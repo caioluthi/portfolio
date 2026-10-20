@@ -1,0 +1,297 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Phase 1 · Discovery | Second Avenue</title>
+<meta name="description" content="Simulated product discovery for a contract-risk data product at Second Avenue, a fictional consignment retailer: personas, interviews, jobs to be done, user journey and synthesis.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&family=Newsreader:opsz,wght@6..72,500;6..72,600&display=swap">
+<link rel="stylesheet" href="assets/site.css">
+<style>
+/* Journey map: stages across, lanes down; scrolls sideways on phones rather than shrinking text. */
+.journey { min-width: 44rem; }
+.journey th[scope="col"] { color: var(--fg); font-family: var(--font-body); font-size: 0.875rem; letter-spacing: 0; text-transform: none; font-weight: 600; }
+.journey th[scope="col"] span { display: block; font-family: var(--font-mono); font-size: 0.6875rem; font-weight: 400; color: var(--muted); letter-spacing: 0.06em; text-transform: uppercase; }
+.journey th[scope="row"] { width: 7rem; }
+.journey td { font-size: 0.875rem; line-height: 1.5; }
+.journey td.pain { background: var(--risk-soft); }
+.journey td.gap { color: var(--muted); font-style: italic; }
+.journey tr.feel td { font-family: var(--font-mono); font-size: 0.8125rem; }
+.legend { display: flex; gap: 1rem; flex-wrap: wrap; font-size: 0.8125rem; color: var(--muted); }
+.legend span::before { content: ""; display: inline-block; width: 0.75rem; height: 0.75rem; border-radius: 2px; margin-right: 0.375rem; vertical-align: -0.0625rem; background: var(--risk-soft); border: 1px solid var(--rule); }
+.qa { display: flex; flex-direction: column; gap: 1rem; }
+.qa p.q { font-weight: 600; font-size: 0.9375rem; }
+.qa p.a { font-size: 0.9375rem; color: var(--fg); margin-top: 0.25rem; }
+.persona dl { display: grid; grid-template-columns: minmax(0, 1fr); gap: 0.25rem; margin: 0; }
+.persona dt { font-family: var(--font-mono); font-size: 0.6875rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); margin-top: 0.5rem; }
+.persona dd { margin: 0; font-size: 0.9375rem; }
+</style>
+</head>
+<body>
+<main class="page">
+  <nav class="sitenav" aria-label="Case study">
+    <a class="home" href="index.html">Second Avenue</a>
+    <a href="phase-1-discovery.html" aria-current="page">1 · Discovery</a>
+    <a href="phase-2-opportunity.html">2 · Opportunity</a>
+    <a href="phase-3-metrics-scope.html">3 · Metrics &amp; scope</a>
+  </nav>
+
+  <header>
+    <p class="eyebrow">Phase 1 · Discovery</p>
+    <h1>Three people, three vantage points, one missing signal.</h1>
+    <p class="note">A simulated discovery exercise for a fictional company, the kind of work a Data Product Manager leads in the first one to two weeks of scoping a new initiative. Second Avenue, its people and every figure here are invented for portfolio purposes and do not represent any real company, individual or business relationship.</p>
+  </header>
+
+  <aside class="tldr" aria-labelledby="tldr-h">
+    <p class="label" id="tldr-h">Summary</p>
+    <dl>
+      <dt>Problem</dt>
+      <dd>Second Avenue guarantees consignors a target price, but underperforming contracts are only noticed near the 90-day deadline, when it is too late to intervene.</dd>
+      <dt>Evidence</dt>
+      <dd>Roughly 15% of contracts underperformed over the last 12 months (18% over the last 6), an estimated $3.6M in shortfall payouts. Even those figures took a one-off manual reconstruction.</dd>
+      <dt>Who</dt>
+      <dd>Ops needs per-contract visibility, Finance needs book-level exposure, and Data spends about 8 hours per report stitching together systems that don't talk to each other.</dd>
+      <dt>Next</dt>
+      <dd><a href="phase-2-opportunity.html">Phase 2</a> frames the problem around pacing and sizes the dollar opportunity.</dd>
+    </dl>
+  </aside>
+
+  <section class="section" aria-labelledby="s1">
+    <h2 id="s1">1. Company profile</h2>
+    <p>Second Avenue is a mid-size consignment retailer that sells pre-owned and specialty goods on behalf of individual consignors: people who bring in items such as furniture, apparel and collectibles to be sold, rather than selling them outright to the company. Consignor and company sign a contract for each item or batch that sets a target price and a lifecycle window, typically 90 days, for the item to sell.</p>
+    <p>At any given time Second Avenue manages roughly 500 active contracts with an average value around $50,000 (a contract can cover a single high-value item or a batch), across 4 regions and a consignor base of several thousand individuals.</p>
+    <h3>Channels</h3>
+    <ul>
+      <li><strong>Online</strong>, through the website or the app</li>
+      <li><strong>In person</strong>, at scheduled live auction events</li>
+    </ul>
+    <h3>Revenue model</h3>
+    <p>Second Avenue shares risk and upside with consignors. If an item sells below its target price, Second Avenue covers the shortfall. If it sells above target, Second Avenue keeps a negotiated, tiered share of the excess (standard tiers in <a href="#appendix-a">Appendix A</a>). This asymmetry, a guaranteed downside against a shared upside, is why underperforming contracts are real financial exposure, and why each contract's negotiated thresholds matter to the product.</p>
+  </section>
+
+  <section class="section" aria-labelledby="s2">
+    <h2 id="s2">2. Personas</h2>
+    <div class="cards">
+      <article class="card persona">
+        <span class="tag">Ops · per contract</span>
+        <h3>Maria, Contract Operations Manager</h3>
+        <dl>
+          <dt>Owns</dt><dd>A portfolio of individual consignment contracts, day to day.</dd>
+          <dt>Goals</dt><dd>Keep each contract's assets moving, hit target before the window closes, minimize shortfall payouts on her book.</dd>
+          <dt>Today</dt><dd>Checks status in ConsignTrack and reviews listings per channel. Often finds a lagging item only when she opens a contract close to its deadline.</dd>
+          <dt>Risk means</dt><dd>A specific contract, with a specific consignor, that won't hit target, and that she needs to act on today.</dd>
+        </dl>
+      </article>
+      <article class="card persona">
+        <span class="tag">Finance · book level</span>
+        <h3>David, Finance Manager</h3>
+        <dl>
+          <dt>Owns</dt><dd>Financial exposure and payout forecasting across the whole contract book.</dd>
+          <dt>Goals</dt><dd>Forecast payouts against tiered-share earnings, flag budget risk early, see which regions, asset types and channels drive losses.</dd>
+          <dt>Today</dt><dd>Pulls aggregate numbers at month and quarter end from the Risk Book Summary in Tableau. Little visibility into which contracts drive a bad number until after the fact.</dd>
+          <dt>Risk means</dt><dd>The shape of the whole book, for example "20% of active contracts are trending toward shortfall this quarter."</dd>
+        </dl>
+      </article>
+      <article class="card persona">
+        <span class="tag">Data · source systems</span>
+        <h3>Priya, Data Analyst</h3>
+        <dl>
+          <dt>Owns</dt><dd>Ad hoc reporting for Ops and Finance; closest to the Contracts, Listings and Sales systems.</dd>
+          <dt>Goals</dt><dd>A unified, trustworthy view of contract risk without days of manual effort per report.</dd>
+          <dt>Today</dt><dd>Exports CSVs from each source system and stitches them together by hand, because no unified data layer exists.</dd>
+          <dt>Risk means</dt><dd>As much a data problem as a business one: no timely, consistent, cross-system view is possible at all.</dd>
+        </dl>
+      </article>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="s3">
+    <h2 id="s3">3. Simulated discovery interviews</h2>
+    <p>One highlight per interview. Full transcripts are in <a href="#appendix-b">Appendix B</a>.</p>
+
+    <h3>Maria, Ops</h3>
+    <blockquote><p>"If I catch it with two weeks left, maybe I can push it into a live auction event or reprice it. But if I catch it with three days left, there's nothing left to do. We're just going to eat the shortfall."</p></blockquote>
+    <p class="takeaway">No pacing flag exists, so she finds out when the options have already run out.</p>
+
+    <h3>David, Finance</h3>
+    <blockquote><p>"I'd assume most of them did, if we'd been looking. But nobody's looking at the halfway point. We only look at the end."</p></blockquote>
+    <p class="takeaway">Across every quantitative question, the honest answer was some version of "we don't actually know." Even the numbers he could eventually produce took a one-off manual pull.</p>
+
+    <h3>Priya, Data</h3>
+    <blockquote><p>"The report wasn't just slow, it was often already out of sync with itself by the time I finished building it."</p></blockquote>
+    <p class="takeaway">Manual visibility is unsustainable: 8 hours per report, a monthly cadence and cross-system drift. That points to a data product, not a reporting workaround.</p>
+  </section>
+
+  <section class="section" aria-labelledby="s4">
+    <h2 id="s4">4. Jobs to be done</h2>
+    <p>Each persona's core job, framed as <em>when [situation], I want to [motivation], so I can [outcome]</em>.</p>
+    <div class="scroll">
+      <table>
+        <thead><tr><th>Persona</th><th>Job to be done</th><th>What they hire today</th><th>Where it fails</th></tr></thead>
+        <tbody>
+          <tr><td>Maria (Ops)</td><td>When a contract I manage starts falling behind its target pace, I want to know early enough to act, so I can reprice, switch channel or extend the window before the shortfall is locked in.</td><td>ConsignTrack, plus opening contracts by hand near the deadline</td><td>No pacing flag. She finds out with days left, not weeks.</td></tr>
+          <tr><td>David (Finance)</td><td>When I'm forecasting quarterly payouts, I want to see which parts of the book are trending toward shortfall right now, so I can adjust forecasts and push Ops to intervene before the quarter closes.</td><td>Risk Book Summary in Tableau, reviewed at month and quarter end</td><td>Reports what already happened. The 15%, 18% and ~$3.6M figures took a one-off manual pull.</td></tr>
+          <tr><td>Priya (Data)</td><td>When stakeholders ask for contract-risk visibility, I want to deliver a trustworthy, current view without hours of manual stitching, so I can spend my time on analysis instead of reconciliation.</td><td>Manual CSV exports from separate source systems</td><td>About 8 hours per report, a monthly cadence, and data out of sync by the time it's assembled.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="s5">
+    <h2 id="s5">5. User journey</h2>
+    <p>One Risk contract across its 90-day life, as each persona experiences it today. The useful window to act closes well before anyone looks.</p>
+    <figure>
+      <div class="scroll">
+        <table class="journey">
+          <thead>
+            <tr>
+              <th></th>
+              <th scope="col"><span>Day 0</span>Contract signed</th>
+              <th scope="col"><span>Days 1–44</span>Early weeks</th>
+              <th scope="col"><span>Day 45</span>Halfway</th>
+              <th scope="col"><span>Days 76–89</span>Final weeks</th>
+              <th scope="col"><span>Day 90</span>Expiry</th>
+              <th scope="col"><span>Quarter close</span>Reporting</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <th scope="row">Contract</th>
+              <td>Target price and tiers agreed; assets listed by channel</td>
+              <td>Sales come in slower than target pace</td>
+              <td>Roughly half the expected value has not sold</td>
+              <td>Gap to target keeps widening</td>
+              <td class="pain">Closes below target; Second Avenue pays the shortfall</td>
+              <td>One of ~300 underperformers this year</td>
+            </tr>
+            <tr>
+              <th scope="row">Maria · Ops</th>
+              <td>Sets the contract up in ConsignTrack</td>
+              <td class="gap">No signal; dozens of other contracts compete for attention</td>
+              <td class="gap">Still no signal; options are all still open</td>
+              <td class="pain">Opens it by hand near the deadline; too late to reprice or move to auction</td>
+              <td class="pain">"We're just going to eat the shortfall"</td>
+              <td class="gap">No record of what could have been done</td>
+            </tr>
+            <tr>
+              <th scope="row">David · Finance</th>
+              <td>Contract enters the book</td>
+              <td class="gap">Not visible in any forward-looking view</td>
+              <td class="gap">"Nobody's looking at the halfway point"</td>
+              <td class="gap">Not visible</td>
+              <td>Payout recorded</td>
+              <td class="pain">Surprised by total shortfall in the Risk Book Summary</td>
+            </tr>
+            <tr>
+              <th scope="row">Priya · Data</th>
+              <td>Contract lives in ConsignTrack only</td>
+              <td>Listings and sales land in separate systems</td>
+              <td class="gap">No joined view exists</td>
+              <td>Monthly report in progress, ~8 hours of CSV stitching</td>
+              <td class="pain">Report already out of sync with itself</td>
+              <td>Asked to rebuild the numbers by hand</td>
+            </tr>
+            <tr class="feel">
+              <th scope="row">Felt</th>
+              <td>Neutral</td>
+              <td>Unaware</td>
+              <td>Unaware</td>
+              <td>Scrambling</td>
+              <td>Resigned</td>
+              <td>Surprised</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="legend"><span>Pain point</span> Italic cells mark where a signal should exist and doesn't.</p>
+    </figure>
+  </section>
+
+  <section class="section" aria-labelledby="s6">
+    <h2 id="s6">6. Synthesis</h2>
+    <ul>
+      <li><strong>Maria (Ops)</strong> has no leading indicator at the contract level. She only catches underperformance when it is too late to act.</li>
+      <li><strong>David (Finance)</strong> has no leading indicator at the book level either. His only tool reports after the fact, and even the figures he could produce required a manual, one-time reconstruction.</li>
+      <li><strong>Priya (Data)</strong> confirmed this is a data infrastructure gap, not only a reporting gap. Contracts, Listings and Sales live in separate systems with no unified layer.</li>
+    </ul>
+    <p><strong>Core takeaway:</strong> this isn't a dashboard problem or a one-off analysis problem. It's the absence of a system that tracks contract performance against target, continuously and across sources, early enough to act on. Nobody can currently answer "which contracts are at risk right now, and what could we still do about it?"</p>
+    <p>None of the three were asked to agree with each other, yet all three independently described the same missing thing: a continuous, cross-source signal rather than a periodic report. Maria wants it at the contract level, David at the book level, Priya built into the data layer itself. Three altitudes of the same unmet need, reached independently, is stronger evidence than any single complaint.</p>
+    <p>As jobs to be done, the three share one core: <strong>know early, across sources, without manual effort</strong>. Maria's job points to a per-contract pacing flag, David's to an aggregate exposure view, and Priya's to a unified data layer underneath both.</p>
+    <p><strong>Open tension: how fresh the signal needs to be.</strong> David says weekly would work, while Priya reports stakeholders wanted something close to real time, and would herself take hourly and consistent over real-time and drifting. The interviews don't settle it; cadence should be tied to the decisions it supports. <em>Resolved in <a href="phase-3-metrics-scope.html#cadence">Phase 3</a>: a daily batch refresh.</em></p>
+    <p>The interviews validate the four candidate questions the product should answer:</p>
+    <ol>
+      <li>How is performance for contracts tied to a specific consignor?</li>
+      <li>Which asset types are underperforming, and which channel performs better for them?</li>
+      <li>Which contracts are close to expiry while still performing poorly?</li>
+      <li>Are there regions or channels with performance issues?</li>
+    </ol>
+  </section>
+
+  <section class="section" aria-labelledby="appendix-a">
+    <h2 id="appendix-a">Appendix A: Standard tier table</h2>
+    <p>The default overperformance share. Thresholds and percentages are negotiable per contract, depending on factors such as deal volume and the consignor's relationship tenure.</p>
+    <div class="scroll">
+      <table>
+        <thead><tr><th>Amount over target</th><th class="num">Second Avenue's share</th></tr></thead>
+        <tbody>
+          <tr><td>First $10K over target</td><td class="num">20%</td></tr>
+          <tr><td>Next $10K ($10K–$20K over)</td><td class="num">30%</td></tr>
+          <tr><td>Beyond $20K over</td><td class="num">70%</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="appendix-b">
+    <h2 id="appendix-b">Appendix B: Full interview transcripts</h2>
+    <p>All interviews are simulated.</p>
+
+    <details>
+      <summary>Maria, Contract Operations Manager</summary>
+      <div class="inner qa">
+        <div><p class="q">Walk me through how you currently find out a contract is underperforming.</p><p class="a">"Honestly, I only really dig into a contract when it's close to the 90-day deadline. I'm managing dozens of contracts at once in ConsignTrack, and there's no flag that tells me 'this one's falling behind pace.' I'd have to open each one and compare the current price trajectory to the target myself."</p></div>
+        <div><p class="q">When you do catch one underperforming, what are your options at that point?</p><p class="a">"Pretty limited, honestly. If I catch it with two weeks left, maybe I can push it into a live auction event or reprice it. But if I catch it with three days left, there's nothing left to do. We're just going to eat the shortfall."</p></div>
+        <div><p class="q">Is there anything that currently helps you catch these early?</p><p class="a">"Not really. It's mostly instinct and whichever contracts happen to be top of mind. I don't have a way to see, across my whole portfolio, which ones are quietly falling behind right now."</p></div>
+        <div><p class="q">What would an ideal solution look like for you?</p><p class="a">"I'd want something that tells me at the start of my day which contracts are behind pace, ranked, so I know where to look first. I don't need it to fix anything. I just need to know where to spend my time."</p></div>
+        <div><p class="q">What's essential versus nice to have?</p><p class="a">"Essential is a flag when a contract falls behind pace, early enough that I can still reprice or move it to an auction. A suggestion for what to do about it would be nice to have, but honestly I know my options. I just can't see the problem in time."</p></div>
+      </div>
+    </details>
+
+    <details>
+      <summary>David, Finance Manager</summary>
+      <div class="inner qa">
+        <div><p class="q">How do you currently track financial exposure from underperforming contracts?</p><p class="a">"I pull the Risk Book Summary in Tableau, but that's really a month-end or quarter-end view. It tells me how much we paid out last period, not which contracts are heading toward a payout right now."</p></div>
+        <div><p class="q">Has that lag ever caused a problem?</p><p class="a">"Yeah. More than once we've closed a quarter and been surprised by how much we paid out in shortfalls. By the time I see the number, the contracts are already closed. There's no way for me to flag it to Ops while there's still time to do something."</p></div>
+        <div><p class="q">What percentage of contracts underperformed in the last 3, 6, 9 and 12 months?</p><p class="a">"Honestly? I don't have an exact number day to day. I could dig through the Risk Book Summary and tally it by hand, but nothing gives me that trend automatically. It's somewhere in my head as 'feels like it's gotten worse,' not a number I could put in a slide. We did eventually pull it manually for this review: roughly 15% of contracts underperformed over the trailing 12 months, and 18% over the trailing 6. So the direction matches my gut, but it took real effort to confirm."</p></div>
+        <div><p class="q">How much money did we lose specifically on underperforming contracts?</p><p class="a">"We know the total payout number each quarter, but breaking out how much came from contracts that could have been caught earlier versus ones that were always going to miss? That's not something I can pull today. The same manual pull estimated around $3.6M in aggregate shortfall payouts over the past year, but again, that was a one-time reconstruction, not something I can monitor as it happens."</p></div>
+        <div><p class="q">Which channel, app, website or live auction, has the worst pacing-to-target rate?</p><p class="a">"My gut says live auction events underperform more, but that's an impression from a few conversations with the Ops team, not something I've actually measured."</p></div>
+        <div><p class="q">Of the contracts that ended up underperforming, how many showed warning signs by the halfway point?</p><p class="a">"I'd assume most of them did, if we'd been looking. But nobody's looking at the halfway point. We only look at the end."</p></div>
+        <div><p class="q">And how many of those had actions available that could have helped if you'd caught them earlier?</p><p class="a">"Probably a lot of them. But that's a guess, not something backed by data."</p></div>
+        <div><p class="q">Has anyone tried to close that gap?</p><p class="a">"Last quarter I asked Tom on the Ops side whether he could flag at-risk contracts early, and he told me he'd have to open each one by hand."</p></div>
+        <div><p class="q">What would an ideal solution look like for you?</p><p class="a">"I'd want to see, while the quarter is still running, which regions and asset types are trending toward shortfall payouts. And I'd want a number I trust. I don't want to walk into a meeting defending a figure nobody can reproduce."</p></div>
+        <div><p class="q">What's essential versus nice to have?</p><p class="a">"Essential is a forward-looking view of expected payouts that refreshes at least weekly. Daily would be nicer, but weekly I could work with. Per-contract detail is nice to have for me, that's more of an Ops need, though I'd want to be able to drill in when something looks off."</p></div>
+        <p class="takeaway">Across every quantitative question, the honest answer was some version of "we don't actually know." The knowledge lives in people's heads, not in any system.</p>
+      </div>
+    </details>
+
+    <details>
+      <summary>Priya, Data Analyst</summary>
+      <div class="inner qa">
+        <div><p class="q">I heard you tried to build a report to give visibility into contract risk. What happened?</p><p class="a">"I did. Contracts, Listings and Sales data all live in different source systems and databases, so there was no single place to pull a unified view from. I ended up exporting CSVs from each system and stitching them together myself."</p></div>
+        <div><p class="q">How long did that take?</p><p class="a">"About 8 hours per report, start to finish: pulling each export, cleaning it, joining everything, checking it made sense."</p></div>
+        <div><p class="q">How often were you able to produce it?</p><p class="a">"Monthly, realistically. That's all I could manage given my other priorities. But the stakeholders wanted something close to real time so they could actually act on it. By the time I delivered a monthly report, it was already too stale to drive a decision."</p></div>
+        <div><p class="q">Beyond the time cost, did you run into any other issues?</p><p class="a">"Yes, data sync. By the time I'd finished pulling from System B, System A had already moved on: contracts had been updated, new sales had come in. So the report wasn't just slow, it was often already out of sync with itself by the time I finished building it."</p></div>
+        <div><p class="q">What would the ideal setup look like?</p><p class="a">"One place where contracts, listings and sales are already joined and refreshed automatically, so I'm not the integration layer. If that existed, the report would be a query, not an eight-hour project."</p></div>
+        <div><p class="q">What's essential versus nice to have?</p><p class="a">"Essential is that the numbers reconcile across systems: same contract, same status, same moment. Refresh speed matters, but consistency matters more. I'd take hourly and consistent over real-time and drifting. A self-serve view for Ops and Finance would be nice to have, because then they'd stop asking me."</p></div>
+      </div>
+    </details>
+  </section>
+
+  <nav class="pager" aria-label="Phases">
+    <a class="next" href="phase-2-opportunity.html"><span class="dir">Next</span>Phase 2 · Frame the opportunity</a>
+  </nav>
+</main>
+</body>
+</html>

@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Second Avenue | Data product case study</title>
+<meta name="description" content="A data product case study, from discovery to delivery: flagging consignment contracts that pace below target before they expire.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&family=Newsreader:opsz,wght@6..72,500;6..72,600&display=swap">
+<link rel="stylesheet" href="assets/site.css">
+<style>
+.phases { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 0; border-top: 1px solid var(--rule); }
+.phases li { display: grid; grid-template-columns: 2.5rem minmax(0, 1fr) auto; gap: 0.25rem 1rem; padding: 1rem 0; border-bottom: 1px solid var(--rule); align-items: baseline; }
+.phases .n { font-family: var(--font-mono); font-size: 0.875rem; color: var(--muted); }
+.phases .t { font-weight: 600; }
+.phases .t a { color: var(--fg); text-decoration: none; }
+.phases .t a:hover { color: var(--accent); }
+.phases .d { display: block; font-size: 0.875rem; color: var(--muted); line-height: 1.5; margin-top: 0.125rem; font-weight: 400; }
+.phases .s { font-family: var(--font-mono); font-size: 0.6875rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); white-space: nowrap; }
+.phases .s.done { color: var(--accent); }
+</style>
+</head>
+<body>
+<main class="page">
+  <nav class="sitenav" aria-label="Case study">
+    <a class="home" href="index.html">Second Avenue</a>
+    <a href="phase-1-discovery.html">1 · Discovery</a>
+    <a href="phase-2-opportunity.html">2 · Opportunity</a>
+    <a href="phase-3-metrics-scope.html">3 · Metrics &amp; scope</a>
+  </nav>
+
+  <header>
+    <p class="eyebrow">Data product case study</p>
+    <h1>Flagging consignment contracts that pace below target, before they expire.</h1>
+    <p class="note">An end-to-end data product, from discovery to a working build, for Second Avenue, a fictional consignment retailer. The use case comes from a problem I worked on professionally; the company, people and data here are simulated.</p>
+  </header>
+
+  <aside class="tldr" aria-labelledby="tldr-h">
+    <p class="label" id="tldr-h">The short version</p>
+    <dl>
+      <dt>Problem</dt>
+      <dd>Second Avenue guarantees consignors a target price and pays the shortfall when a contract misses. About 15% of contracts miss, costing roughly $3.6M a year, and nobody sees it coming until the contract expires.</dd>
+      <dt>Product</dt>
+      <dd>A governed pacing metric and daily risk flag across contracts, listings and sales, with natural-language questions on top.</dd>
+      <dt>Success</dt>
+      <dd>Flag underperformers a median of 30+ days before expiry, without more than 40% false alarms.</dd>
+    </dl>
+  </aside>
+
+  <section class="section" aria-labelledby="phases-h">
+    <h2 id="phases-h">The work, phase by phase</h2>
+    <ol class="phases">
+      <li><span class="n">01</span><span class="t"><a href="phase-1-discovery.html">Discovery</a><span class="d">Company profile, three personas, simulated interviews, jobs to be done, user journey.</span></span><span class="s done">Done</span></li>
+      <li><span class="n">02</span><span class="t"><a href="phase-2-opportunity.html">Frame the opportunity</a><span class="d">Problem statement around pacing, and sizing of the recoverable exposure.</span></span><span class="s done">Done</span></li>
+      <li><span class="n">03</span><span class="t"><a href="phase-3-metrics-scope.html">Success metrics &amp; scope</a><span class="d">Lead time as the primary metric, false-positive guardrails, governed definitions, v1 and v2.</span></span><span class="s done">Done</span></li>
+      <li><span class="n">04</span><span class="t">Structure the work<span class="d">Epics, stories and acceptance criteria, including the entity model.</span></span><span class="s">Next</span></li>
+      <li><span class="n">05</span><span class="t">Data foundation<span class="d">Synthetic consignors, contracts, assets and sales in BigQuery.</span></span><span class="s">Planned</span></li>
+      <li><span class="n">06</span><span class="t">Semantic layer<span class="d">Pacing, risk flag and exposure as governed metrics.</span></span><span class="s">Planned</span></li>
+      <li><span class="n">07</span><span class="t">Conversational layer<span class="d">Natural-language questions answered against the governed metrics with the Claude API.</span></span><span class="s">Planned</span></li>
+      <li><span class="n">08</span><span class="t">Package &amp; deliver<span class="d">README, AI skills, case study and a recorded walkthrough.</span></span><span class="s">Planned</span></li>
+    </ol>
+  </section>
+
+  <p class="foot">Built with AI as a working partner throughout. The skills and prompts used along the way will be published in this repository.</p>
+</main>
+</body>
+</html>

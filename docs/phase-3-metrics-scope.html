@@ -1,0 +1,247 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Phase 3 · Metrics &amp; scope | Second Avenue</title>
+<meta name="description" content="Success metrics, guardrails, governed metric definitions and v1/v2 scope for Second Avenue's contract-risk data product.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&family=Newsreader:opsz,wght@6..72,500;6..72,600&display=swap">
+<link rel="stylesheet" href="assets/site.css">
+<style>
+/* Metric tree: one row per metric, role in the left rail so the hierarchy reads top to bottom. */
+.tree { display: flex; flex-direction: column; border-top: 1px solid var(--rule); }
+.metric { display: grid; grid-template-columns: 7rem minmax(0, 1fr) 9.5rem; gap: 0.25rem 1rem; padding: 0.875rem 0; border-bottom: 1px solid var(--rule); align-items: baseline; }
+.metric .role { font-family: var(--font-mono); font-size: 0.6875rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+.metric.primary .role, .metric.primary .target { color: var(--accent); }
+.metric.guard .role { color: var(--risk); }
+.metric .name { font-weight: 600; }
+.metric .def { display: block; font-size: 0.875rem; color: var(--muted); line-height: 1.5; margin-top: 0.125rem; }
+.metric .target { font-family: var(--font-mono); font-size: 0.875rem; font-weight: 500; text-align: right; font-variant-numeric: tabular-nums; }
+.metric .target small { display: block; font-weight: 400; color: var(--muted); font-size: 0.75rem; }
+.metric.primary { background: var(--accent-soft); margin: 0 -0.75rem; padding-left: 0.75rem; padding-right: 0.75rem; border-radius: 4px; }
+@media (max-width: 34rem) {
+  .metric { grid-template-columns: minmax(0, 1fr) auto; }
+  .metric .role { grid-column: 1 / -1; }
+}
+.formula { font-family: var(--font-mono); font-size: 0.8125rem; white-space: nowrap; }
+.chart text { font-family: var(--font-body); font-size: 15px; fill: var(--muted); }
+.chart .lbl { fill: var(--fg); font-weight: 500; }
+.chart .lbl-risk { fill: var(--risk); font-weight: 500; }
+.chart .lbl-accent { fill: var(--accent); font-weight: 500; }
+.scope .tag.in { color: var(--accent); }
+.scope .tag.next { color: var(--fg); }
+</style>
+</head>
+<body>
+<main class="page">
+  <nav class="sitenav" aria-label="Case study">
+    <a class="home" href="index.html">Second Avenue</a>
+    <a href="phase-1-discovery.html">1 · Discovery</a>
+    <a href="phase-2-opportunity.html">2 · Opportunity</a>
+    <a href="phase-3-metrics-scope.html" aria-current="page">3 · Metrics &amp; scope</a>
+  </nav>
+
+  <header>
+    <p class="eyebrow">Phase 3 · Define success metrics &amp; scope</p>
+    <h1>Success means seeing a failing contract weeks earlier, without burying Ops in false alarms.</h1>
+    <p class="note">Second Avenue is a fictional consignment retailer and every figure on this page is simulated. It builds on the <a href="phase-1-discovery.html">discovery</a> and the <a href="phase-2-opportunity.html">opportunity sizing</a>.</p>
+  </header>
+
+  <aside class="tldr" aria-labelledby="tldr-h">
+    <p class="label" id="tldr-h">TL;DR</p>
+    <dl>
+      <dt>Primary</dt>
+      <dd>Detection lead time: how many days before expiry an underperforming contract is first flagged. Target a median of at least 30 days, against under a week today.</dd>
+      <dt>Guardrails</dt>
+      <dd>No more than 40% of flags are false alarms, and no more than 25 new flags a week.</dd>
+      <dt>Scope</dt>
+      <dd>v1 uses linear pacing with a daily refresh. Pacing against historical curves of similar contracts is v2.</dd>
+      <dt>Next</dt>
+      <dd>Phase 4 turns this page into epics, stories and acceptance criteria.</dd>
+    </dl>
+  </aside>
+
+  <section class="section" aria-labelledby="metrics">
+    <h2 id="metrics">1. What success looks like</h2>
+    <p>Reducing the $3.6M in shortfall payouts is the reason the product exists, but it is a poor primary metric. Whether a dollar is saved depends on the product noticing the contract, on Ops acting, and on the action working. Phase 2 flagged that last step, the recovery rate, as its weakest assumption.</p>
+    <p>The product directly controls only the first step: how early it raises the flag. So detection lead time is the primary metric, and dollars saved sit above it as the outcome it should drive. If lead time improves and payouts don't fall, the problem is in the intervention, not the signal, and the metrics make that visible instead of blurring it.</p>
+
+    <div class="tree" role="list">
+      <div class="metric" role="listitem">
+        <span class="role">Outcome</span>
+        <div><span class="name">Shortfall payouts avoided</span><span class="def">Annual payouts against the ~$3.6M baseline. Tracked over quarters, not a launch gate.</span></div>
+        <span class="target">~$500K / yr<small>Phase 2 base case</small></span>
+      </div>
+      <div class="metric primary" role="listitem">
+        <span class="role">Primary</span>
+        <div><span class="name">Detection lead time</span><span class="def">Days from a contract's first risk flag to its expiry, for contracts that closed below target. An underperformer that was never flagged counts as 0 days, so missed contracts pull the number down instead of disappearing.</span></div>
+        <span class="target">Median ≥ 30 days<small>Today: under ~7</small></span>
+      </div>
+      <div class="metric" role="listitem">
+        <span class="role">Supporting</span>
+        <div><span class="name">Recall at halfway</span><span class="def">Share of eventual underperformers flagged by day 45. This replaces the first assumption in the Phase 2 funnel with a measured number.</span></div>
+        <span class="target">≥ 70%<small>Phase 2 base case</small></span>
+      </div>
+      <div class="metric guard" role="listitem" id="guardrails">
+        <span class="role">Guardrail</span>
+        <div><span class="name">False-positive rate</span><span class="def">Share of flagged contracts that closed at or above target. Every false alarm costs Ops a review and erodes trust in the next flag.</span></div>
+        <span class="target">≤ 40%</span>
+      </div>
+      <div class="metric guard" role="listitem">
+        <span class="role">Guardrail</span>
+        <div><span class="name">Alert volume</span><span class="def">New flags per week across the book. Keeps review cost near the ~$13K a year sized in Phase 2.</span></div>
+        <span class="target">≤ 25 / week</span>
+      </div>
+      <div class="metric guard" role="listitem">
+        <span class="role">Guardrail</span>
+        <div><span class="name">Reconciliation</span><span class="def">Share of active contracts whose status and sales agree across Contracts, Listings and Sales at each refresh. Priya's one essential requirement.</span></div>
+        <span class="target">100%</span>
+      </div>
+    </div>
+    <p class="note" style="margin-top:0">The baseline lead time comes from the Ops interview: contracts are opened near the 90-day deadline, often with days rather than weeks left. Phase 5 will measure it properly by replaying a "final-week manual review" policy on the synthetic data.</p>
+    <p>The primary metric and the false-positive guardrail pull against each other. A looser threshold flags contracts earlier, which raises lead time, and also flags more contracts that would have recovered on their own. The targets above are set so that neither can be bought at the other's expense.</p>
+  </section>
+
+  <section class="section" aria-labelledby="definitions">
+    <h2 id="definitions">2. Governed metric definitions</h2>
+    <p>These are the definitions the semantic layer in Phase 6 implements and the conversational layer in Phase 7 queries. They are written once here so no later phase reinvents them.</p>
+    <div class="scroll">
+      <table>
+        <thead><tr><th>Metric</th><th>Definition</th><th>Grain</th></tr></thead>
+        <tbody>
+          <tr><td>Elapsed share</td><td><span class="formula">days_elapsed ÷ lifecycle_days</span>, capped at 1</td><td>Contract, daily</td></tr>
+          <tr><td>Realized sales</td><td>Sum of gross sale proceeds to date for the contract's assets</td><td>Contract, daily</td></tr>
+          <tr><td>Pacing %</td><td><span class="formula">realized ÷ (target × elapsed_share)</span></td><td>Contract, daily</td></tr>
+          <tr><td>Risk flag (v1)</td><td>Pacing % below 80%, on an active contract, from day 15 onward. The first two weeks are excluded because a single early sale or its absence swings pacing too much to mean anything.</td><td>Contract, daily</td></tr>
+          <tr><td>Projected final value</td><td><span class="formula">realized ÷ elapsed_share</span> (linear projection)</td><td>Contract, daily</td></tr>
+          <tr><td>Projected shortfall</td><td><span class="formula">max(0, target − projected_final)</span></td><td>Contract, daily</td></tr>
+          <tr><td>Exposure at risk</td><td>Sum of projected shortfall across flagged contracts</td><td>Any rollup: region, channel, asset type, consignor</td></tr>
+          <tr><td>Detection lead time</td><td><span class="formula">expiry_date − first_flag_date</span> for contracts closing below target; 0 if never flagged</td><td>Contract, at close</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>A worked example</h3>
+    <p>A $50,000 contract on a 90-day window has sold $11,000 by day 30. Linear pacing expects a third of the target by then, about $16,700, so pacing is 66% and the contract is flagged. Projected linearly, it finishes near $33,000, a projected shortfall of about $17,000.</p>
+    <p>On this contract's actual sales path, the flag first fires on day 15, the first day it is allowed to. Today it would be noticed around day 85. That difference, 75 days of lead time against about 5, is what the primary metric measures.</p>
+
+    <figure>
+      <svg class="chart" viewBox="0 0 680 300" role="img" aria-labelledby="chart-t chart-d">
+        <title id="chart-t">Linear pacing on one simulated contract</title>
+        <desc id="chart-d">Cumulative sales of a $50,000, 90-day contract compared with the linear target pace and the 80% flag line. Sales fall below the flag line early; the v1 flag fires on day 15, while today the contract would be noticed around day 85. It closes at $36,000.</desc>
+        <rect x="56" y="30" width="84" height="230" fill="var(--rule)" opacity="0.35"/>
+        <g stroke="var(--rule)" stroke-width="1">
+          <line x1="56" y1="260" x2="560" y2="260"/>
+          <line x1="56" y1="183.3" x2="560" y2="183.3"/>
+          <line x1="56" y1="106.7" x2="560" y2="106.7"/>
+          <line x1="56" y1="30" x2="560" y2="30"/>
+        </g>
+        <text x="48" y="265" text-anchor="end">$0</text>
+        <text x="48" y="188" text-anchor="end">$20K</text>
+        <text x="48" y="111" text-anchor="end">$40K</text>
+        <text x="48" y="35" text-anchor="end">$60K</text>
+        <text x="56" y="284" text-anchor="start">Day 0</text>
+        <text x="308" y="284" text-anchor="middle">Day 45</text>
+        <text x="560" y="284" text-anchor="end">Day 90</text>
+        <text x="98" y="52" text-anchor="middle" font-size="13">no flags</text>
+        <line x1="56" y1="260" x2="560" y2="68.3" stroke="var(--fg)" stroke-width="2" stroke-dasharray="6 5"/>
+        <line x1="56" y1="260" x2="560" y2="106.7" stroke="var(--risk)" stroke-width="2" stroke-dasharray="2 4"/>
+        <polyline points="56,260 112,240.8 168,229.3 224,217.8 308,198.7 392,175.7 476,152.7 560,122" fill="none" stroke="var(--accent)" stroke-width="3" stroke-linejoin="round"/>
+        <text class="lbl" x="566" y="73">Target pace</text>
+        <text class="lbl-risk" x="566" y="111">Flag line 80%</text>
+        <text class="lbl-accent" x="566" y="140">Actual sales</text>
+        <circle cx="140" cy="235.1" r="6" fill="var(--risk)"/>
+        <text class="lbl-risk" x="150" y="254">v1 flag, day 15</text>
+        <circle cx="532" cy="132.3" r="6" fill="none" stroke="var(--fg)" stroke-width="2"/>
+        <line x1="532" y1="139" x2="532" y2="222" stroke="var(--fg)" stroke-width="1"/>
+        <text class="lbl" x="524" y="236" text-anchor="end">Noticed today, ~day 85</text>
+      </svg>
+      <figcaption>One simulated contract. The shaded band is the 15-day window before flags are allowed. The contract closes at $36,000, a $14,000 shortfall.</figcaption>
+    </figure>
+
+    <h3>The questions these metrics must answer</h3>
+    <p>Each of the four questions validated in discovery maps onto the definitions above, so the conversational layer can answer all of them without a new metric.</p>
+    <div class="scroll">
+      <table>
+        <thead><tr><th>Question from discovery</th><th>Answered with</th></tr></thead>
+        <tbody>
+          <tr><td>How are a consignor's contracts performing?</td><td>Pacing % and exposure at risk, by consignor</td></tr>
+          <tr><td>Which asset types underperform, and in which channel?</td><td>Pacing % by asset type and channel</td></tr>
+          <tr><td>Which contracts are close to expiry and still behind?</td><td>Risk flag, filtered by days to expiry</td></tr>
+          <tr><td>Do some regions or channels have performance issues?</td><td>Share of contracts flagged and exposure at risk, by region and channel</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="cadence">
+    <h2 id="cadence">3. Refresh cadence: daily</h2>
+    <p>Discovery left open how fresh the signal needs to be. David can work with weekly, Priya heard stakeholders ask for near-real-time, and she would trade speed for consistency. Tying cadence to the decision it supports settles it.</p>
+    <p>The decision is Ops choosing to reprice, switch channel or move a contract into an auction, and it plays out over days. A weekly refresh could spend up to 7 of the days the primary metric is trying to win. Real-time adds cost and makes it harder to keep the three source systems consistent, which is Priya's essential requirement. A <strong>daily batch refresh</strong>, landing before Ops starts the day, keeps every system on the same snapshot and gives Maria the ranked morning list she described.</p>
+  </section>
+
+  <section class="section" aria-labelledby="measure">
+    <h2 id="measure">4. How v1 will be judged</h2>
+    <p>This is a lab build, so success is judged by a backtest. The Phase 5 synthetic data generator produces contracts whose final outcomes are known, including a realistic share that pace below target. Replaying the daily flag over that history produces every metric above.</p>
+    <p>v1 passes when, on the backtest:</p>
+    <ul>
+      <li>median detection lead time is at least 30 days,</li>
+      <li>at least 70% of underperformers are flagged by day 45,</li>
+      <li>no more than 40% of flags are false alarms,</li>
+      <li>new flags stay at or below 25 a week, and</li>
+      <li>every active contract reconciles across the three sources.</li>
+    </ul>
+    <p>The 80% threshold and the day-15 floor are starting values, not commitments. The backtest sweeps both and picks the setting that best meets the lead-time target while staying inside the guardrails.</p>
+  </section>
+
+  <section class="section" aria-labelledby="scope">
+    <h2 id="scope">5. Scope</h2>
+    <div class="cards scope">
+      <article class="card">
+        <span class="tag in">v1 · building now</span>
+        <ul>
+          <li>Linear pacing and the v1 risk flag</li>
+          <li>Projected shortfall and exposure at risk</li>
+          <li>Daily batch refresh with cross-source reconciliation</li>
+          <li>Ranked daily list of flagged contracts for Ops</li>
+          <li>Book rollups by region, channel, asset type and consignor for Finance</li>
+          <li>Natural-language questions over these metrics</li>
+        </ul>
+      </article>
+      <article class="card">
+        <span class="tag next">v2 · stated next</span>
+        <ul>
+          <li>Pacing against the historical sales curve of similar past contracts, by asset type, channel and region</li>
+          <li>Suggested interventions per flagged contract</li>
+          <li>Logging of Ops actions, so the recovery rate can be measured instead of assumed</li>
+        </ul>
+      </article>
+      <article class="card">
+        <span class="tag">Not planned</span>
+        <ul>
+          <li>Automated repricing or channel moves</li>
+          <li>Real-time streaming</li>
+          <li>What-if simulation of moving assets between channels</li>
+          <li>Optimizing the upside tiers</li>
+        </ul>
+      </article>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="risks">
+    <h2 id="risks">6. Known limitations of v1</h2>
+    <ul>
+      <li><strong>Back-loaded contracts look worse than they are.</strong> A contract whose assets are scheduled into a live auction late in the window will pace low until the auction and then catch up. Linear pacing will flag it. This is the main reason historical-curve pacing is v2, and the backtest will report the false-positive rate by channel to show how large the effect is.</li>
+      <li><strong>Single-asset contracts are all or nothing.</strong> A contract covering one high-value item shows $0 realized until it sells, so pacing says little about it. The backtest will report false positives by contract size so this segment can be handled separately if it dominates the noise.</li>
+      <li><strong>The outcome metric can't be fully proven in a lab.</strong> Payouts avoided depend on Ops acting, which the synthetic data can only assume. v1 proves the signal; v2's action logging is what would prove the dollars.</li>
+    </ul>
+  </section>
+
+  <nav class="pager" aria-label="Phases">
+    <a href="phase-2-opportunity.html"><span class="dir">Previous</span>Phase 2 · Frame the opportunity</a>
+  </nav>
+</main>
+</body>
+</html>
