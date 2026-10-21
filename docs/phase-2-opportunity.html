@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Phase 2 · Frame the opportunity | Second Avenue</title>
-<meta name="description" content="Problem statement framed around contract pacing, and opportunity sizing for late-detected underperforming Risk contracts at Second Avenue.">
+<title>Phase 2 · Opportunity &amp; success metrics | Second Avenue</title>
+<meta name="description" content="Problem statement framed around contract pacing, opportunity sizing for late-detected underperforming Risk contracts, and the success metrics that judge the product.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&family=Newsreader:opsz,wght@6..72,500;6..72,600&display=swap">
@@ -32,6 +32,21 @@
 .scenario[aria-pressed="true"] .name { color: var(--accent); }
 .scenario .amount { font-family: var(--font-mono); font-size: clamp(1.125rem, 4.4vw, 1.625rem); font-weight: 500; font-variant-numeric: tabular-nums; }
 .scenario .share { font-size: 0.8125rem; color: var(--muted); }
+/* Metric tree: one row per metric, role in the left rail so the hierarchy reads top to bottom. */
+.tree { display: flex; flex-direction: column; border-top: 1px solid var(--rule); }
+.metric { display: grid; grid-template-columns: 7rem minmax(0, 1fr) 9.5rem; gap: 0.25rem 1rem; padding: 0.875rem 0; border-bottom: 1px solid var(--rule); align-items: baseline; }
+.metric .role { font-family: var(--font-mono); font-size: 0.6875rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+.metric.primary .role, .metric.primary .target { color: var(--accent); }
+.metric.guard .role { color: var(--risk); }
+.metric .name { font-weight: 600; }
+.metric .def { display: block; font-size: 0.875rem; color: var(--muted); line-height: 1.5; margin-top: 0.125rem; }
+.metric .target { font-family: var(--font-mono); font-size: 0.875rem; font-weight: 500; text-align: right; font-variant-numeric: tabular-nums; }
+.metric .target small { display: block; font-weight: 400; color: var(--muted); font-size: 0.75rem; }
+.metric.primary { background: var(--accent-soft); margin: 0 -0.75rem; padding-left: 0.75rem; padding-right: 0.75rem; border-radius: 4px; }
+@media (max-width: 34rem) {
+  .metric { grid-template-columns: minmax(0, 1fr) auto; }
+  .metric .role { grid-column: 1 / -1; }
+}
 .caption { font-size: 0.8125rem; color: var(--muted); margin-top: -0.25rem; }
 
 /* Funnel */
@@ -62,10 +77,10 @@
     <a class="home" href="index.html">Second Avenue</a>
     <a href="phase-1-discovery.html">1 · Discovery</a>
     <a href="phase-2-opportunity.html" aria-current="page">2 · Opportunity</a>
-    <a href="phase-3-metrics-scope.html">3 · Metrics &amp; scope</a>
+    <a href="phase-3-prd.html">3 · PRD</a>
   </nav>
   <header>
-    <p class="eyebrow">Phase 2 · Frame the opportunity</p>
+    <p class="eyebrow">Phase 2 · Opportunity &amp; success metrics</p>
     <h1>Second Avenue finds out a Risk contract is underperforming only when it is too late to act.</h1>
     <p class="note">Second Avenue is a fictional consignment retailer and every figure on this page is simulated. The evidence behind it is in the <a href="phase-1-discovery.html">product discovery write-up</a>.</p>
   </header>
@@ -77,8 +92,10 @@
       <dd>Nobody sees a Risk contract falling behind its target until it has expired. About 15% of contracts underperformed over the last 12 months, costing roughly $3.6M a year in shortfall payouts.</dd>
       <dt>Opportunity</dt>
       <dd>Flagging contracts that pace below target while they are still running could recover about $110K to $1.4M a year, with a base case near $500K. Ops review time costs about $13K a year.</dd>
+      <dt>Success</dt>
+      <dd>Flag underperformers a median of at least 30 days before expiry, against under a week today, with no more than 40% false alarms and 25 new flags a week.</dd>
       <dt>Next</dt>
-      <dd><a href="phase-3-metrics-scope.html">Phase 3</a> sets the success metrics and the pilot scope.</dd>
+      <dd>The <a href="phase-3-prd.html">PRD</a> turns this into the requirements Engineering sizes.</dd>
     </dl>
   </aside>
 
@@ -173,7 +190,7 @@
         </tbody>
       </table>
     </div>
-    <p>Even the highest case is small next to the low-case recovery. Alert volume is what the false-positive guardrail in <a href="phase-3-metrics-scope.html#guardrails">Phase 3</a> controls.</p>
+    <p>Even the highest case is small next to the low-case recovery. Alert volume is what the false-positive guardrail in <a href="#guardrails">success metrics</a> below control.</p>
 
     <h3>What this page does not claim</h3>
     <ul>
@@ -205,9 +222,50 @@ cost_side:
   loaded_hourly_cost_usd: 60</pre>
     </details>
   </section>
+
+  <section class="section" aria-labelledby="metrics">
+    <h2 id="metrics">What success looks like</h2>
+    <p>Reducing the $3.6M in shortfall payouts is the reason the product exists, but it is a poor primary metric. Whether a dollar is saved depends on the product noticing the contract, on Ops acting, and on the action working. The funnel above flagged that last step, the recovery rate, as its weakest assumption.</p>
+    <p>The product directly controls only the first step: how early it raises the flag. So detection lead time is the primary metric, and dollars saved sit above it as the outcome it should drive. If lead time improves and payouts don't fall, the problem is in the intervention, not the signal, and the metrics make that visible instead of blurring it.</p>
+
+    <div class="tree" role="list">
+      <div class="metric" role="listitem">
+        <span class="role">Outcome</span>
+        <div><span class="name">Shortfall payouts avoided</span><span class="def">Annual payouts against the ~$3.6M baseline. Tracked over quarters, not a launch gate.</span></div>
+        <span class="target">~$500K / yr<small>Base case above</small></span>
+      </div>
+      <div class="metric primary" role="listitem">
+        <span class="role">Primary</span>
+        <div><span class="name">Detection lead time</span><span class="def">Days from a contract's first risk flag to its expiry, for contracts that closed below target. An underperformer that was never flagged counts as 0 days, so missed contracts pull the number down instead of disappearing.</span></div>
+        <span class="target">Median ≥ 30 days<small>Today: under ~7</small></span>
+      </div>
+      <div class="metric" role="listitem">
+        <span class="role">Supporting</span>
+        <div><span class="name">Recall at halfway</span><span class="def">Share of eventual underperformers flagged by day 45. This replaces the first assumption in the funnel with a measured number.</span></div>
+        <span class="target">≥ 70%<small>Base case above</small></span>
+      </div>
+      <div class="metric guard" role="listitem" id="guardrails">
+        <span class="role">Guardrail</span>
+        <div><span class="name">False-positive rate</span><span class="def">Share of flagged contracts that closed at or above target. Every false alarm costs Ops a review and erodes trust in the next flag.</span></div>
+        <span class="target">≤ 40%</span>
+      </div>
+      <div class="metric guard" role="listitem">
+        <span class="role">Guardrail</span>
+        <div><span class="name">Alert volume</span><span class="def">New flags per week across the book. Keeps review cost near the ~$13K a year sized above.</span></div>
+        <span class="target">≤ 25 / week</span>
+      </div>
+      <div class="metric guard" role="listitem">
+        <span class="role">Guardrail</span>
+        <div><span class="name">Reconciliation</span><span class="def">Share of active contracts whose status and sales agree across Contracts, Listings and Sales at each refresh. Priya's one essential requirement.</span></div>
+        <span class="target">100%</span>
+      </div>
+    </div>
+    <p class="note" style="margin-top:0">The baseline lead time comes from the Ops interview: contracts are opened near the 90-day deadline, often with days rather than weeks left. Before launch, the backtest measures it properly by replaying today's practice, a manual review in the final week, over last year's contracts.</p>
+    <p>The primary metric and the false-positive guardrail pull against each other. A looser threshold flags contracts earlier, which raises lead time, and also flags more contracts that would have recovered on their own. The targets are set so that neither can be bought at the other's expense. How each metric is computed, and the release criteria built on these targets, are specified in the <a href="phase-3-prd.html">PRD</a>.</p>
+  </section>
   <nav class="pager" aria-label="Phases">
     <a href="phase-1-discovery.html"><span class="dir">Previous</span>Phase 1 · Discovery</a>
-    <a class="next" href="phase-3-metrics-scope.html"><span class="dir">Next</span>Phase 3 · Metrics &amp; scope</a>
+    <a class="next" href="phase-3-prd.html"><span class="dir">Next</span>Phase 3 · Product requirements</a>
   </nav>
   <p class="foot">The sizing inputs and model will be version-controlled in this repository so every figure above can be reproduced.</p>
 </main>

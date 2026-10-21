@@ -15,9 +15,9 @@ Second Avenue guarantees each consignor a target price and pays the difference w
 | # | Phase | Where | Status |
 |---|---|---|---|
 | 1 | [Discovery](docs/phase-1-discovery.html) | `docs/` | Done |
-| 2 | [Frame the opportunity](docs/phase-2-opportunity.html) | `docs/`, sizing model in `sizing/` (to come) | Done |
-| 3 | [Success metrics & scope](docs/phase-3-metrics-scope.html) | `docs/` | Done |
-| 4 | Structure the work | GitHub Issues and Projects | Next |
+| 2 | [Opportunity & success metrics](docs/phase-2-opportunity.html) | `docs/`, sizing model in `sizing/` (to come) | Done |
+| 3 | [Product requirements (PRD)](docs/phase-3-prd.html) | `docs/` | Done |
+| 4 | Structure the work: Engineering sizing, epics and stories traced to each DPR | GitHub Issues and Projects | Next |
 | 5 | Data foundation | BigQuery sandbox, synthetic data generator | Planned |
 | 6 | Semantic layer | dbt Semantic Layer / MetricFlow | Planned |
 | 7 | Conversational layer | Claude API and a lightweight UI | Planned |
