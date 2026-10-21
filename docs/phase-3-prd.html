@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Phase 3 · Product requirements | Second Avenue</title>
-<meta name="description" content="Product requirements for Second Avenue's contract-risk data product: scope, numbered data product requirements, governed metric definitions, release criteria and open questions for Engineering.">
+<meta name="description" content="Product requirements for Second Avenue's contract-risk data product: scope, numbered data product requirements, required and calculated fields, and open questions for Engineering.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&family=Newsreader:opsz,wght@6..72,500;6..72,600&display=swap">
@@ -47,7 +47,7 @@ td.id { font-family: var(--font-mono); font-size: 0.8125rem; font-weight: 500; c
   <header>
     <p class="eyebrow">Phase 3 · Product requirements</p>
     <h1>What the contract-risk product must do, written down once so Engineering can size it.</h1>
-    <p class="note">Second Avenue is a fictional consignment retailer and every figure on this page is simulated. The problem, sizing and success metrics are in the <a href="phase-2-opportunity.html">opportunity page</a>; the evidence is in the <a href="phase-1-discovery.html">discovery</a>.</p>
+    <p class="note">Second Avenue is a fictional consignment retailer and every figure on this page is simulated. This page says what the product must do, with a one-line reason for each requirement. Why it matters, how success is judged and what the pilot is betting on are on the <a href="phase-2-opportunity.html">opportunity page</a>. How it gets built and when it ships come from Engineering in Phase 4.</p>
   </header>
 
   <aside class="tldr" aria-labelledby="tldr-h">
@@ -91,7 +91,7 @@ td.id { font-family: var(--font-mono); font-size: 0.8125rem; font-weight: 500; c
         <ul>
           <li>Linear pacing and the risk flag</li>
           <li>Projected shortfall and exposure at risk</li>
-          <li>Daily batch refresh with cross-source reconciliation</li>
+          <li>Daily refresh with cross-source reconciliation</li>
           <li>Ranked daily list of flagged contracts for Ops</li>
           <li>Book rollups by region, channel, asset type and consignor for Finance</li>
           <li>Natural-language questions over these metrics</li>
@@ -151,7 +151,7 @@ td.id { font-family: var(--font-mono); font-size: 0.8125rem; font-weight: 500; c
       </div>
       <div class="req" role="listitem" id="dpr-8">
         <span class="id">DPR-8</span>
-        <div class="body"><span class="name">Success scorecard</span><span class="def">Once live, the success metrics are reported weekly from their calculated fields, broken out by channel and contract size.</span><span class="trace">Keeps the guardrails honest after launch, and measures the two <a href="#limits">known limitations</a>.</span></div>
+        <div class="body"><span class="name">Success scorecard</span><span class="def">Once live, the success metrics are reported weekly from their calculated fields, broken out by channel and contract size.</span><span class="trace">Keeps the guardrails honest after launch, and measures the two <a href="phase-2-opportunity.html#pilot-risks">known risks to the pilot</a>.</span></div>
         <span class="pri">Should</span>
       </div>
       <div class="req" role="listitem" id="dpr-9">
@@ -278,45 +278,29 @@ td.id { font-family: var(--font-mono); font-size: 0.8125rem; font-weight: 500; c
       <table>
         <thead><tr><th>ID</th><th>Requirement</th></tr></thead>
         <tbody>
-          <tr><td class="id">NFR-1</td><td><strong>Daily batch refresh</strong>, landed before the Ops day starts, with all three sources taken from the same point in time.</td></tr>
+          <tr><td class="id">NFR-1</td><td><strong>Daily refresh</strong>, landed before the Ops day starts, with all three sources reflecting the same point in time.</td></tr>
           <tr><td class="id">NFR-2</td><td><strong>One definition per metric.</strong> Lists, rollups and answers to questions all read the governed metrics; none recomputes them.</td></tr>
           <tr><td class="id">NFR-3</td><td><strong>Reproducible by date.</strong> Any day's output can be regenerated for that as-of date and comes out the same.</td></tr>
           <tr><td class="id">NFR-4</td><td><strong>Read-only access for questions.</strong> The question layer can't change data and can't query raw source tables directly.</td></tr>
         </tbody>
       </table>
     </div>
-    <h3>Why daily</h3>
-    <p>Discovery left open how fresh the signal needs to be. David can work with weekly, Priya heard stakeholders ask for near-real-time, and she would trade speed for consistency. Tying cadence to the decision it supports settles it.</p>
-    <p>The decision is Ops choosing to reprice, switch channel or move a contract into an auction, and it plays out over days. A weekly refresh could spend up to 7 of the days the primary metric is trying to win. Real-time adds cost and makes it harder to keep the three source systems consistent, which is Priya's essential requirement. A daily batch refresh keeps every system on the same snapshot and gives Maria her morning list.</p>
+    <p class="note" style="margin-top:0">Daily is the slowest refresh that doesn't spend the lead time the product exists to win; the reasoning is on the <a href="phase-2-opportunity.html#cadence">opportunity page</a>.</p>
   </section>
 
   <section class="section" aria-labelledby="release">
     <h2 id="release">5. Release criteria</h2>
-    <p>Before Ops relies on the flag, the backtest (DPR-7) replays it over the last 12 months of closed contracts, whose final outcomes are already known. The pilot goes live with Ops when, on the backtest:</p>
-    <ul>
-      <li>median detection lead time is at least 30 days,</li>
-      <li>at least 70% of underperformers are flagged by day 45,</li>
-      <li>no more than 40% of flags are false alarms,</li>
-      <li>new flags stay at or below 25 a week, and</li>
-      <li>every active contract reconciles across the three sources.</li>
-    </ul>
-    <p>The 80% threshold and the day-15 floor are starting values, not commitments. The backtest sweeps both and picks the setting that best meets the lead-time target while staying inside the guardrails.</p>
+    <p>The pilot goes live with Ops when the backtest meets the <a href="phase-2-opportunity.html#go-live">go-live criteria</a> set on the opportunity page. The requirement on this side is DPR-7: the backtest must produce every number those criteria use, for any setting of the flag parameters.</p>
   </section>
 
   <section class="section" aria-labelledby="limits">
-    <h2 id="limits">6. Known limitations, assumptions and dependencies</h2>
-    <h3>Limitations of the pilot</h3>
-    <ul>
-      <li><strong>Back-loaded contracts look worse than they are.</strong> A contract whose assets are scheduled into a live auction late in the window will pace low until the auction and then catch up. Linear pacing will flag it. This is the main reason historical-curve pacing comes next, and the false-positive rate by channel will show how large the effect is.</li>
-      <li><strong>Single-asset contracts are all or nothing.</strong> A contract covering one high-value item shows $0 realized until it sells, so pacing says little about it. False positives by contract size will show whether this segment needs separate handling.</li>
-      <li><strong>The backtest can't prove the dollars.</strong> Payouts avoided depend on Ops acting on a flag, which history can't show. The pilot proves the signal; logging Ops actions, planned next, is what proves the dollars.</li>
-    </ul>
-    <h3>Assumptions and dependencies</h3>
+    <h2 id="limits">6. Assumptions and dependencies</h2>
     <ul>
       <li>Twelve months of contract, listing and sales history can be extracted from the three source systems.</li>
       <li>Ops commits to working the morning list during the pilot, so live lead time reflects the flag and not whether anyone looked.</li>
       <li>Contract targets and windows in ConsignTrack are accurate; the product reports on them but doesn't validate the commercial terms.</li>
     </ul>
+    <p class="note" style="margin-top:0">The known risks to the pilot, and why linear pacing comes first, are on the <a href="phase-2-opportunity.html#pilot">opportunity page</a>.</p>
   </section>
 
   <section class="section" aria-labelledby="questions">

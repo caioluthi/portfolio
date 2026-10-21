@@ -94,6 +94,8 @@
       <dd>Flagging contracts that pace below target while they are still running could recover about $110K to $1.4M a year, with a base case near $500K. Ops review time costs about $13K a year.</dd>
       <dt>Success</dt>
       <dd>Flag underperformers a median of at least 30 days before expiry, against under a week today, with no more than 40% false alarms and 25 new flags a week.</dd>
+      <dt>Pilot</dt>
+      <dd>Test a linear pacing flag, refreshed daily, against last year's contracts, and go live with Ops only if it meets the success targets.</dd>
       <dt>Next</dt>
       <dd>The <a href="phase-3-prd.html">PRD</a> turns this into the requirements Engineering sizes.</dd>
     </dl>
@@ -261,7 +263,38 @@ cost_side:
       </div>
     </div>
     <p class="note" style="margin-top:0">The baseline lead time comes from the Ops interview: contracts are opened near the 90-day deadline, often with days rather than weeks left. Before launch, the backtest measures it properly by replaying today's practice, a manual review in the final week, over last year's contracts.</p>
-    <p>The primary metric and the false-positive guardrail pull against each other. A looser threshold flags contracts earlier, which raises lead time, and also flags more contracts that would have recovered on their own. The targets are set so that neither can be bought at the other's expense. How each metric is computed, and the release criteria built on these targets, are specified in the <a href="phase-3-prd.html">PRD</a>.</p>
+    <p>The primary metric and the false-positive guardrail pull against each other. A looser threshold flags contracts earlier, which raises lead time, and also flags more contracts that would have recovered on their own. The targets are set so that neither can be bought at the other's expense. How each metric is calculated is specified in the <a href="phase-3-prd.html#calculated">PRD</a>.</p>
+  </section>
+
+  <section class="section" aria-labelledby="pilot">
+    <h2 id="pilot">The pilot bet</h2>
+    <p>The pilot tests one claim: a simple pacing flag, computed daily from data Second Avenue already has, catches underperforming contracts weeks earlier than today without burying Ops in false alarms. If that holds, the dollars can follow. If it doesn't, nothing more sophisticated is worth building on top of it.</p>
+
+    <h3>Why linear pacing first</h3>
+    <p>Linear pacing compares sales to date with a straight line from zero to the target. It needs no history, Ops can check it in their head, and it is enough to test whether earlier flags are useful at all. Pacing against the historical sales curves of similar contracts is more accurate, especially for live auctions, and comes next once the pilot shows where linear pacing is wrong.</p>
+
+    <h3 id="cadence">Why a daily refresh</h3>
+    <p>Discovery left open how fresh the signal needs to be. David can work with weekly, Priya heard stakeholders ask for near-real-time, and she would trade speed for consistency. Tying cadence to the decision it supports settles it.</p>
+    <p>The decision is Ops choosing to reprice, switch channel or move a contract into an auction, and it plays out over days. A weekly refresh could spend up to 7 of the days the primary metric is trying to win. Real-time adds cost and makes it harder to keep the three source systems consistent, which is Priya's essential requirement. A daily refresh keeps every system on the same snapshot and gives Maria her morning list.</p>
+
+    <h3 id="go-live">How we decide to go live</h3>
+    <p>Before Ops relies on the flag, it is replayed over the last 12 months of closed contracts, whose final outcomes are already known. The pilot goes live with Ops when, on that backtest:</p>
+    <ul>
+      <li>median detection lead time is at least 30 days,</li>
+      <li>at least 70% of underperformers are flagged by day 45,</li>
+      <li>no more than 40% of flags are false alarms,</li>
+      <li>new flags stay at or below 25 a week, and</li>
+      <li>every active contract reconciles across the three sources.</li>
+    </ul>
+    <p>The 80% threshold and the day-15 floor are starting values, not commitments. The backtest sweeps both and picks the setting that best meets the lead-time target while staying inside the guardrails.</p>
+
+    <h3 id="pilot-risks">Risks to the bet</h3>
+    <ul>
+      <li><strong>Back-loaded contracts look worse than they are.</strong> A contract whose assets are scheduled into a live auction late in the window will pace low until the auction and then catch up. Linear pacing will flag it. This is the main reason historical-curve pacing comes next, and the false-positive rate by channel will show how large the effect is.</li>
+      <li><strong>Single-asset contracts are all or nothing.</strong> A contract covering one high-value item shows $0 realized until it sells, so pacing says little about it. False positives by contract size will show whether this segment needs separate handling.</li>
+      <li><strong>The backtest can't prove the dollars.</strong> Payouts avoided depend on Ops acting on a flag, which history can't show. The pilot proves the signal; logging Ops actions, planned next, is what proves the dollars.</li>
+    </ul>
+    <p>The <a href="phase-3-prd.html">PRD</a> turns the pilot into requirements for Engineering.</p>
   </section>
   <nav class="pager" aria-label="Phases">
     <a href="phase-1-discovery.html"><span class="dir">Previous</span>Phase 1 · Discovery</a>
