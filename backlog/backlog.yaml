@@ -1,0 +1,410 @@
+# Second Avenue contract-risk data product: backlog
+#
+# Source of truth for the GitHub Issues backlog. Every story traces to a
+# requirement in the PRD (docs/phase-3-prd.html): DPR-n for data product
+# requirements, NFR-n for non-functional ones, OQ-n for an open question
+# Engineering must settle first.
+#
+# Product writes the why and the what: the user story and acceptance criteria.
+# Engineering adds the how and the when in the sizing session: `size` is left
+# empty here on purpose.
+
+prd: https://caioluthi.github.io/portfolio/phase-3-prd.html
+
+open_questions:
+  OQ-1: Extraction. Full daily snapshots or change capture, and how the three sources are frozen to one point in time.
+  OQ-2: Source of truth. Which system wins on contract status for the flag when systems disagree.
+  OQ-3: Listings. Whether listings are modeled as their own entity or channel on the sale event is enough.
+  OQ-4: Delivery. Where the morning list lives - dashboard, email or the question interface.
+  OQ-5: Day boundary. Which time zone defines a contract day.
+  OQ-6: Channel attribution. How a contract that sells across channels is attributed in rollups by channel.
+  OQ-7: Question layer. Hosting, cost envelope and how accuracy is tested before Ops sees it.
+
+personas:
+  maria: Maria, Ops contract manager
+  david: David, Finance
+  priya: Priya, data analyst
+
+epics:
+
+  - key: E1
+    title: Contract data foundation
+    goal: One daily, reproducible snapshot of every Risk contract with its consignor, assets and sales.
+    traces: [DPR-1, NFR-1, NFR-3]
+    priority: must
+    stories:
+
+      - key: E1-S1
+        title: Define the contract entity model
+        as: priya
+        want: a documented model of Consignor, Contract, Asset and Sale event, with channel and region as dimensions
+        so_that: every later table and metric is built on the same grain and keys
+        traces: [DPR-1]
+        open_questions: [OQ-3]
+        acceptance:
+          - The model names each entity's grain and primary key, and every foreign key between them.
+          - Each asset belongs to exactly one contract, and each sale event to exactly one asset.
+          - Channel takes only the values app, website or live; region is a dimension on the contract and on the sale event.
+          - The contract carries its target price, window and per-contract tier schedule.
+          - Every required field in the PRD maps to exactly one entity and source system.
+          - The model is committed to the repository as a diagram and a schema file.
+
+      - key: E1-S2
+        title: Land the three source systems into a daily snapshot
+        as: priya
+        want: ConsignTrack, Listings and Sales landed every day, taken from the same point in time
+        so_that: the joined view is never built from systems that have drifted apart
+        traces: [DPR-1, NFR-1]
+        open_questions: [OQ-1]
+        acceptance:
+          - All three sources land once a day, before the Ops day starts.
+          - Each landed row carries the as_of_date it represents.
+          - A run fails loudly, rather than landing partial data, if any of the three sources is missing.
+          - Raw landed data is kept per source, unmodified, so reconciliation can compare them.
+
+      - key: E1-S3
+        title: Build the joined contract view
+        as: priya
+        want: each contract joined with its consignor, assets and sales in one table per day
+        so_that: a report becomes a query instead of an eight-hour project
+        traces: [DPR-1]
+        depends_on: [E1-S1, E1-S2]
+        acceptance:
+          - Every required field in the PRD is present, with the name and meaning stated there.
+          - Active and closed contracts are both included; cancelled contracts are excluded from metrics but kept.
+          - No contract is duplicated, and no sale is attached to more than one contract.
+          - Row counts per day match the count of contracts in ConsignTrack, or the gap is reported by E2.
+
+      - key: E1-S4
+        title: Reproduce any day's snapshot by as-of date
+        as: david
+        want: to regenerate the snapshot for any past as-of date and get the same result
+        so_that: I can audit what was known on the day a decision was made
+        traces: [NFR-3]
+        depends_on: [E1-S3]
+        acceptance:
+          - Running the pipeline for a past as_of_date produces output identical to the original run.
+          - Late-arriving source changes don't alter a past day's snapshot.
+          - At least 12 months of as-of dates can be produced, enough for the backtest.
+
+  - key: E2
+    title: Cross-source reconciliation
+    goal: Every refresh proves that contracts agree across the three systems, or says exactly where they don't.
+    traces: [DPR-2]
+    priority: must
+    stories:
+
+      - key: E2-S1
+        title: Reconcile each active contract at every refresh
+        as: priya
+        want: each active contract's status and sales checked across ConsignTrack, Listings and Sales
+        so_that: nobody acts on a number that only one system believes
+        traces: [DPR-2]
+        depends_on: [E1-S3]
+        acceptance:
+          - Every active contract gets a daily reconciled value of true or false.
+          - Status must match across all three systems, and realized sales must match between Sales and the joined view.
+          - The reconciliation rate for the day is available as a single number.
+
+      - key: E2-S2
+        title: Report every disagreement
+        as: priya
+        want: a list of contracts that failed reconciliation, with the systems and fields involved
+        so_that: I can fix the source instead of hunting for the mismatch
+        traces: [DPR-2]
+        depends_on: [E2-S1]
+        acceptance:
+          - Each failed contract shows its contract_id, the field that disagrees, and the value in each system.
+          - Disagreements are reported, never silently overwritten.
+          - The report is empty, not missing, on a day with full reconciliation.
+
+      - key: E2-S3
+        title: Apply a single source-of-truth rule for status
+        as: maria
+        want: the flag to use one agreed status when systems disagree
+        so_that: a contract is never flagged and unflagged by the same data on the same day
+        traces: [DPR-2, DPR-3]
+        open_questions: [OQ-2]
+        depends_on: [E2-S1]
+        acceptance:
+          - The rule chosen for OQ-2 is documented next to the metric definitions.
+          - Contracts resolved by the rule still appear in the disagreement report.
+
+  - key: E3
+    title: Governed metrics as calculated fields
+    goal: Every calculated field in the PRD, defined once and exposed by name to everything downstream.
+    traces: [DPR-3, NFR-2]
+    priority: must
+    stories:
+
+      - key: E3-S1
+        title: Calculate daily contract pacing
+        as: maria
+        want: elapsed share, days to expiry, realized sales and pacing % for every active contract each day
+        so_that: I can see which contracts are behind their target pace
+        traces: [DPR-3]
+        open_questions: [OQ-5]
+        depends_on: [E1-S3]
+        acceptance:
+          - Each field matches its PRD definition exactly; elapsed share is capped at 1.
+          - "Worked example: a $50,000, 90-day contract with $11,000 sold by day 30 has pacing of 66%."
+          - Realized sales count only sales dated on or before the as_of_date.
+          - Day counting uses the time zone agreed for OQ-5.
+
+      - key: E3-S2
+        title: Raise the daily risk flag
+        as: maria
+        want: a risk flag on active contracts pacing below the threshold from the day floor onward
+        so_that: falling-behind contracts reach me while there is still time to act
+        traces: [DPR-3]
+        depends_on: [E3-S1, E2-S3]
+        acceptance:
+          - The flag is true when pacing % is below flag_threshold, the contract is active, and it is on or after flag_day_floor.
+          - No contract is flagged before the day floor.
+          - Changing flag_threshold or flag_day_floor changes results without changing any definition or code.
+          - Pilot defaults are 80% and day 15.
+
+      - key: E3-S3
+        title: Project final value and shortfall
+        as: david
+        want: a linear projected final value and projected shortfall for each contract
+        so_that: I can see what each flagged contract is likely to cost
+        traces: [DPR-3, DPR-4]
+        depends_on: [E3-S1]
+        acceptance:
+          - Projected final value and projected shortfall match their PRD definitions; shortfall is never negative.
+          - "Worked example: the $50,000 contract above projects to about $33,000, a shortfall of about $17,000."
+          - Exposure at risk is the sum of projected shortfall over flagged contracts only.
+
+      - key: E3-S4
+        title: Mark how each contract closed
+        as: david
+        want: every closed contract marked as closed below target or not
+        so_that: success metrics can compare flags against real outcomes
+        traces: [DPR-3]
+        depends_on: [E3-S1]
+        acceptance:
+          - Closed below target is true when realized sales at expiry are below target_price.
+          - The field is set once, at close, and never changes after.
+
+      - key: E3-S5
+        title: Publish the metric catalog
+        as: priya
+        want: every calculated field documented with its definition, inputs and grain, in one place
+        so_that: dashboards, lists and answers all read the same numbers and nobody recomputes them
+        traces: [NFR-2]
+        depends_on: [E3-S1, E3-S2, E3-S3, E3-S4]
+        acceptance:
+          - Every calculated field in the PRD appears in the catalog under the same name.
+          - Each entry's definition matches the PRD word for word or links to it.
+          - No downstream view computes a metric that exists in the catalog.
+
+  - key: E4
+    title: Flag history and evaluation fields
+    goal: Keep every day's flag so lead time and the other success metrics can be calculated.
+    traces: [DPR-6, DPR-3]
+    priority: must
+    stories:
+
+      - key: E4-S1
+        title: Keep each contract's daily flag state
+        as: david
+        want: a history of each contract's flag, pacing and projected shortfall by day
+        so_that: any past day's list can be reproduced as it was
+        traces: [DPR-6]
+        depends_on: [E3-S2]
+        acceptance:
+          - One row per contract per as_of_date with the flag, pacing % and projected shortfall.
+          - History is append-only; a past day's row never changes.
+          - The morning list for any past date can be regenerated from history alone.
+
+      - key: E4-S2
+        title: Calculate the evaluation fields
+        as: david
+        want: first flag date, detection lead time, flagged by halfway, false positive and new flags
+        so_that: the backtest and the scorecard aggregate one set of fields instead of computing their own
+        traces: [DPR-3, DPR-6]
+        depends_on: [E4-S1, E3-S4]
+        acceptance:
+          - Each field matches its PRD definition.
+          - An underperformer that was never flagged has a lead time of 0, not null.
+          - "Worked example: flagged on day 15 of a 90-day contract that closes below target gives a lead time of 75 days."
+
+  - key: E5
+    title: Backtest and go-live report
+    goal: Prove the flag on last year's contracts before Ops relies on it.
+    traces: [DPR-7]
+    priority: must
+    stories:
+
+      - key: E5-S1
+        title: Replay the daily flag over 12 months of closed contracts
+        as: david
+        want: the flag run for every day of the last 12 months, as it would have run then
+        so_that: we know how early it would have caught last year's underperformers
+        traces: [DPR-7]
+        depends_on: [E1-S4, E4-S2]
+        acceptance:
+          - Every day in the 12-month window is replayed from its own as-of snapshot, never from later data.
+          - The replay produces every evaluation field for every closed contract.
+
+      - key: E5-S2
+        title: Replay today's practice as the baseline
+        as: david
+        want: today's practice, a manual review in the final week, replayed over the same contracts
+        so_that: lead time is measured against what Ops does now, not against zero
+        traces: [DPR-7]
+        depends_on: [E5-S1]
+        acceptance:
+          - The baseline treats a contract as noticed 7 days before expiry if it closed below target.
+          - Baseline and flag results are reported side by side for every success metric.
+
+      - key: E5-S3
+        title: Sweep the flag parameters
+        as: maria
+        want: the backtest run across a range of thresholds and day floors
+        so_that: the pilot starts with the setting that wins the most lead time inside the guardrails
+        traces: [DPR-7]
+        depends_on: [E5-S1]
+        acceptance:
+          - Thresholds from 60% to 95% in 5-point steps, and day floors of 7, 10, 15, 21 and 30, are each evaluated.
+          - Each setting reports all five go-live measures.
+          - The recommended setting is the one with the highest median lead time that meets every guardrail.
+
+      - key: E5-S4
+        title: Produce the go-live report
+        as: david
+        want: one report stating whether each go-live criterion is met
+        so_that: the decision to go live is made on evidence, not opinion
+        traces: [DPR-7]
+        depends_on: [E5-S2, E5-S3, E2-S1]
+        acceptance:
+          - Each of the five go-live criteria on the opportunity page is shown as met or not met, with its value.
+          - False-positive rate is broken out by channel and by contract size, to size the two known pilot risks.
+          - The report can be regenerated from the repository with one command.
+
+  - key: E6
+    title: Ops and Finance views
+    goal: Put the flag in front of the people who act on it.
+    traces: [DPR-4, DPR-5]
+    priority: must
+    stories:
+
+      - key: E6-S1
+        title: Ranked morning list for Ops
+        as: maria
+        want: each morning, the flagged contracts ranked by projected shortfall
+        so_that: I open the contracts that matter most first
+        traces: [DPR-5]
+        open_questions: [OQ-4]
+        depends_on: [E3-S3, E2-S1]
+        acceptance:
+          - The list is ready before the Ops day starts.
+          - Each row shows the contract, consignor, pacing %, days to expiry, projected shortfall and sales so far by channel.
+          - Contracts that failed reconciliation are marked, not hidden.
+          - The list is delivered where OQ-4 decides.
+
+      - key: E6-S2
+        title: Exposure rollups for Finance
+        as: david
+        want: exposure at risk and share of contracts flagged by region, channel, asset type and consignor
+        so_that: I can see where the book is at risk without waiting for the quarterly report
+        traces: [DPR-4]
+        open_questions: [OQ-6]
+        depends_on: [E3-S3]
+        acceptance:
+          - Rollups go from contract level to the whole book, and the book total equals the sum of its parts.
+          - Rollups by channel follow the attribution rule chosen for OQ-6, documented on the view.
+          - Every number shows the as_of_date it represents.
+
+  - key: E7
+    title: Success scorecard
+    goal: Keep the guardrails honest after launch.
+    traces: [DPR-8]
+    priority: should
+    stories:
+
+      - key: E7-S1
+        title: Report the success metrics weekly
+        as: david
+        want: lead time, recall at day 45, false-positive rate, alert volume and reconciliation rate each week
+        so_that: we notice if the flag drifts out of its guardrails
+        traces: [DPR-8]
+        depends_on: [E4-S2, E2-S1]
+        acceptance:
+          - Each metric is an aggregate of the evaluation fields, never recomputed.
+          - Each is shown against its target, broken out by channel and by contract size.
+          - A metric outside its guardrail is visibly marked.
+
+  - key: E8
+    title: Questions in plain language
+    goal: Let Ops and Finance ask the four discovery questions without a new report.
+    traces: [DPR-9, NFR-4]
+    priority: should
+    stories:
+
+      - key: E8-S1
+        title: Answer the four discovery questions from governed metrics
+        as: maria
+        want: to ask in plain language which contracts are behind and close to expiry, and get the list
+        so_that: I don't need an analyst for each question
+        traces: [DPR-9]
+        open_questions: [OQ-7]
+        depends_on: [E3-S5, E6-S2]
+        acceptance:
+          - Each of the four discovery questions, plus "which contracts are pacing below target and expiring in the next 30 days", gets a correct answer.
+          - Answers are built only from catalog fields, never from raw source tables.
+
+      - key: E8-S2
+        title: Show the metric and as-of date with every answer
+        as: david
+        want: each answer to say which metric it used and for which date
+        so_that: I can trust it and repeat it
+        traces: [DPR-9]
+        depends_on: [E8-S1]
+        acceptance:
+          - Every answer names the catalog fields it used and the as_of_date.
+
+      - key: E8-S3
+        title: Decline questions the product can't answer
+        as: david
+        want: a plain "not supported" when I ask something outside the governed metrics
+        so_that: I never get an invented number
+        traces: [DPR-9]
+        depends_on: [E8-S1]
+        acceptance:
+          - Questions about what-if channel moves, upside tiers or future predictions get a "not supported" answer that says what is supported instead.
+          - No answer contains a number that isn't in the catalog's output for that date.
+
+      - key: E8-S4
+        title: Restrict the question layer to read-only governed access
+        as: priya
+        want: the question layer unable to change data or read raw tables
+        so_that: a badly phrased question can't break anything or leak raw data
+        traces: [NFR-4]
+        depends_on: [E8-S1]
+        acceptance:
+          - The question layer's credentials allow reads of catalog fields only.
+          - An attempt to write or to read a raw table fails and is logged.
+
+      - key: E8-S5
+        title: Test answer accuracy before Ops sees it
+        as: maria
+        want: the question layer checked against a fixed set of questions with known answers
+        so_that: I only see it once it is right
+        traces: [DPR-9]
+        open_questions: [OQ-7]
+        depends_on: [E8-S1]
+        acceptance:
+          - A versioned set of at least 30 questions, with expected answers computed from the catalog, lives in the repository.
+          - The set includes the four discovery questions, paraphrases of each, and out-of-scope questions.
+          - Every answer must be correct, and every out-of-scope question declined, before Ops gets access.
+
+# Next scope. Not broken into stories until the pilot reports.
+next:
+  - title: Historical-curve pacing
+    why: Linear pacing over-flags back-loaded contracts, especially live auctions.
+  - title: Suggested interventions per flagged contract
+    why: Ops knows a contract is behind but not yet which action fits it.
+  - title: Log Ops actions on flagged contracts
+    why: The recovery rate is the weakest assumption in the sizing; logging actions measures it.
