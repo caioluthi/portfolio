@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Phase 3 · Metrics &amp; scope | Second Avenue</title>
-<meta name="description" content="Success metrics, guardrails, governed metric definitions and v1/v2 scope for Second Avenue's contract-risk data product.">
+<meta name="description" content="Success metrics, guardrails, governed metric definitions and pilot scope for Second Avenue's contract-risk data product.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&family=Newsreader:opsz,wght@6..72,500;6..72,600&display=swap">
@@ -57,7 +57,7 @@
       <dt>Guardrails</dt>
       <dd>No more than 40% of flags are false alarms, and no more than 25 new flags a week.</dd>
       <dt>Scope</dt>
-      <dd>v1 uses linear pacing with a daily refresh. Pacing against historical curves of similar contracts is v2.</dd>
+      <dd>The pilot uses linear pacing with a daily refresh. Pacing against the historical curves of similar contracts comes next.</dd>
       <dt>Next</dt>
       <dd>Phase 4 turns this page into epics, stories and acceptance criteria.</dd>
     </dl>
@@ -100,7 +100,7 @@
         <span class="target">100%</span>
       </div>
     </div>
-    <p class="note" style="margin-top:0">The baseline lead time comes from the Ops interview: contracts are opened near the 90-day deadline, often with days rather than weeks left. Phase 5 will measure it properly by replaying a "final-week manual review" policy on the synthetic data.</p>
+    <p class="note" style="margin-top:0">The baseline lead time comes from the Ops interview: contracts are opened near the 90-day deadline, often with days rather than weeks left. Before launch, the backtest measures it properly by replaying today's practice, a manual review in the final week, over last year's contracts.</p>
     <p>The primary metric and the false-positive guardrail pull against each other. A looser threshold flags contracts earlier, which raises lead time, and also flags more contracts that would have recovered on their own. The targets above are set so that neither can be bought at the other's expense.</p>
   </section>
 
@@ -114,7 +114,7 @@
           <tr><td>Elapsed share</td><td><span class="formula">days_elapsed ÷ lifecycle_days</span>, capped at 1</td><td>Contract, daily</td></tr>
           <tr><td>Realized sales</td><td>Sum of gross sale proceeds to date for the contract's assets</td><td>Contract, daily</td></tr>
           <tr><td>Pacing %</td><td><span class="formula">realized ÷ (target × elapsed_share)</span></td><td>Contract, daily</td></tr>
-          <tr><td>Risk flag (v1)</td><td>Pacing % below 80%, on an active contract, from day 15 onward. The first two weeks are excluded because a single early sale or its absence swings pacing too much to mean anything.</td><td>Contract, daily</td></tr>
+          <tr><td>Risk flag (pilot)</td><td>Pacing % below 80%, on an active contract, from day 15 onward. The first two weeks are excluded because a single early sale or its absence swings pacing too much to mean anything.</td><td>Contract, daily</td></tr>
           <tr><td>Projected final value</td><td><span class="formula">realized ÷ elapsed_share</span> (linear projection)</td><td>Contract, daily</td></tr>
           <tr><td>Projected shortfall</td><td><span class="formula">max(0, target − projected_final)</span></td><td>Contract, daily</td></tr>
           <tr><td>Exposure at risk</td><td>Sum of projected shortfall across flagged contracts</td><td>Any rollup: region, channel, asset type, consignor</td></tr>
@@ -130,7 +130,7 @@
     <figure>
       <svg class="chart" viewBox="0 0 680 300" role="img" aria-labelledby="chart-t chart-d">
         <title id="chart-t">Linear pacing on one simulated contract</title>
-        <desc id="chart-d">Cumulative sales of a $50,000, 90-day contract compared with the linear target pace and the 80% flag line. Sales fall below the flag line early; the v1 flag fires on day 15, while today the contract would be noticed around day 85. It closes at $36,000.</desc>
+        <desc id="chart-d">Cumulative sales of a $50,000, 90-day contract compared with the linear target pace and the 80% flag line. Sales fall below the flag line early; the pilot flag fires on day 15, while today the contract would be noticed around day 85. It closes at $36,000.</desc>
         <rect x="56" y="30" width="84" height="230" fill="var(--rule)" opacity="0.35"/>
         <g stroke="var(--rule)" stroke-width="1">
           <line x1="56" y1="260" x2="560" y2="260"/>
@@ -153,7 +153,7 @@
         <text class="lbl-risk" x="566" y="111">Flag line 80%</text>
         <text class="lbl-accent" x="566" y="140">Actual sales</text>
         <circle cx="140" cy="235.1" r="6" fill="var(--risk)"/>
-        <text class="lbl-risk" x="150" y="254">v1 flag, day 15</text>
+        <text class="lbl-risk" x="150" y="254">Pilot flag, day 15</text>
         <circle cx="532" cy="132.3" r="6" fill="none" stroke="var(--fg)" stroke-width="2"/>
         <line x1="532" y1="139" x2="532" y2="222" stroke="var(--fg)" stroke-width="1"/>
         <text class="lbl" x="524" y="236" text-anchor="end">Noticed today, ~day 85</text>
@@ -183,9 +183,9 @@
   </section>
 
   <section class="section" aria-labelledby="measure">
-    <h2 id="measure">4. How v1 will be judged</h2>
-    <p>This is a lab build, so success is judged by a backtest. The Phase 5 synthetic data generator produces contracts whose final outcomes are known, including a realistic share that pace below target. Replaying the daily flag over that history produces every metric above.</p>
-    <p>v1 passes when, on the backtest:</p>
+    <h2 id="measure">4. How the pilot will be judged</h2>
+    <p>Before Ops relies on the flag, it is replayed over the last 12 months of closed contracts, whose final outcomes are already known. Running the daily flag over that history produces every metric above.</p>
+    <p>The pilot goes live with Ops when, on the backtest:</p>
     <ul>
       <li>median detection lead time is at least 30 days,</li>
       <li>at least 70% of underperformers are flagged by day 45,</li>
@@ -200,9 +200,9 @@
     <h2 id="scope">5. Scope</h2>
     <div class="cards scope">
       <article class="card">
-        <span class="tag in">v1 · building now</span>
+        <span class="tag in">Pilot</span>
         <ul>
-          <li>Linear pacing and the v1 risk flag</li>
+          <li>Linear pacing and the risk flag</li>
           <li>Projected shortfall and exposure at risk</li>
           <li>Daily batch refresh with cross-source reconciliation</li>
           <li>Ranked daily list of flagged contracts for Ops</li>
@@ -211,31 +211,23 @@
         </ul>
       </article>
       <article class="card">
-        <span class="tag next">v2 · stated next</span>
+        <span class="tag next">Next</span>
         <ul>
           <li>Pacing against the historical sales curve of similar past contracts, by asset type, channel and region</li>
           <li>Suggested interventions per flagged contract</li>
           <li>Logging of Ops actions, so the recovery rate can be measured instead of assumed</li>
         </ul>
       </article>
-      <article class="card">
-        <span class="tag">Not planned</span>
-        <ul>
-          <li>Automated repricing or channel moves</li>
-          <li>Real-time streaming</li>
-          <li>What-if simulation of moving assets between channels</li>
-          <li>Optimizing the upside tiers</li>
-        </ul>
-      </article>
     </div>
+    <p class="note" style="margin-top:0">Out of scope for both: automated repricing or channel moves, real-time streaming, what-if simulation of moving assets between channels, and optimizing the upside tiers.</p>
   </section>
 
   <section class="section" aria-labelledby="risks">
-    <h2 id="risks">6. Known limitations of v1</h2>
+    <h2 id="risks">6. Known limitations of the pilot</h2>
     <ul>
-      <li><strong>Back-loaded contracts look worse than they are.</strong> A contract whose assets are scheduled into a live auction late in the window will pace low until the auction and then catch up. Linear pacing will flag it. This is the main reason historical-curve pacing is v2, and the backtest will report the false-positive rate by channel to show how large the effect is.</li>
+      <li><strong>Back-loaded contracts look worse than they are.</strong> A contract whose assets are scheduled into a live auction late in the window will pace low until the auction and then catch up. Linear pacing will flag it. This is the main reason historical-curve pacing comes next, and the backtest will report the false-positive rate by channel to show how large the effect is.</li>
       <li><strong>Single-asset contracts are all or nothing.</strong> A contract covering one high-value item shows $0 realized until it sells, so pacing says little about it. The backtest will report false positives by contract size so this segment can be handled separately if it dominates the noise.</li>
-      <li><strong>The outcome metric can't be fully proven in a lab.</strong> Payouts avoided depend on Ops acting, which the synthetic data can only assume. v1 proves the signal; v2's action logging is what would prove the dollars.</li>
+      <li><strong>The backtest can't prove the dollars.</strong> Payouts avoided depend on Ops acting on a flag, which history can't show. The pilot proves the signal; logging Ops actions, planned next, is what proves the dollars.</li>
     </ul>
   </section>
 
