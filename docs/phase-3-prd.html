@@ -58,7 +58,7 @@ td.id { font-family: var(--font-mono); font-size: 0.8125rem; font-weight: 500; c
       <dt>Pilot</dt>
       <dd>Linear pacing, a daily risk flag, exposure at risk, a ranked list for Ops, rollups for Finance and plain-language questions on top.</dd>
       <dt>Requirements</dt>
-      <dd>Nine data product requirements, DPR-1 to DPR-9: seven must-haves and two should-haves. Every story in the backlog traces to one of them.</dd>
+      <dd>Nine data product requirements, DPR-1 to DPR-9: seven must-haves and two should-haves, with the required and calculated fields each one depends on. Every story in the backlog traces to one of them.</dd>
       <dt>Next</dt>
       <dd>Phase 4 takes this page to an Engineering sizing session and breaks it into epics and stories.</dd>
     </dl>
@@ -116,7 +116,7 @@ td.id { font-family: var(--font-mono); font-size: 0.8125rem; font-weight: 500; c
     <div class="reqs" role="list">
       <div class="req" role="listitem" id="dpr-1">
         <span class="id">DPR-1</span>
-        <div class="body"><span class="name">One contract view across systems</span><span class="def">Every Risk contract, active or closed, is joined with its consignor, its assets and their sales into a single daily snapshot, with channel and region on every sale.</span><span class="trace">For Priya and everyone downstream. Today contracts, listings and sales live in three systems and an analyst is the integration layer.</span></div>
+        <div class="body"><span class="name">One contract view across systems</span><span class="def">Every Risk contract, active or closed, is joined with its consignor, its assets and their sales into a single daily snapshot that carries every <a href="#fields">required field</a>.</span><span class="trace">For Priya and everyone downstream. Today contracts, listings and sales live in three systems and an analyst is the integration layer.</span></div>
         <span class="pri must">Must</span>
       </div>
       <div class="req" role="listitem" id="dpr-2">
@@ -126,12 +126,12 @@ td.id { font-family: var(--font-mono); font-size: 0.8125rem; font-weight: 500; c
       </div>
       <div class="req" role="listitem" id="dpr-3">
         <span class="id">DPR-3</span>
-        <div class="body"><span class="name">Daily pacing and risk flag</span><span class="def">Every active contract gets a pacing % and a risk flag each day, computed exactly as defined in <a href="#definitions">section 4</a>. The flag threshold and the day floor can be changed without changing the definitions.</span><span class="trace">For Maria. The leading indicator the whole product exists to produce.</span></div>
+        <div class="body"><span class="name">Governed metrics as calculated fields</span><span class="def">Every <a href="#calculated">calculated field</a> is defined once, computed daily per contract from the required fields, and exposed by name to everything downstream. The flag threshold and the day floor are parameters, so they can change without changing a definition.</span><span class="trace">The single source of the numbers Maria acts on, David reports and the success metrics judge. Nothing later in the build reinvents them.</span></div>
         <span class="pri must">Must</span>
       </div>
       <div class="req" role="listitem" id="dpr-4">
         <span class="id">DPR-4</span>
-        <div class="body"><span class="name">Projected shortfall and exposure at risk</span><span class="def">Each flagged contract shows its projected shortfall, and exposure at risk rolls up by region, channel, asset type and consignor.</span><span class="trace">For David. Replaces the quarterly Risk Book Summary as the view of exposure.</span></div>
+        <div class="body"><span class="name">Exposure rollups for Finance</span><span class="def">Exposure at risk and the share of contracts flagged roll up by region, channel, asset type and consignor, from contract level to the whole book.</span><span class="trace">For David. Replaces the quarterly Risk Book Summary as the view of exposure.</span></div>
         <span class="pri must">Must</span>
       </div>
       <div class="req" role="listitem" id="dpr-5">
@@ -141,52 +141,85 @@ td.id { font-family: var(--font-mono); font-size: 0.8125rem; font-weight: 500; c
       </div>
       <div class="req" role="listitem" id="dpr-6">
         <span class="id">DPR-6</span>
-        <div class="body"><span class="name">Flag history</span><span class="def">Each contract's daily flag state is kept, so its first flag date is known and any past day's list can be reproduced as it was.</span><span class="trace">Detection lead time can't be measured without it, and Finance needs to audit what was known when.</span></div>
+        <div class="body"><span class="name">Flag history</span><span class="def">Each contract's daily flag state is kept, so its first flag date is known and any past day's list can be reproduced as it was.</span><span class="trace">Detection lead time can't be calculated without it, and Finance needs to audit what was known when.</span></div>
         <span class="pri must">Must</span>
       </div>
       <div class="req" role="listitem" id="dpr-7">
         <span class="id">DPR-7</span>
-        <div class="body"><span class="name">Backtest</span><span class="def">The daily flag can be replayed over the last 12 months of closed contracts, alongside today's practice of a manual review in the final week, producing every success metric. It can sweep the threshold and the day floor.</span><span class="trace">The release gate in <a href="#release">section 6</a> depends on it.</span></div>
+        <div class="body"><span class="name">Backtest</span><span class="def">The daily flag can be replayed over the last 12 months of closed contracts, alongside today's practice of a manual review in the final week, producing every success metric. It can sweep the threshold and the day floor.</span><span class="trace">The <a href="#release">release criteria</a> depend on it.</span></div>
         <span class="pri must">Must</span>
       </div>
       <div class="req" role="listitem" id="dpr-8">
         <span class="id">DPR-8</span>
-        <div class="body"><span class="name">Success scorecard</span><span class="def">Once live, lead time, recall at day 45, false-positive rate, alert volume and reconciliation are reported weekly, broken out by channel and contract size.</span><span class="trace">Keeps the guardrails honest after launch, and measures the two known limitations in <a href="#limits">section 7</a>.</span></div>
+        <div class="body"><span class="name">Success scorecard</span><span class="def">Once live, the success metrics are reported weekly from their calculated fields, broken out by channel and contract size.</span><span class="trace">Keeps the guardrails honest after launch, and measures the two <a href="#limits">known limitations</a>.</span></div>
         <span class="pri">Should</span>
       </div>
       <div class="req" role="listitem" id="dpr-9">
         <span class="id">DPR-9</span>
-        <div class="body"><span class="name">Questions in plain language</span><span class="def">Ops and Finance can ask the four discovery questions in plain language. Answers come only from the governed metrics, name the metric and the as-of date, and say plainly when a question is outside what the product supports.</span><span class="trace">For Maria and David, and what Priya called a nice-to-have: "then they'd stop asking me."</span></div>
+        <div class="body"><span class="name">Questions in plain language</span><span class="def">Ops and Finance can ask the four discovery questions in plain language. Answers come only from the calculated fields, name the metric and the as-of date, and say plainly when a question is outside what the product supports.</span><span class="trace">For Maria and David, and what Priya called a nice-to-have: "then they'd stop asking me."</span></div>
         <span class="pri">Should</span>
       </div>
     </div>
 
     <h3>Key entities</h3>
-    <p>The requirements assume this conceptual model. Its physical design, keys and grain are the first story in the backlog.</p>
     <p class="entities">Consignor → Contract → Asset → Sale event &nbsp;·&nbsp; dimensions: channel (app, website, live), region</p>
-    <p>A contract carries its target price, its 90-day window and its tier schedule, which can be negotiated per contract. Each asset belongs to one contract. Each sale event records the channel and region it happened in.</p>
-  </section>
+    <p>A contract carries its target price, its 90-day window and its tier schedule, which can be negotiated per contract. Each asset belongs to one contract. Each sale event records the channel and region it happened in. The physical design, keys and grain are the first story in the backlog.</p>
 
-  <section class="section" aria-labelledby="definitions">
-    <h2 id="definitions">4. Governed metric definitions</h2>
-    <p>These are the definitions the semantic layer in Phase 6 implements and the conversational layer in Phase 7 queries. They are written once here so no later phase reinvents them.</p>
+    <h3 id="fields">Required fields</h3>
+    <p>DPR-1 is met when the daily snapshot carries every field below, from the system named. This is the data contract Engineering sizes against.</p>
     <div class="scroll">
       <table>
-        <thead><tr><th>Metric</th><th>Definition</th><th>Grain</th></tr></thead>
+        <thead><tr><th>Entity</th><th>Field</th><th>Meaning</th><th>Source</th><th class="how">Needed for</th></tr></thead>
         <tbody>
-          <tr><td>Elapsed share</td><td><span class="formula">days_elapsed ÷ lifecycle_days</span>, capped at 1</td><td>Contract, daily</td></tr>
-          <tr><td>Realized sales</td><td>Sum of gross sale proceeds to date for the contract's assets</td><td>Contract, daily</td></tr>
-          <tr><td>Pacing %</td><td><span class="formula">realized ÷ (target × elapsed_share)</span></td><td>Contract, daily</td></tr>
-          <tr><td>Risk flag (pilot)</td><td>Pacing % below 80%, on an active contract, from day 15 onward. The first two weeks are excluded because a single early sale or its absence swings pacing too much to mean anything.</td><td>Contract, daily</td></tr>
-          <tr><td>Projected final value</td><td><span class="formula">realized ÷ elapsed_share</span> (linear projection)</td><td>Contract, daily</td></tr>
-          <tr><td>Projected shortfall</td><td><span class="formula">max(0, target − projected_final)</span></td><td>Contract, daily</td></tr>
-          <tr><td>Exposure at risk</td><td>Sum of projected shortfall across flagged contracts</td><td>Any rollup: region, channel, asset type, consignor</td></tr>
-          <tr><td>Detection lead time</td><td><span class="formula">expiry_date − first_flag_date</span> for contracts closing below target; 0 if never flagged</td><td>Contract, at close</td></tr>
+          <tr><td>Consignor</td><td><code>consignor_id</code></td><td>Unique consignor</td><td>ConsignTrack</td><td class="how">Rollups by consignor</td></tr>
+          <tr><td>Contract</td><td><code>contract_id</code></td><td>Unique contract; links to its consignor</td><td>ConsignTrack</td><td class="how">Every metric</td></tr>
+          <tr><td></td><td><code>start_date</code></td><td>First day of the contract window</td><td>ConsignTrack</td><td class="how">Elapsed share</td></tr>
+          <tr><td></td><td><code>lifecycle_days</code></td><td>Length of the window, 90 by default</td><td>ConsignTrack</td><td class="how">Elapsed share</td></tr>
+          <tr><td></td><td><code>expiry_date</code></td><td>Last day of the window</td><td>ConsignTrack</td><td class="how">Days to expiry, lead time</td></tr>
+          <tr><td></td><td><code>target_price</code></td><td>Guaranteed target in USD</td><td>ConsignTrack</td><td class="how">Pacing %, shortfall</td></tr>
+          <tr><td></td><td><code>tier_schedule</code></td><td>Negotiated upside tiers</td><td>ConsignTrack</td><td class="how">Carried for context; not used by pilot metrics</td></tr>
+          <tr><td></td><td><code>status</code></td><td>Active, closed or cancelled</td><td>ConsignTrack, checked against Listings and Sales</td><td class="how">Risk flag, reconciliation</td></tr>
+          <tr><td></td><td><code>region</code></td><td>Region that manages the contract</td><td>ConsignTrack</td><td class="how">Exposure rollups by region</td></tr>
+          <tr><td>Asset</td><td><code>asset_id</code></td><td>Unique asset; belongs to one contract</td><td>ConsignTrack</td><td class="how">Realized sales</td></tr>
+          <tr><td></td><td><code>asset_type</code></td><td>Category, such as furniture or jewelry</td><td>ConsignTrack</td><td class="how">Rollups by asset type</td></tr>
+          <tr><td></td><td><code>listing_status, listing_channel</code></td><td>Where and whether the asset is listed</td><td>Listings</td><td class="how">Reconciliation, sales by channel on the Ops list</td></tr>
+          <tr><td>Sale event</td><td><code>sale_id, asset_id</code></td><td>Unique sale of one asset</td><td>Sales</td><td class="how">Realized sales</td></tr>
+          <tr><td></td><td><code>sale_date</code></td><td>Date the sale closed</td><td>Sales</td><td class="how">Realized sales to date</td></tr>
+          <tr><td></td><td><code>gross_amount</code></td><td>Gross proceeds in USD</td><td>Sales</td><td class="how">Realized sales</td></tr>
+          <tr><td></td><td><code>channel</code></td><td>App, website or live</td><td>Sales</td><td class="how">Rollups and Ops list by channel</td></tr>
+          <tr><td></td><td><code>region</code></td><td>Region where the sale happened</td><td>Sales</td><td class="how">Sales performance by region</td></tr>
+          <tr><td>Parameter</td><td><code>flag_threshold, flag_day_floor</code></td><td>80% and day 15 for the pilot</td><td>Configuration</td><td class="how">Risk flag</td></tr>
+          <tr><td>Snapshot</td><td><code>as_of_date</code></td><td>Day the snapshot represents</td><td>Pipeline</td><td class="how">Every daily metric</td></tr>
         </tbody>
       </table>
     </div>
 
-    <h3>A worked example</h3>
+    <h3 id="calculated">Calculated fields</h3>
+    <p>DPR-3 is met when each field below is defined once, computed from the required fields, and exposed by this name. The semantic layer in Phase 6 implements them and the conversational layer in Phase 7 queries them. The last five are the inputs to the <a href="phase-2-opportunity.html#metrics">success metrics</a>: median lead time, recall at halfway, false-positive rate, alert volume and reconciliation rate are aggregates of them.</p>
+    <div class="scroll">
+      <table>
+        <thead><tr><th>Field</th><th>Definition</th><th class="how">Inputs</th><th>Grain</th></tr></thead>
+        <tbody>
+          <tr><td>Elapsed share</td><td><span class="formula">days_elapsed ÷ lifecycle_days</span>, capped at 1</td><td class="how">start_date, lifecycle_days, as_of_date</td><td>Contract, daily</td></tr>
+          <tr><td>Days to expiry</td><td><span class="formula">expiry_date − as_of_date</span></td><td class="how">expiry_date, as_of_date</td><td>Contract, daily</td></tr>
+          <tr><td>Realized sales</td><td>Sum of gross sale proceeds to date for the contract's assets</td><td class="how">gross_amount, sale_date, asset_id</td><td>Contract, daily</td></tr>
+          <tr><td>Pacing %</td><td><span class="formula">realized ÷ (target × elapsed_share)</span></td><td class="how">realized sales, target_price, elapsed share</td><td>Contract, daily</td></tr>
+          <tr><td>Risk flag</td><td>Pacing % below the threshold (80%), on an active contract, from the day floor (day 15) onward. The first two weeks are excluded because a single early sale or its absence swings pacing too much to mean anything.</td><td class="how">pacing %, status, flag parameters</td><td>Contract, daily</td></tr>
+          <tr><td>Projected final value</td><td><span class="formula">realized ÷ elapsed_share</span> (linear projection)</td><td class="how">realized sales, elapsed share</td><td>Contract, daily</td></tr>
+          <tr><td>Projected shortfall</td><td><span class="formula">max(0, target − projected_final)</span></td><td class="how">target_price, projected final value</td><td>Contract, daily</td></tr>
+          <tr><td>Exposure at risk</td><td>Sum of projected shortfall across flagged contracts</td><td class="how">projected shortfall, risk flag</td><td>Any rollup: region, channel, asset type, consignor</td></tr>
+          <tr><td>Reconciled</td><td>True when status and sales agree across ConsignTrack, Listings and Sales</td><td class="how">status, listing_status, sales from each source</td><td>Contract, daily</td></tr>
+          <tr><td>Closed below target</td><td>Realized sales at expiry below target_price</td><td class="how">realized sales, target_price, status</td><td>Contract, at close</td></tr>
+          <tr><td>First flag date</td><td>Earliest as_of_date on which the risk flag was true</td><td class="how">risk flag history (DPR-6)</td><td>Contract</td></tr>
+          <tr><td>Detection lead time</td><td><span class="formula">expiry_date − first_flag_date</span> for contracts closing below target; 0 if never flagged</td><td class="how">first flag date, expiry_date, closed below target</td><td>Contract, at close</td></tr>
+          <tr><td>Flagged by halfway</td><td>First flag date on or before day 45</td><td class="how">first flag date, start_date</td><td>Contract, at close</td></tr>
+          <tr><td>False positive</td><td>Flagged at some point, then closed at or above target</td><td class="how">first flag date, closed below target</td><td>Contract, at close</td></tr>
+          <tr><td>New flags</td><td>Contracts whose first flag date falls in the period</td><td class="how">first flag date</td><td>Book, weekly</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3 id="worked-example">A worked example</h3>
     <p>A $50,000 contract on a 90-day window has sold $11,000 by day 30. Linear pacing expects a third of the target by then, about $16,700, so pacing is 66% and the contract is flagged. Projected linearly, it finishes near $33,000, a projected shortfall of about $17,000.</p>
     <p>On this contract's actual sales path, the flag first fires on day 15, the first day it is allowed to. Today it would be noticed around day 85. That difference, 75 days of lead time against about 5, is what the primary metric measures.</p>
 
@@ -224,8 +257,8 @@ td.id { font-family: var(--font-mono); font-size: 0.8125rem; font-weight: 500; c
       <figcaption>One simulated contract. The shaded band is the 15-day window before flags are allowed. The contract closes at $36,000, a $14,000 shortfall.</figcaption>
     </figure>
 
-    <h3>The questions these metrics must answer</h3>
-    <p>Each of the four questions validated in discovery maps onto the definitions above, so DPR-9 can answer all of them without a new metric.</p>
+    <h3 id="questions-map">The questions these metrics must answer</h3>
+    <p>Each of the four questions validated in discovery maps onto the calculated fields above, so DPR-9 can answer all of them without a new metric.</p>
     <div class="scroll">
       <table>
         <thead><tr><th>Question from discovery</th><th>Answered with</th></tr></thead>
@@ -240,7 +273,7 @@ td.id { font-family: var(--font-mono); font-size: 0.8125rem; font-weight: 500; c
   </section>
 
   <section class="section" aria-labelledby="nfr">
-    <h2 id="nfr">5. Non-functional requirements</h2>
+    <h2 id="nfr">4. Non-functional requirements</h2>
     <div class="scroll">
       <table>
         <thead><tr><th>ID</th><th>Requirement</th></tr></thead>
@@ -258,7 +291,7 @@ td.id { font-family: var(--font-mono); font-size: 0.8125rem; font-weight: 500; c
   </section>
 
   <section class="section" aria-labelledby="release">
-    <h2 id="release">6. Release criteria</h2>
+    <h2 id="release">5. Release criteria</h2>
     <p>Before Ops relies on the flag, the backtest (DPR-7) replays it over the last 12 months of closed contracts, whose final outcomes are already known. The pilot goes live with Ops when, on the backtest:</p>
     <ul>
       <li>median detection lead time is at least 30 days,</li>
@@ -271,7 +304,7 @@ td.id { font-family: var(--font-mono); font-size: 0.8125rem; font-weight: 500; c
   </section>
 
   <section class="section" aria-labelledby="limits">
-    <h2 id="limits">7. Known limitations, assumptions and dependencies</h2>
+    <h2 id="limits">6. Known limitations, assumptions and dependencies</h2>
     <h3>Limitations of the pilot</h3>
     <ul>
       <li><strong>Back-loaded contracts look worse than they are.</strong> A contract whose assets are scheduled into a live auction late in the window will pace low until the auction and then catch up. Linear pacing will flag it. This is the main reason historical-curve pacing comes next, and the false-positive rate by channel will show how large the effect is.</li>
@@ -287,7 +320,7 @@ td.id { font-family: var(--font-mono); font-size: 0.8125rem; font-weight: 500; c
   </section>
 
   <section class="section" aria-labelledby="questions">
-    <h2 id="questions">8. Open questions for Engineering</h2>
+    <h2 id="questions">7. Open questions for Engineering</h2>
     <p>These are the questions the sizing session in Phase 4 needs to settle before estimates mean anything.</p>
     <ol>
       <li><strong>Extraction.</strong> Do we take full daily snapshots of the three sources or capture changes, and how do we freeze them to the same point in time (NFR-1)?</li>
@@ -295,6 +328,7 @@ td.id { font-family: var(--font-mono); font-size: 0.8125rem; font-weight: 500; c
       <li><strong>Listings.</strong> Does the pilot need listings modeled as their own entity, to show where an asset was placed over time, or is channel on the sale event enough?</li>
       <li><strong>Delivery.</strong> Where does Maria's morning list live: a dashboard, an email, or the question interface?</li>
       <li><strong>Day boundary.</strong> Which time zone defines a contract day, for the day-15 floor and for expiry?</li>
+      <li><strong>Channel attribution.</strong> Pacing and exposure are contract-level, but a contract can sell across several channels. For rollups by channel, do we attribute a contract to the channel with most of its listed assets, or split its exposure by asset? This is a product decision to settle with Finance; Engineering needs to know which, because one needs listing history and the other doesn't.</li>
       <li><strong>Question layer.</strong> What hosting and cost envelope does DPR-9 need, and how is its accuracy tested before Ops sees it?</li>
     </ol>
   </section>
