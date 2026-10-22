@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Second Avenue | Data product case study</title>
-<meta name="description" content="A data product case study, from discovery to delivery: flagging consignment contracts that pace below target before they expire.">
+<meta name="description" content="A data product case study, from discovery to a working prototype: flagging consignment contracts that pace below target before they expire.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&family=Newsreader:opsz,wght@6..72,500;6..72,600&display=swap">
@@ -33,7 +33,7 @@
   <header>
     <p class="eyebrow">Data product case study</p>
     <h1>Flagging consignment contracts that pace below target, before they expire.</h1>
-    <p class="note">An end-to-end data product, from discovery to a working build, for Second Avenue, a fictional consignment retailer. The use case comes from a problem I worked on professionally; the company, people and data here are simulated.</p>
+    <p class="note">An end-to-end data product case study, from discovery to a working prototype, for Second Avenue, a fictional consignment retailer. The use case comes from a problem I worked on professionally; the company, people and data here are simulated.</p>
   </header>
 
   <aside class="tldr" aria-labelledby="tldr-h">
@@ -45,6 +45,8 @@
       <dd>A governed pacing metric and daily risk flag across contracts, listings and sales, with natural-language questions on top.</dd>
       <dt>Success</dt>
       <dd>Flag underperformers a median of 30+ days before expiry, without more than 40% false alarms.</dd>
+      <dt>Approach</dt>
+      <dd>Test the bet with a prototype before planning the build. What the prototype learns changes the requirements, and the backlog is planned from the revised version.</dd>
     </dl>
   </aside>
 
@@ -53,16 +55,14 @@
     <ol class="phases">
       <li><span class="n">01</span><span class="t"><a href="phase-1-discovery.html">Discovery</a><span class="d">Company profile, three personas, simulated interviews, jobs to be done, user journey.</span></span><span class="s done">Done</span></li>
       <li><span class="n">02</span><span class="t"><a href="phase-2-opportunity.html">Opportunity &amp; success metrics</a><span class="d">Problem statement around pacing, sizing of the recoverable exposure, lead time as the primary metric with false-positive guardrails.</span></span><span class="s done">Done</span></li>
-      <li><span class="n">03</span><span class="t"><a href="phase-3-prd.html">Product requirements</a><span class="d">Scope, numbered data product requirements (DPRs), governed metric definitions and release criteria, ready for Engineering.</span></span><span class="s done">Done</span></li>
-      <li><span class="n">04</span><span class="t">Structure the work<span class="d">An Engineering sizing session, then epics, stories and acceptance criteria traced to each DPR.</span></span><span class="s">Next</span></li>
-      <li><span class="n">05</span><span class="t">Data foundation<span class="d">Consignors, contracts, assets and sales modeled in BigQuery.</span></span><span class="s">Planned</span></li>
-      <li><span class="n">06</span><span class="t">Semantic layer<span class="d">Pacing, risk flag and exposure as governed metrics.</span></span><span class="s">Planned</span></li>
-      <li><span class="n">07</span><span class="t">Conversational layer<span class="d">Natural-language questions answered against the governed metrics with the Claude API.</span></span><span class="s">Planned</span></li>
-      <li><span class="n">08</span><span class="t">Package &amp; deliver<span class="d">README, AI skills, case study and a recorded walkthrough.</span></span><span class="s">Planned</span></li>
+      <li><span class="n">03</span><span class="t"><a href="phase-3-prd.html">Product requirements</a><span class="d">Scope, numbered data product requirements (DPRs), and the required and calculated fields behind every metric.</span></span><span class="s done">Done</span></li>
+      <li><span class="n">04</span><span class="t">Prototype &amp; conversational demo<span class="d">A throwaway prototype that tests the pilot bet: the metrics, a backtest against the go-live criteria, plain-language questions on top, and what it changed in the requirements.</span></span><span class="s">Next</span></li>
+      <li><span class="n">05</span><span class="t">Backlog &amp; roadmap<span class="d">Epics, stories and acceptance criteria traced to each requirement, an Engineering sizing session, and a Now / Next / Later roadmap.</span></span><span class="s">Planned</span></li>
+      <li><span class="n">06</span><span class="t">Package &amp; deliver<span class="d">Case study, the AI skills behind each phase, and a short recorded walkthrough.</span></span><span class="s">Planned</span></li>
     </ol>
   </section>
 
-  <p class="foot">Built with AI as a working partner throughout. The skills and prompts used along the way will be published in this repository.</p>
+  <p class="foot">Built with AI as a working partner throughout, including the prototype. The skills and prompts used along the way will be published in this repository.</p>
 </main>
 </body>
 </html>

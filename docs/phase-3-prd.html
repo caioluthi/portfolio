@@ -47,7 +47,7 @@ td.id { font-family: var(--font-mono); font-size: 0.8125rem; font-weight: 500; c
   <header>
     <p class="eyebrow">Phase 3 · Product requirements</p>
     <h1>What the contract-risk product must do, written down once so Engineering can size it.</h1>
-    <p class="note">Second Avenue is a fictional consignment retailer and every figure on this page is simulated. This page says what the product must do, with a one-line reason for each requirement. Why it matters, how success is judged and what the pilot is betting on are on the <a href="phase-2-opportunity.html">opportunity page</a>. How it gets built and when it ships come from Engineering in Phase 4.</p>
+    <p class="note">Second Avenue is a fictional consignment retailer and every figure on this page is simulated. This page says what the product must do, with a one-line reason for each requirement. Why it matters, how success is judged and what the pilot is betting on are on the <a href="phase-2-opportunity.html">opportunity page</a>. Phase 4 prototypes the riskiest part of it. How the production build is done and when it ships come from Engineering in Phase 5.</p>
   </header>
 
   <aside class="tldr" aria-labelledby="tldr-h">
@@ -60,7 +60,7 @@ td.id { font-family: var(--font-mono); font-size: 0.8125rem; font-weight: 500; c
       <dt>Requirements</dt>
       <dd>Nine data product requirements, DPR-1 to DPR-9: seven must-haves and two should-haves, with the required and calculated fields each one depends on. Every story in the backlog traces to one of them.</dd>
       <dt>Next</dt>
-      <dd>Phase 4 takes this page to an Engineering sizing session and breaks it into epics and stories.</dd>
+      <dd>Phase 4 tests the pilot bet with a prototype built against these requirements. Phase 5 takes the revised page to an Engineering sizing session and breaks it into epics and stories.</dd>
     </dl>
   </aside>
 
@@ -111,7 +111,7 @@ td.id { font-family: var(--font-mono); font-size: 0.8125rem; font-weight: 500; c
 
   <section class="section" aria-labelledby="dpr">
     <h2 id="dpr">3. Data product requirements</h2>
-    <p>Each requirement says what the product must do and who it is for, not how to build it. The how is settled with Engineering in Phase 4, and every backlog story names the DPR it satisfies.</p>
+    <p>Each requirement says what the product must do and who it is for, not how to build it. The how is settled with Engineering in Phase 5, and every backlog story names the DPR it satisfies.</p>
 
     <div class="reqs" role="list">
       <div class="req" role="listitem" id="dpr-1">
@@ -195,7 +195,7 @@ td.id { font-family: var(--font-mono); font-size: 0.8125rem; font-weight: 500; c
     </div>
 
     <h3 id="calculated">Calculated fields</h3>
-    <p>DPR-3 is met when each field below is defined once, computed from the required fields, and exposed by this name. The semantic layer in Phase 6 implements them and the conversational layer in Phase 7 queries them. The last five are the inputs to the <a href="phase-2-opportunity.html#metrics">success metrics</a>: median lead time, recall at halfway, false-positive rate, alert volume and reconciliation rate are aggregates of them.</p>
+    <p>DPR-3 is met when each field below is defined once, computed from the required fields, and exposed by this name. Everything downstream reads them by name, including the plain-language question layer. The last five are the inputs to the <a href="phase-2-opportunity.html#metrics">success metrics</a>: median lead time, recall at halfway, false-positive rate, alert volume and reconciliation rate are aggregates of them.</p>
     <div class="scroll">
       <table>
         <thead><tr><th>Field</th><th>Definition</th><th class="how">Inputs</th><th>Grain</th></tr></thead>
@@ -305,7 +305,7 @@ td.id { font-family: var(--font-mono); font-size: 0.8125rem; font-weight: 500; c
 
   <section class="section" aria-labelledby="questions">
     <h2 id="questions">7. Open questions for Engineering</h2>
-    <p>These are the questions the sizing session in Phase 4 needs to settle before estimates mean anything.</p>
+    <p>These are the questions that need settling before estimates mean anything. The prototype in Phase 4 tests the product decisions among them, such as channel attribution; the rest go to the Engineering sizing session in Phase 5.</p>
     <ol>
       <li><strong>Extraction.</strong> Do we take full daily snapshots of the three sources or capture changes, and how do we freeze them to the same point in time (NFR-1)?</li>
       <li><strong>Source of truth.</strong> When systems disagree on a contract's status, which one wins for the flag, while DPR-2 still reports the disagreement?</li>

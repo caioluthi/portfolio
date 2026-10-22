@@ -1,6 +1,6 @@
 # Second Avenue: a data product case study
 
-An end-to-end data product, from discovery to a working build: flagging consignment contracts that pace below target **before** they expire.
+An end-to-end data product case study, from discovery to a working prototype: flagging consignment contracts that pace below target **before** they expire.
 
 Second Avenue is a fictional consignment retailer. The use case comes from a problem I worked on professionally; the company, people and data here are simulated.
 
@@ -17,16 +17,19 @@ Second Avenue guarantees each consignor a target price and pays the difference w
 | 1 | [Discovery](docs/phase-1-discovery.html) | `docs/` | Done |
 | 2 | [Opportunity & success metrics](docs/phase-2-opportunity.html) | `docs/`, sizing model in `sizing/` (to come) | Done |
 | 3 | [Product requirements (PRD)](docs/phase-3-prd.html) | `docs/` | Done |
-| 4 | Structure the work: Engineering sizing, epics and stories traced to each DPR | GitHub Issues and Projects | Next |
-| 5 | Data foundation | BigQuery sandbox, synthetic data generator | Planned |
-| 6 | Semantic layer | dbt Semantic Layer / MetricFlow | Planned |
-| 7 | Conversational layer | Claude API and a lightweight UI | Planned |
-| 8 | Package & deliver | README, skills, case study, walkthrough | Planned |
+| 4 | Prototype and conversational demo: test the pilot bet, then show what it changed | BigQuery sandbox, Claude API | Next |
+| 5 | Backlog and roadmap: epics and stories, Engineering sizing, Now / Next / Later | `backlog/`, GitHub Issues | Planned |
+| 6 | Package and deliver | Case study, AI skills, walkthrough | Planned |
+
+### Why the prototype comes before the backlog
+
+The riskiest assumption is that a simple pacing flag catches underperforming contracts weeks earlier without burying Ops in false alarms. A product manager can test that with AI-assisted prototyping before asking Engineering for a production backlog. The prototype is deliberately throwaway: it skips the parts Engineering owns, such as landing real source systems, reconciliation, reproducibility and access control. What it learns feeds back into the PRD, and the backlog in Phase 5 is planned from the revised version.
 
 ## Repository layout
 
 ```
 docs/      Case study pages (GitHub Pages site)
+backlog/   Draft backlog: epics and stories traced to the PRD, revised after the prototype
 ```
 
 More folders are added as the build phases land.

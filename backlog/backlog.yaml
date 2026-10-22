@@ -5,6 +5,9 @@
 # requirements, NFR-n for non-functional ones, OQ-n for an open question
 # Engineering must settle first.
 #
+# Status: draft, written from the PRD before the prototype. It is revised in
+# Phase 5 with what the prototype learned, then taken to Engineering sizing.
+#
 # Product writes the why and the what: the user story and acceptance criteria.
 # Engineering adds the how and the when in the sizing session: `size` is left
 # empty here on purpose.
