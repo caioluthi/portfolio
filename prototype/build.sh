@@ -25,7 +25,7 @@ echo "2/4 Loading into $PROJECT:$DATASET"
 bq --project_id="$PROJECT" mk --force --dataset --location=US "$PROJECT:$DATASET" >/dev/null
 printf 'today,flag_threshold,flag_day_floor\n%s,%s,%s\n' "$TODAY" "$FLAG_THRESHOLD" "$FLAG_DAY_FLOOR" > "$DATA/flag_parameters.csv"
 load() {
-  bq --project_id="$PROJECT" load --replace --source_format=CSV --skip_leading_rows=1 \
+  bq --quiet --project_id="$PROJECT" load --replace --source_format=CSV --skip_leading_rows=1 \
     "$DATASET.$1" "$DATA/$2.csv" "$3" >/dev/null
   echo "    $1"
 }
