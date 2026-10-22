@@ -1,0 +1,146 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Phase 4 · Prototype &amp; validation | Second Avenue</title>
+<meta name="description" content="A throwaway prototype that tests Second Avenue's pilot bet before Engineering plans the build: what it must answer, what it builds, what it skips, and what it changed.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&family=Newsreader:opsz,wght@6..72,500;6..72,600&display=swap">
+<link rel="stylesheet" href="assets/site.css">
+<style>
+.status { font-family: var(--font-mono); font-size: 0.6875rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); white-space: nowrap; }
+.status.done { color: var(--accent); }
+.status.wip { color: var(--fg); }
+td.n { font-family: var(--font-mono); font-size: 0.8125rem; color: var(--muted); white-space: nowrap; }
+.scope .tag.in { color: var(--accent); }
+.scope .tag.out { color: var(--risk); }
+.pending { background: var(--surface); border: 1px dashed var(--rule); border-radius: 6px; padding: 1rem 1.25rem; color: var(--muted); font-size: 0.9375rem; max-width: 38rem; }
+.pending strong { color: var(--fg); }
+</style>
+</head>
+<body>
+<main class="page">
+  <nav class="sitenav" aria-label="Case study">
+    <a class="home" href="index.html">Second Avenue</a>
+    <a href="phase-1-discovery.html">1 · Discovery</a>
+    <a href="phase-2-opportunity.html">2 · Opportunity</a>
+    <a href="phase-3-prd.html">3 · PRD</a>
+    <a href="phase-4-prototype.html" aria-current="page">4 · Prototype</a>
+  </nav>
+
+  <header>
+    <p class="eyebrow">Phase 4 · Prototype &amp; validation · In progress</p>
+    <h1>Before asking Engineering to build it, test whether the flag works.</h1>
+    <p class="note">Second Avenue is a fictional consignment retailer and every figure on this page is simulated. The prototype is built against the <a href="phase-3-prd.html">PRD</a> and judged by the <a href="phase-2-opportunity.html#go-live">go-live criteria</a> set on the opportunity page.</p>
+  </header>
+
+  <aside class="tldr" aria-labelledby="tldr-h">
+    <p class="label" id="tldr-h">TL;DR</p>
+    <dl>
+      <dt>Why</dt>
+      <dd>The whole product rests on one bet: a simple pacing flag catches failing contracts weeks earlier without burying Ops in false alarms. That is cheap to test and expensive to assume.</dd>
+      <dt>What</dt>
+      <dd>A timeboxed, throwaway prototype: the governed metrics on a simulated book of contracts, a backtest against last year, Ops and Finance views, and plain-language questions on top.</dd>
+      <dt>Output</dt>
+      <dd>A go-live verdict, chosen flag settings, the failure cases sized, and a revised PRD.</dd>
+      <dt>Next</dt>
+      <dd>Phase 5 plans the production build from the revised PRD, with Engineering.</dd>
+    </dl>
+  </aside>
+
+  <section class="section" aria-labelledby="questions">
+    <h2 id="questions">1. What the prototype must answer</h2>
+    <p>A prototype is worth building only if it answers questions that a document can't. These six decide whether the pilot goes ahead, how it is configured, and what changes in the requirements.</p>
+    <div class="scroll">
+      <table>
+        <thead><tr><th>#</th><th>Question</th><th>Evidence it produces</th></tr></thead>
+        <tbody>
+          <tr><td class="n">Q1</td><td><strong>Does the bet hold?</strong> Does a linear pacing flag meet the five go-live criteria on last year's contracts?</td><td>A backtest against today's practice, a review in the final week, with each criterion met or not met</td></tr>
+          <tr><td class="n">Q2</td><td><strong>What should the flag settings be?</strong></td><td>A sweep of threshold and day floor that replaces the 80% and day-15 starting values</td></tr>
+          <tr><td class="n">Q3</td><td><strong>Where does linear pacing fail?</strong></td><td>False positives by channel and by contract size, sizing the back-loaded-auction and single-asset risks</td></tr>
+          <tr><td class="n">Q4</td><td><strong>How should a contract count in rollups by channel?</strong> Open question OQ-6 in the PRD.</td><td>Both attribution options built side by side, one chosen with a reason</td></tr>
+          <tr><td class="n">Q5</td><td><strong>Can questions be answered from the governed fields alone?</strong></td><td>A fixed set of about 30 questions, with the four from discovery, paraphrases and out-of-scope ones, and a pass rate</td></tr>
+          <tr><td class="n">Q6</td><td><strong>Is the morning list what Ops needs?</strong> Open question OQ-4 in the PRD.</td><td>A feedback session with Maria on the list and David on the rollups</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="scope">
+    <h2 id="scope">2. What it builds, and what it deliberately skips</h2>
+    <p>The prototype covers the parts of the PRD that test the bet. It skips the parts that make a product dependable in production. Those are Engineering's to build, and listing them here is what keeps the prototype throwaway.</p>
+    <div class="cards scope">
+      <article class="card">
+        <span class="tag in">Builds</span>
+        <ul>
+          <li>A simulated book of contracts, assets and sales, calibrated to the <a href="phase-2-opportunity.html#opportunity">Phase 2 book</a>, including late-selling auction contracts and single-asset contracts</li>
+          <li>Every <a href="phase-3-prd.html#calculated">calculated field</a> in the PRD, under the same names</li>
+          <li>Flag history replayed day by day, and the backtest and go-live report built on it</li>
+          <li>The ranked morning list and the Finance rollups</li>
+          <li>Plain-language questions that can read only the governed fields</li>
+        </ul>
+      </article>
+      <article class="card">
+        <span class="tag out">Skips</span>
+        <ul>
+          <li>Landing the three real source systems</li>
+          <li>Cross-source reconciliation</li>
+          <li>Reproducibility guarantees and scheduling</li>
+          <li>Access control</li>
+          <li>The weekly success scorecard</li>
+        </ul>
+      </article>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="plan">
+    <h2 id="plan">3. Plan</h2>
+    <p>Timeboxed to five steps. Each step ends with something reviewable; the prototype stops at step five whether or not every question has a clean answer, because an unclear answer is itself a finding.</p>
+    <div class="scroll">
+      <table>
+        <thead><tr><th>#</th><th>Step</th><th>Answers</th><th>Status</th></tr></thead>
+        <tbody>
+          <tr><td class="n">1</td><td>Simulated book of contracts and the calculated fields</td><td>Groundwork</td><td><span class="status">Planned</span></td></tr>
+          <tr><td class="n">2</td><td>Backtest, parameter sweep and go-live report</td><td>Q1, Q2, Q3</td><td><span class="status">Planned</span></td></tr>
+          <tr><td class="n">3</td><td>Morning list, Finance rollups and channel attribution</td><td>Q4</td><td><span class="status">Planned</span></td></tr>
+          <tr><td class="n">4</td><td>Plain-language questions and the evaluation set</td><td>Q5</td><td><span class="status">Planned</span></td></tr>
+          <tr><td class="n">5</td><td>Feedback from Ops and Finance, and the PRD revision</td><td>Q6</td><td><span class="status">Planned</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="done">
+    <h2 id="done">4. Done when</h2>
+    <ul>
+      <li>The go-live report states, for each of the five criteria, whether it is met and by how much.</li>
+      <li>The flag settings for the pilot are chosen from the sweep, not assumed.</li>
+      <li>The question layer answers every in-scope question in the evaluation set correctly and declines every out-of-scope one.</li>
+      <li>At least one change goes back into the PRD, recorded below with its reason.</li>
+      <li>A short recorded walkthrough shows the morning list, a rollup and a few questions answered.</li>
+    </ul>
+  </section>
+
+  <section class="section" aria-labelledby="results">
+    <h2 id="results">5. Results</h2>
+    <p class="pending"><strong>To come.</strong> The go-live verdict, the chosen flag settings, false positives by channel and contract size, and the evaluation results, filled in as each step lands.</p>
+  </section>
+
+  <section class="section" aria-labelledby="feedback">
+    <h2 id="feedback">6. What Ops and Finance said</h2>
+    <p class="pending"><strong>To come.</strong> Maria's reaction to the morning list and David's to the rollups, in the same format as the discovery interviews.</p>
+  </section>
+
+  <section class="section" aria-labelledby="changed">
+    <h2 id="changed">7. What the prototype changed</h2>
+    <p class="pending"><strong>To come.</strong> Every change the prototype makes to the PRD, with the evidence behind it. The backlog in Phase 5 is planned from the revised version.</p>
+  </section>
+
+  <nav class="pager" aria-label="Phases">
+    <a href="phase-3-prd.html"><span class="dir">Previous</span>Phase 3 · Product requirements</a>
+  </nav>
+</main>
+</body>
+</html>
