@@ -1,0 +1,151 @@
+{
+  "today": "2026-09-30",
+  "windows": {
+    "train": [
+      "2025-09-30",
+      "2026-04-01"
+    ],
+    "test": [
+      "2026-04-01",
+      "2026-09-30"
+    ],
+    "year": [
+      "2025-09-30",
+      "2026-09-30"
+    ]
+  },
+  "sell_through_by_period": [
+    0.895,
+    0.871,
+    0.824,
+    0.745,
+    0.576,
+    0.192
+  ],
+  "check_variant_A_full_year_pilot_default": {
+    "median_lead_time_days": 75.0,
+    "recall_at_halfway": 0.680921052631579,
+    "recall_ever": 0.7993421052631579,
+    "false_positive_rate": 0.7990074441687345,
+    "new_flags_per_week": 23.243835616438353,
+    "n_closed": 1968,
+    "n_underperformers": 304,
+    "n_flagged": 1209
+  },
+  "variants": {
+    "A": {
+      "status": "no setting meets the guardrails on training; reference setting shown",
+      "setting": {
+        "threshold": 0.95,
+        "floor": 30
+      },
+      "settings_meeting_guardrails_on_training": 0,
+      "settings_tested": 40,
+      "training": {
+        "median_lead_time_days": 59.0,
+        "recall_at_halfway": 0.6538461538461539,
+        "recall_ever": 0.9153846153846154,
+        "false_positive_rate": 0.740174672489083,
+        "new_flags_per_week": 17.78688524590164,
+        "n_closed": 986.0,
+        "n_underperformers": 130.0,
+        "n_flagged": 458.0
+      },
+      "test": {
+        "median_lead_time_days": 55.5,
+        "recall_at_halfway": 0.5862068965517241,
+        "recall_ever": 0.9252873563218391,
+        "false_positive_rate": 0.6624737945492662,
+        "new_flags_per_week": 18.192307692307693,
+        "n_closed": 982,
+        "n_underperformers": 174,
+        "n_flagged": 477
+      },
+      "test_checks": {
+        "median_lead_time_days": true,
+        "recall_at_halfway": false,
+        "false_positive_rate": false,
+        "new_flags_per_week": true
+      },
+      "passes_on_test": false
+    },
+    "B": {
+      "status": "chosen on training",
+      "setting": {
+        "threshold": 0.95,
+        "floor": 30,
+        "w_share": 0.3
+      },
+      "settings_meeting_guardrails_on_training": 49,
+      "settings_tested": 72,
+      "training": {
+        "median_lead_time_days": 30.0,
+        "recall_at_halfway": 0.36923076923076925,
+        "recall_ever": 0.8076923076923077,
+        "false_positive_rate": 0.39655172413793105,
+        "new_flags_per_week": 6.885245901639345,
+        "n_closed": 986.0,
+        "n_underperformers": 130.0,
+        "n_flagged": 174.0
+      },
+      "test": {
+        "median_lead_time_days": 30.0,
+        "recall_at_halfway": 0.3793103448275862,
+        "recall_ever": 0.8505747126436781,
+        "false_positive_rate": 0.3728813559322034,
+        "new_flags_per_week": 9.5,
+        "n_closed": 982,
+        "n_underperformers": 174,
+        "n_flagged": 236
+      },
+      "test_checks": {
+        "median_lead_time_days": true,
+        "recall_at_halfway": false,
+        "false_positive_rate": true,
+        "new_flags_per_week": true
+      },
+      "passes_on_test": false
+    },
+    "C": {
+      "status": "chosen on training",
+      "setting": {
+        "threshold": 0.95,
+        "floor": 21,
+        "w_share": 0.15,
+        "evidence": 0.15
+      },
+      "settings_meeting_guardrails_on_training": 208,
+      "settings_tested": 216,
+      "training": {
+        "median_lead_time_days": 30.0,
+        "recall_at_halfway": 0.4,
+        "recall_ever": 0.7692307692307693,
+        "false_positive_rate": 0.37888198757763975,
+        "new_flags_per_week": 6.655737704918033,
+        "n_closed": 986.0,
+        "n_underperformers": 130.0,
+        "n_flagged": 161.0,
+        "watch_list_p95": 5.0
+      },
+      "test": {
+        "median_lead_time_days": 30.0,
+        "recall_at_halfway": 0.4367816091954023,
+        "recall_ever": 0.7816091954022989,
+        "false_positive_rate": 0.35545023696682465,
+        "new_flags_per_week": 8.538461538461538,
+        "n_closed": 982,
+        "n_underperformers": 174,
+        "n_flagged": 211,
+        "watch_list_p95": 10.0
+      },
+      "test_checks": {
+        "median_lead_time_days": true,
+        "recall_at_halfway": false,
+        "false_positive_rate": true,
+        "new_flags_per_week": true,
+        "watch_list_p95": true
+      },
+      "passes_on_test": false
+    }
+  }
+}
