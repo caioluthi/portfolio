@@ -41,8 +41,8 @@ def query(project: str, dataset: str, sql_file: str) -> pd.DataFrame:
     sql = (HERE / sql_file).read_text().replace("{dataset}", f"{project}.{dataset}")
     out = subprocess.run(
         ["bq", "--quiet", f"--project_id={project}", "query", "--use_legacy_sql=false",
-         "--format=csv", "--max_rows=10000000", sql],
-        check=True, capture_output=True, text=True).stdout
+         "--format=csv", "--max_rows=10000000"],
+        input=sql, check=True, capture_output=True, text=True).stdout
     return pd.read_csv(io.StringIO(out))
 
 

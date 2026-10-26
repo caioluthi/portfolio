@@ -1,0 +1,100 @@
+{
+  "today": "2026-09-30",
+  "baseline_final_week_review": {
+    "median_lead_time_days": 0.0,
+    "recall_at_halfway": 0.0,
+    "recall_ever": 0.3256578947368421,
+    "false_positive_rate": 0.05714285714285714,
+    "new_flags_per_week": 2.019230769230769,
+    "n_closed": 1968,
+    "n_underperformers": 304,
+    "n_flagged": 105
+  },
+  "pilot_default": {
+    "threshold": 0.8,
+    "day_floor": 15,
+    "metrics": {
+      "median_lead_time_days": 75.0,
+      "recall_at_halfway": 0.680921052631579,
+      "recall_ever": 0.7993421052631579,
+      "false_positive_rate": 0.7990074441687345,
+      "new_flags_per_week": 23.307692307692307,
+      "n_closed": 1968.0,
+      "n_underperformers": 304.0,
+      "n_flagged": 1209.0
+    },
+    "criteria": {
+      "median_lead_time_days": true,
+      "recall_at_halfway": false,
+      "false_positive_rate": false,
+      "new_flags_per_week": true
+    },
+    "breakdown": {
+      "main_channel": [
+        {
+          "main_channel": "app",
+          "contracts": 768,
+          "flagged": 417,
+          "false_positive_rate": 0.7721822541966427,
+          "underperformance_rate": 0.16536458333333334
+        },
+        {
+          "main_channel": "live",
+          "contracts": 206,
+          "flagged": 176,
+          "false_positive_rate": 0.8295454545454546,
+          "underperformance_rate": 0.14563106796116504
+        },
+        {
+          "main_channel": "website",
+          "contracts": 994,
+          "flagged": 616,
+          "false_positive_rate": 0.8084415584415584,
+          "underperformance_rate": 0.14788732394366197
+        }
+      ],
+      "auction_heavy": [
+        {
+          "auction_heavy": "half or more at live auction",
+          "contracts": 85,
+          "flagged": 78,
+          "false_positive_rate": 0.8717948717948718,
+          "underperformance_rate": 0.11764705882352941
+        },
+        {
+          "auction_heavy": "mostly online",
+          "contracts": 1883,
+          "flagged": 1131,
+          "false_positive_rate": 0.7939876215738285,
+          "underperformance_rate": 0.15613382899628253
+        }
+      ],
+      "size_band": [
+        {
+          "size_band": "1 asset",
+          "contracts": 219,
+          "flagged": 184,
+          "false_positive_rate": 0.7989130434782609,
+          "underperformance_rate": 0.182648401826484
+        },
+        {
+          "size_band": "2-9 assets",
+          "contracts": 403,
+          "flagged": 259,
+          "false_positive_rate": 0.7760617760617761,
+          "underperformance_rate": 0.17369727047146402
+        },
+        {
+          "size_band": "10+ assets",
+          "contracts": 1346,
+          "flagged": 766,
+          "false_positive_rate": 0.8067885117493473,
+          "underperformance_rate": 0.14413075780089152
+        }
+      ]
+    }
+  },
+  "chosen": null,
+  "settings_meeting_guardrails": 0,
+  "settings_tested": 40
+}
