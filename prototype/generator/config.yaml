@@ -53,6 +53,12 @@ pricing:
   recent_drift: -0.03        # demand softens in the most recent 6 months
   unsold_base: 0.06          # share of assets that never sell, rising when demand is weak
 
+# Appraised value of each item at intake, as ConsignTrack would hold it. The
+# appraiser doesn't know which channel the item will sell on or how strong demand
+# for this consignor's items will be, and appraisals carry error.
+estimates:
+  sigma: 0.30                # lognormal appraisal error around the item's asking value
+
 # When items sell within the 90-day window.
 timing:
   # Beta distribution of the sale day as a share of the window, per online channel.

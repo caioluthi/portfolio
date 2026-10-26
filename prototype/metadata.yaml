@@ -22,6 +22,7 @@ columns:
   target_price: Price guaranteed to the consignor, in USD. If realized sales at expiry fall short, Second Avenue pays the difference.
   tier_schedule: Negotiated upside tiers as JSON - share of sales above target that Second Avenue keeps, per band. Carried for context; not used by pilot metrics.
   status: Contract status in ConsignTrack as of today - active, closed or cancelled.
+  estimate_usd: Appraised value of the item at intake, in USD, as recorded in ConsignTrack. Doesn't know the channel the item will sell on or current demand, and carries appraisal error.
   asset_type: Item category - jewelry, watches, handbags, furniture, art or collectibles.
   listing_channel: Channel the asset is listed on - app, website or live (auction).
   listed_date: Date the listing went up.

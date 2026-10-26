@@ -47,6 +47,8 @@ def tier_schedule(rng: np.random.Generator) -> str:
 
 def generate(cfg: dict) -> dict[str, pd.DataFrame]:
     rng = np.random.default_rng(cfg["seed"])
+    # Estimates draw from their own stream, so adding them leaves the rest of the book unchanged.
+    rng_est = np.random.default_rng(cfg["seed"] + 1)
     book, pricing, timing = cfg["book"], cfg["pricing"], cfg["timing"]
     today: date = cfg["today"]
     L = book["lifecycle_days"]
@@ -121,7 +123,9 @@ def generate(cfg: dict) -> dict[str, pd.DataFrame]:
             p = cfg["placement"][atype]
             channel = rng.choice(CHANNELS, p=[p[c] for c in CHANNELS])
             fit = cfg["channel_fit"][atype][channel]
-            assets.append({"asset_id": aid, "contract_id": cid, "asset_type": atype})
+            # Appraised value at intake: channel-agnostic, blind to this contract's demand, with appraisal error
+            estimate = round(float(expected[k] * rng_est.lognormal(0, cfg["estimates"]["sigma"])), -1)
+            assets.append({"asset_id": aid, "contract_id": cid, "asset_type": atype, "estimate_usd": estimate})
 
             # Listing
             listing_seq += 1
@@ -191,7 +195,7 @@ def add_worked_example(t: dict[str, pd.DataFrame], today: date) -> None:
     for i, (day, amount) in enumerate(path, start=1):
         aid = f"AS-EX{i:03d}"
         d = start + timedelta(days=day)
-        a.append({"asset_id": aid, "contract_id": cid, "asset_type": "furniture"})
+        a.append({"asset_id": aid, "contract_id": cid, "asset_type": "furniture", "estimate_usd": float(amount)})
         l.append({"listing_id": f"LS-EX{i:03d}", "asset_id": aid, "listing_channel": "website",
                   "listed_date": start, "ended_date": d, "listing_status": "sold"})
         s.append({"sale_id": f"SL-EX{i:03d}", "asset_id": aid, "sale_date": d, "gross_amount": float(amount),

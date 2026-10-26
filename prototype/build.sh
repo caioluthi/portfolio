@@ -32,7 +32,7 @@ load() {
 }
 load raw_consignors  consignors "consignor_id:STRING,home_region:STRING"
 load raw_contracts   contracts  "contract_id:STRING,consignor_id:STRING,start_date:DATE,lifecycle_days:INT64,expiry_date:DATE,target_price:FLOAT64,tier_schedule:STRING,status:STRING,region:STRING"
-load raw_assets      assets     "asset_id:STRING,contract_id:STRING,asset_type:STRING"
+load raw_assets      assets     "asset_id:STRING,contract_id:STRING,asset_type:STRING,estimate_usd:FLOAT64"
 load raw_listings    listings   "listing_id:STRING,asset_id:STRING,listing_channel:STRING,listed_date:DATE,ended_date:DATE,listing_status:STRING"
 load raw_sales       sales      "sale_id:STRING,asset_id:STRING,sale_date:DATE,gross_amount:FLOAT64,channel:STRING,region:STRING"
 load flag_parameters flag_parameters "today:DATE,flag_threshold:FLOAT64,flag_day_floor:INT64"
