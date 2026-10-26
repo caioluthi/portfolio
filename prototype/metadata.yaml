@@ -1,0 +1,72 @@
+# Descriptions for every table, view and column in the prototype dataset.
+#
+# Applied by apply_metadata.py at the end of build.sh, because reloading a
+# table or replacing a view drops its descriptions. The script fails if any
+# live column has no description, so new columns can't ship undocumented.
+#
+# `columns` is the shared glossary: a column means the same thing in every
+# table it appears in. A table's own `columns` entry overrides the glossary
+# where the meaning is narrower.
+
+columns:
+  consignor_id: Unique consignor (CN-nnnnn). Source system ConsignTrack.
+  contract_id: Unique Risk contract (CT-nnnnn). Source system ConsignTrack.
+  asset_id: Unique asset (AS-nnnnnn). Belongs to exactly one contract.
+  listing_id: Unique listing of an asset on a channel (LS-nnnnnn). Source system Listings.
+  sale_id: Unique sale of one asset (SL-nnnnnn). Source system Sales.
+  home_region: Region the consignor is based in.
+  region: Region that manages the contract. Used for exposure rollups by region.
+  start_date: First day of the contract window (day 0).
+  lifecycle_days: Length of the contract window in days. 90 by default.
+  expiry_date: Day the contract window ends; start_date + lifecycle_days. The contract is active up to the day before.
+  target_price: Price guaranteed to the consignor, in USD. If realized sales at expiry fall short, Second Avenue pays the difference.
+  tier_schedule: Negotiated upside tiers as JSON - share of sales above target that Second Avenue keeps, per band. Carried for context; not used by pilot metrics.
+  status: Contract status in ConsignTrack as of today - active, closed or cancelled.
+  asset_type: Item category - jewelry, watches, handbags, furniture, art or collectibles.
+  listing_channel: Channel the asset is listed on - app, website or live (auction).
+  listed_date: Date the listing went up.
+  ended_date: Date the listing ended, by sale or contract expiry. Null while still live.
+  listing_status: sold, expired (contract ended unsold) or live.
+  sale_date: Date the sale closed.
+  gross_amount: Gross sale proceeds in USD.
+  channel: Channel the sale happened on - app, website or live (auction).
+  today: The prototype's "now". Contracts expiring on or before it are closed; daily rows stop at it.
+  flag_threshold: Risk flag fires when pacing_pct is below this share of target pace. Pilot value 0.80.
+  flag_day_floor: No risk flag before this many days into the contract window. Pilot value 15.
+  as_of_date: Day the row describes. Every field is computed only from data dated on or before it.
+  days_elapsed: Days since start_date as of as_of_date. Day 0 is the start date.
+  elapsed_share: days_elapsed / lifecycle_days, capped at 1. Share of the contract window used up.
+  days_to_expiry: expiry_date - as_of_date, in days.
+  realized_sales: Gross sale proceeds to date for the contract's assets, counting sales dated on or before as_of_date.
+  pacing_pct: realized_sales / (target_price x elapsed_share). 1.0 is exactly on linear pace to target; 0.66 is a third behind. Null on day 0.
+  projected_final_value: realized_sales / elapsed_share. Linear projection of sales at expiry.
+  projected_shortfall: max(0, target_price - projected_final_value). What the contract is on course to cost in USD if nothing changes.
+  risk_flag: TRUE when the contract is behind pace enough to act on - pacing_pct below flag_threshold, on or after flag_day_floor. A daily state, not a prediction; a contract can be flagged, recover and be flagged again.
+  realized_sales_at_close: Gross sale proceeds for sales dated before expiry_date.
+  closed_below_target: TRUE when realized_sales_at_close is below target_price, so Second Avenue paid a shortfall.
+  first_flag_date: Earliest as_of_date on which risk_flag was TRUE. Null if never flagged.
+  detection_lead_time_days: expiry_date - first_flag_date, for contracts that closed below target; 0 if never flagged; null for contracts that met target. Input to the primary success metric.
+  flagged_by_halfway: TRUE when first_flag_date falls on or before day 45. Input to recall at halfway.
+  false_positive: TRUE when the contract was flagged at some point but closed at or above target. Input to the false-positive guardrail.
+
+tables:
+  raw_consignors:
+    description: Source - consignors, as held in ConsignTrack. One row per consignor. Simulated.
+  raw_contracts:
+    description: Source - Risk contracts, as held in ConsignTrack. One row per contract, including the PRD worked example CT-EXAMPLE. Simulated.
+  raw_assets:
+    description: Source - assets under contract, as held in ConsignTrack. One row per asset. Simulated.
+  raw_listings:
+    description: Source - where and whether each asset is listed, as held in Listings. One row per listing. Simulated.
+  raw_sales:
+    description: Source - completed sales, as held in Sales. One row per sale. Simulated.
+    columns:
+      region: Region where the sale happened.
+  flag_parameters:
+    description: Settings for the risk flag and the prototype's "now". One row. Change these to re-tune the flag; no definition changes.
+  contract_pacing_daily:
+    description: Calculated fields per contract per day, before the flag (PRD section 3). One row per non-cancelled contract per day it was active, up to today. History is replayed as it was - realized sales only count sales dated on or before as_of_date.
+  contract_daily:
+    description: Calculated fields per contract per day, including pacing, projections and the pilot risk flag (PRD section 3, DPR-3). One row per non-cancelled contract per day it was active, up to today.
+  contract_outcome:
+    description: Calculated fields at close - the inputs to the success metrics (PRD section 3; Phase 2 success metrics). One row per closed contract.

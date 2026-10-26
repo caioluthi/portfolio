@@ -11,7 +11,7 @@ what it must answer and what it deliberately skips.
 ```
 
 This generates the book of contracts, loads it into the BigQuery sandbox,
-creates the calculated-field views and checks them against the PRD's worked
+creates the calculated-field views, describes every table and column, and checks them against the PRD's worked
 example. Sandbox tables expire after 60 days, so this command is the prototype.
 
 ## What's here
@@ -21,6 +21,7 @@ example. Sandbox tables expire after 60 days, so this command is the prototype.
 | `generator/config.yaml` | Every assumption behind the simulated book, fixed before the backtest ran |
 | `generator/generate.py` | Writes the source tables: consignors, contracts, assets, listings, sales |
 | `sql/` | The PRD's calculated fields as BigQuery views, under the PRD's names |
+| `metadata.yaml` | A description for every table, view and column, applied on every build; the build fails if a column is undocumented |
 | `checks/` | The PRD's worked example as an automated check |
 
 ## How the book is calibrated
