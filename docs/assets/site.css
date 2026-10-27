@@ -68,6 +68,11 @@ strong { font-weight: 600; }
 @media (max-width: 34rem) { .tldr dl { grid-template-columns: minmax(0, 1fr); gap: 0.125rem; } .tldr dd { margin-bottom: 0.75rem; } .tldr dd:last-child { margin-bottom: 0; } }
 
 /* Callouts */
+/* Revision panel: what changed on a page after later evidence */
+.revision { margin-top: 1rem; border-left: 3px solid var(--accent); background: var(--accent-soft); border-radius: 0 6px 6px 0; padding: 1rem 1.25rem; max-width: 38rem; display: flex; flex-direction: column; gap: 0.5rem; font-size: 0.9375rem; }
+.revision .label { font-family: var(--font-mono); font-size: 0.75rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent); margin: 0; }
+.revision ul { gap: 0.25rem; }
+
 .hmw { background: var(--accent-soft); padding: 1.25rem 1.5rem; border-radius: 4px; max-width: 38rem; margin-top: 0.5rem; }
 .hmw .lead { color: var(--accent); }
 .hmw p { font-family: var(--font-display); font-size: 1.25rem; line-height: 1.45; font-weight: 500; }

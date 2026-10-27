@@ -18,6 +18,9 @@ td.n { font-family: var(--font-mono); font-size: 0.8125rem; color: var(--muted);
 .scope .tag.out { color: var(--risk); }
 .pending { background: var(--surface); border: 1px dashed var(--rule); border-radius: 6px; padding: 1rem 1.25rem; color: var(--muted); font-size: 0.9375rem; max-width: 38rem; }
 .pending strong { color: var(--fg); }
+td.win { color: var(--accent); font-weight: 600; }
+td.miss { color: var(--risk); }
+table.changes td:nth-child(2) { white-space: nowrap; }
 </style>
 </head>
 <body>
@@ -45,6 +48,8 @@ td.n { font-family: var(--font-mono); font-size: 0.8125rem; color: var(--muted);
       <dd>A timeboxed, throwaway prototype: the governed metrics on a simulated book of contracts, a backtest against last year, Ops and Finance views, and plain-language questions on top.</dd>
       <dt>Output</dt>
       <dd>A go-live verdict, chosen flag settings, the failure cases sized, and a revised PRD.</dd>
+      <dt>So far</dt>
+      <dd>The simple flag failed: 80% of its flags were false alarms. Counting unsold inventory brought that to 36% on contracts it wasn't tuned on. The prototype also measured that 44% of underperformers can be caught with confidence by halfway, which resized the opportunity to about $320K a year.</dd>
       <dt>Next</dt>
       <dd>Phase 5 plans the production build from the revised PRD, with Engineering.</dd>
     </dl>
@@ -104,7 +109,8 @@ td.n { font-family: var(--font-mono); font-size: 0.8125rem; color: var(--muted);
         <tbody>
           <tr><td class="n">1</td><td>Simulated book of contracts and the calculated fields, checked against the PRD's worked example</td><td>Groundwork</td><td><span class="status done">Done</span></td></tr>
           <tr><td class="n">2</td><td>Backtest, parameter sweep and go-live report</td><td>Q1, Q2, Q3</td><td><span class="status done">Done</span></td></tr>
-          <tr><td class="n">3</td><td>Morning list, Finance rollups and channel attribution</td><td>Q4</td><td><span class="status">Planned</span></td></tr>
+          <tr><td class="n">2b</td><td>A better signal and a two-tier flag, tested on contracts the settings weren't tuned on. Added after step 2 failed.</td><td>Q1, Q2</td><td><span class="status done">Done</span></td></tr>
+          <tr><td class="n">3</td><td>Morning list, Finance rollups and channel attribution</td><td>Q4</td><td><span class="status wip">Next</span></td></tr>
           <tr><td class="n">4</td><td>Plain-language questions and the evaluation set</td><td>Q5</td><td><span class="status">Planned</span></td></tr>
           <tr><td class="n">5</td><td>Feedback from Ops and Finance, and the PRD revision</td><td>Q6</td><td><span class="status">Planned</span></td></tr>
         </tbody>
@@ -125,7 +131,44 @@ td.n { font-family: var(--font-mono); font-size: 0.8125rem; color: var(--muted);
 
   <section class="section" aria-labelledby="results">
     <h2 id="results">5. Results</h2>
-    <p class="pending"><strong>To come.</strong> The go-live verdict, the chosen flag settings, false positives by channel and contract size, and the evaluation results, filled in as each step lands.</p>
+    <h3>Q1 · Does the bet hold? Not as first written.</h3>
+    <p>The first flag compared sales to date with a straight line to the target. Replayed over the 1,968 contracts that closed in the last 12 months, it caught underperformers early: 80% of them, a median of 75 days before expiry, against 33% in the final week today. But <strong>80% of its flags were false alarms</strong>, double the guardrail, and none of the 40 settings in the sweep got below 70%.</p>
+    <p>Accuracy depended almost entirely on timing:</p>
+    <div class="scroll">
+      <table>
+        <thead><tr><th>Days into the contract</th><th class="num">15–30</th><th class="num">30–45</th><th class="num">45–60</th><th class="num">60–75</th><th class="num">75–90</th></tr></thead>
+        <tbody><tr><td>Share of flags that were right</td><td class="num">19%</td><td class="num">26%</td><td class="num">38%</td><td class="num">56%</td><td class="num">90%</td></tr></tbody>
+      </table>
+    </div>
+    <p>With 15% of contracts underperforming, a flag in the first month was barely better than picking contracts at random. Early in a contract, being behind mostly means the big items haven't sold yet, not that they won't.</p>
+
+    <h3>A better signal, tested once on held-out contracts</h3>
+    <p>Two changes were tested together, with the design, grids and selection rule committed before the run. Settings were chosen on contracts that closed 6 to 12 months ago and scored once on the last 6 months.</p>
+    <ul>
+      <li><strong>B · Count what is still unsold.</strong> Project the final value from sales so far plus the appraised value of unsold items, priced by how the contract's sold items have fetched against their appraisals.</li>
+      <li><strong>C · Add watch and act tiers.</strong> Only flag <em>act</em> once enough of the contract has sold to trust the signal; otherwise <em>watch</em>.</li>
+    </ul>
+    <p>A is the linear flag from step 2, scored the same way. Today is the final-week review.</p>
+    <div class="scroll">
+      <table class="results">
+        <thead><tr><th>Held-out contracts</th><th class="num">Bar</th><th class="num">A</th><th class="num">B</th><th class="num">C</th><th class="num">Today</th></tr></thead>
+        <tbody>
+          <tr><td>Median lead time, days</td><td class="num">≥ 30</td><td class="num">56</td><td class="num">30</td><td class="num win">30</td><td class="num">0</td></tr>
+          <tr><td>Recall at halfway</td><td class="num">≥ 70%, now ≥ 40%</td><td class="num">59%</td><td class="num">38%</td><td class="num win">44%</td><td class="num">0%</td></tr>
+          <tr><td>False alarms</td><td class="num">≤ 40%</td><td class="num miss">66%</td><td class="num">37%</td><td class="num win">36%</td><td class="num">6%</td></tr>
+          <tr><td>New flags a week</td><td class="num">≤ 25</td><td class="num">18</td><td class="num">9.5</td><td class="num win">8.5</td><td class="num">2</td></tr>
+          <tr><td>Watch list, 95% of days</td><td class="num">≤ 40</td><td class="num"></td><td class="num"></td><td class="num win">10</td><td class="num"></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p><strong>Counting unsold inventory fixed the false alarms</strong>, from 66% to 37%, and halved the weekly flags. The tiers added a little on top: 6 more points of recall and a watch list that rarely tops 10 contracts.</p>
+
+    <h3>Q2 · What should the settings be?</h3>
+    <p>Chosen by the pre-set rule on the training contracts: flag when the projection falls below <strong>95% of target</strong>, from <strong>day 21</strong>, with price realization pulled toward 1 by a prior worth <strong>15% of target</strong>, and move to act once <strong>15% of appraised value has sold</strong>.</p>
+
+    <h3>Q3 · Where does it fall short?</h3>
+    <p>Recall at halfway. Across every setting tested, staying under 40% false alarms caps it at about 41%; reaching 70% means going back to about 70% false alarms. On sales and appraisals alone, roughly half of eventual underperformers look like healthy contracts at day 45. The 70% target came from a judgment in the Phase 2 sizing funnel, so the prototype replaced that judgment with a measurement, and the target moved with it, as recorded <a href="#changed">below</a>. Under linear pacing, auction-heavy contracts were the noisiest segment (87% false alarms), but no segment explained the overall failure: every channel and contract size was between 77% and 83%.</p>
+    <p class="note" style="margin-top:0">Reports, data and code: <a href="https://github.com/caioluthi/portfolio/blob/main/prototype/backtest/results/report.md">step 2 report</a>, <a href="https://github.com/caioluthi/portfolio/blob/main/prototype/experiment/DESIGN.md">step 2b design</a> and <a href="https://github.com/caioluthi/portfolio/blob/main/prototype/experiment/results/report.md">step 2b results</a>. Each selection rule was committed before its run.</p>
   </section>
 
   <section class="section" aria-labelledby="feedback">
@@ -135,7 +178,23 @@ td.n { font-family: var(--font-mono); font-size: 0.8125rem; color: var(--muted);
 
   <section class="section" aria-labelledby="changed">
     <h2 id="changed">7. What the prototype changed</h2>
-    <p class="pending"><strong>To come.</strong> Every change the prototype makes to the PRD, with the evidence behind it. The backlog in Phase 5 is planned from the revised version.</p>
+    <p>Every change below is now in the published pages, with the evidence that prompted it. The backlog in Phase 5 is planned from these revised versions.</p>
+    <div class="scroll">
+      <table class="changes">
+        <thead><tr><th>Change</th><th>Where</th><th>Evidence</th></tr></thead>
+        <tbody>
+          <tr><td>The risk flag projects the final value from what has sold and what is still unsold, replacing linear pacing</td><td><a href="phase-3-prd.html#calculated">PRD, DPR-3</a></td><td>False alarms 66% → 37% on held-out contracts</td></tr>
+          <tr><td>Flags have two tiers: act, which Ops reviews, and watch, shown as context</td><td><a href="phase-3-prd.html#dpr-5">PRD, DPR-3 and DPR-5</a></td><td>+6 points of recall at halfway; watch list of at most 10 on 95% of days</td></tr>
+          <tr><td>New required field: an appraised estimate per asset</td><td><a href="phase-3-prd.html#fields">PRD, required fields</a></td><td>The projection can't price unsold items without it</td></tr>
+          <tr><td>Pilot settings: 95% of target, day 21, prior 15% of target, act at 15% sold</td><td><a href="phase-3-prd.html#fields">PRD, parameters</a></td><td>Chosen by the pre-set rule on training contracts</td></tr>
+          <tr><td>Recall-at-halfway target 70% → 40%</td><td><a href="phase-2-opportunity.html#metrics">Opportunity, success metrics</a></td><td>No setting reaches more than ~41% inside the false-alarm guardrail</td></tr>
+          <tr><td>Opportunity base case ~$500K → ~$320K a year</td><td><a href="phase-2-opportunity.html#opportunity">Opportunity, sizing</a></td><td>The funnel's first step is measured at 44%, not judged at 70%</td></tr>
+          <tr><td>Success counts from the first act flag; a watch-list size guardrail is added</td><td><a href="phase-2-opportunity.html#metrics">Opportunity, success metrics</a></td><td>Decided before the step 2b run, as part of its design</td></tr>
+          <tr><td>Next scope adds listing activity (views, watchers, bids, price drops)</td><td><a href="phase-3-prd.html#scope">PRD, scope</a></td><td>Sales and appraisals alone cap recall at halfway near 41%; going further needs new evidence. Not yet tested</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p><strong>What didn't change:</strong> the lead-time, false-alarm and alert-volume targets. Only the recall target moved, because it was the one built on a judgment that the prototype could measure. Lowering it takes about $185K a year off the opportunity, and that trade is stated rather than hidden.</p>
   </section>
 
   <nav class="pager" aria-label="Phases">

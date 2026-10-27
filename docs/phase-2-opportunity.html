@@ -86,17 +86,27 @@
     <p class="note">Second Avenue is a fictional consignment retailer and every figure on this page is simulated. The evidence behind it is in the <a href="phase-1-discovery.html">product discovery write-up</a>.</p>
   </header>
 
+  <aside class="revision" aria-labelledby="rev-h">
+    <p class="label" id="rev-h">Revision 2 · after the Phase 4 prototype</p>
+    <ul>
+      <li>The first funnel step is now measured, not judged: <strong>44%</strong> of underperformers can be flagged with confidence by halfway, not the 70% first assumed. The base case falls from about $500K to about <strong>$320K</strong> a year.</li>
+      <li>The recall-at-halfway target moves from 70% to <strong>40%</strong>, the level the prototype showed is reachable without breaking the false-alarm guardrail. The other targets don't move, and a guardrail on the size of the watch list is added.</li>
+      <li>The pilot flag changes from linear pacing to a projection that counts unsold inventory, with <strong>watch</strong> and <strong>act</strong> tiers. Success is measured from the first act flag.</li>
+    </ul>
+    <p>Why, with the evidence: <a href="phase-4-prototype.html#changed">what the prototype changed</a>.</p>
+  </aside>
+
   <aside class="tldr" aria-labelledby="tldr-h">
     <p class="label" id="tldr-h">TL;DR</p>
     <dl>
       <dt>Problem</dt>
       <dd>Nobody sees a Risk contract falling behind its target until it has expired. About 15% of contracts underperformed over the last 12 months, costing roughly $3.6M a year in shortfall payouts.</dd>
       <dt>Opportunity</dt>
-      <dd>Flagging contracts that pace below target while they are still running could recover about $110K to $1.4M a year, with a base case near $500K. Ops review time costs about $13K a year.</dd>
+      <dd>Flagging contracts heading below target while they are still running could recover about $95K to $665K a year, with a base case near $320K. Ops review time costs about $4K a year.</dd>
       <dt>Success</dt>
-      <dd>Flag underperformers a median of at least 30 days before expiry, against under a week today, with no more than 40% false alarms and 25 new flags a week.</dd>
+      <dd>Flag underperformers a median of at least 30 days before expiry, against under a week today, and at least 40% of them by halfway, with no more than 40% false alarms and 25 new flags a week.</dd>
       <dt>Pilot</dt>
-      <dd>Test a linear pacing flag, refreshed daily, against last year's contracts, and go live with Ops only if it meets the success targets.</dd>
+      <dd>A daily flag that projects each contract's final value from what has sold and what is still unsold, with watch and act tiers. On the prototype's backtest it meets every go-live criterion it can be tested on.</dd>
       <dt>Next</dt>
       <dd>The <a href="phase-3-prd.html">PRD</a> turns this into the requirements Engineering sizes.</dd>
     </dl>
@@ -123,23 +133,23 @@
 
   <section class="section" aria-labelledby="opportunity">
     <h2 id="opportunity">The opportunity</h2>
-    <p>Not every shortfall dollar can be saved. A dollar is recoverable only if the contract showed warning signs early enough, an action was still available, and that action worked. Each condition cuts the total, so the three shares multiply. Pick a scenario to see the funnel.</p>
+    <p>Not every shortfall dollar can be saved. A dollar is recoverable only if the contract was flagged early enough, an action was still available, and that action worked. Each condition cuts the total, so the three shares multiply. The first share is measured; the scenarios vary the other two. Pick a scenario to see the funnel.</p>
 
     <div class="scenarios" role="group" aria-label="Scenario">
       <button class="scenario" type="button" data-k="low" aria-pressed="false">
         <span class="name">Low</span>
-        <span class="amount">~$110K</span>
+        <span class="amount">~$95K</span>
         <span class="share">3% of total</span>
       </button>
       <button class="scenario" type="button" data-k="base" aria-pressed="true">
         <span class="name">Base</span>
-        <span class="amount">~$500K</span>
-        <span class="share">14% of total</span>
+        <span class="amount">~$320K</span>
+        <span class="share">9% of total</span>
       </button>
       <button class="scenario" type="button" data-k="high" aria-pressed="false">
         <span class="name">High</span>
-        <span class="amount">~$1.4M</span>
-        <span class="share">38% of total</span>
+        <span class="amount">~$665K</span>
+        <span class="share">18% of total</span>
       </button>
     </div>
     <p class="caption">Recoverable shortfall per year, against roughly $3.6M in annual payouts.</p>
@@ -151,19 +161,19 @@
         <div class="val" id="val0">$3.60M</div>
       </div>
       <div class="step">
-        <div class="what"><strong>Showed warning signs by the halfway mark <span class="mult" id="mult1" style="display:inline">× 70%</span></strong><span>Judgment, informed by the Finance interview</span></div>
-        <div class="track"><div class="bar" id="bar1" style="width:70%"></div></div>
-        <div class="val" id="val1">$2.52M</div>
+        <div class="what"><strong>Flagged with confidence by the halfway mark <span class="mult" id="mult1" style="display:inline">× 44%</span></strong><span>Measured by the Phase 4 prototype. Was a 70% judgment, informed by the Finance interview</span></div>
+        <div class="track"><div class="bar" id="bar1" style="width:44%"></div></div>
+        <div class="val" id="val1">$1.58M</div>
       </div>
       <div class="step">
         <div class="what"><strong>An action was still available <span class="mult" id="mult2" style="display:inline">× 50%</span></strong><span>Judgment, informed by the Finance and Ops interviews</span></div>
-        <div class="track"><div class="bar" id="bar2" style="width:35%"></div></div>
-        <div class="val" id="val2">$1.26M</div>
+        <div class="track"><div class="bar" id="bar2" style="width:22%"></div></div>
+        <div class="val" id="val2">$792K</div>
       </div>
       <div class="step result">
         <div class="what"><strong>Shortfall recovered when acted on <span class="mult" id="mult3" style="display:inline">× 40%</span></strong><span>Assumption with no interview evidence</span></div>
-        <div class="track"><div class="bar" id="bar3" style="width:14%"></div></div>
-        <div class="val" id="val3">$504K</div>
+        <div class="track"><div class="bar" id="bar3" style="width:8.8%"></div></div>
+        <div class="val" id="val3">$317K</div>
       </div>
     </div>
 
@@ -193,12 +203,13 @@
         </tbody>
       </table>
     </div>
-    <p>Even the highest case is small next to the low-case recovery. Alert volume is what the false-positive guardrail in <a href="#guardrails">success metrics</a> below control.</p>
+    <p>Even the highest case is small next to the low-case recovery. On the prototype's backtest the flag raised about 8.5 act flags a week, roughly $4K a year of review time. Alert volume is what the guardrails in <a href="#guardrails">success metrics</a> below control.</p>
 
     <h3>What this page does not claim</h3>
     <ul>
       <li>The $3.6M and the 15% and 18% rates come from a one-off manual pull, so they are estimates and not monitored figures.</li>
-      <li>Recovery when acted on is the weakest input. Once pacing is tracked, the product produces the data to replace it with a measured rate.</li>
+      <li>Recovery when acted on is now the weakest input. Once Ops actions are logged, the product produces the data to replace it with a measured rate.</li>
+      <li>The 44% was measured on the prototype's backtest. Running the same backtest on Second Avenue's own history is the first check before the pilot goes live.</li>
       <li>The sizing counts avoided shortfall only. It leaves out upside from better channel placement and the analyst time saved, about 8 hours per report today.</li>
     </ul>
 
@@ -215,12 +226,12 @@ observed:
   annual_shortfall_payouts_usd: 3600000
 
 funnel:            # low / base / high
-  warning_by_halfway:  {low: 0.50, base: 0.70, high: 0.90}
+  flagged_by_halfway:  {low: 0.44, base: 0.44, high: 0.44}  # measured in Phase 4; was 0.50 / 0.70 / 0.90
   action_available:    {low: 0.30, base: 0.50, high: 0.70}
   recovery_when_acted: {low: 0.20, base: 0.40, high: 0.60}
 
 cost_side:
-  alerts_per_week: {low: 10, base: 25, high: 60}
+  alerts_per_week: {low: 10, base: 25, high: 60}  # Phase 4 backtest: ~8.5 act flags a week
   minutes_per_review: 10
   loaded_hourly_cost_usd: 60</pre>
     </details>
@@ -235,27 +246,32 @@ cost_side:
       <div class="metric" role="listitem">
         <span class="role">Outcome</span>
         <div><span class="name">Shortfall payouts avoided</span><span class="def">Annual payouts against the ~$3.6M baseline. Tracked over quarters, not a launch gate.</span></div>
-        <span class="target">~$500K / yr<small>Base case above</small></span>
+        <span class="target">~$320K / yr<small>Base case above</small></span>
       </div>
       <div class="metric primary" role="listitem">
         <span class="role">Primary</span>
-        <div><span class="name">Detection lead time</span><span class="def">Days from a contract's first risk flag to its expiry, for contracts that closed below target. An underperformer that was never flagged counts as 0 days, so missed contracts pull the number down instead of disappearing.</span></div>
+        <div><span class="name">Detection lead time</span><span class="def">Days from a contract's first <strong>act</strong> flag to its expiry, for contracts that closed below target. An underperformer that was never flagged act counts as 0 days, so missed contracts pull the number down instead of disappearing.</span></div>
         <span class="target">Median ≥ 30 days<small>Today: under ~7</small></span>
       </div>
       <div class="metric" role="listitem">
         <span class="role">Supporting</span>
-        <div><span class="name">Recall at halfway</span><span class="def">Share of eventual underperformers flagged by day 45. This replaces the first assumption in the funnel with a measured number.</span></div>
-        <span class="target">≥ 70%<small>Base case above</small></span>
+        <div><span class="name">Recall at halfway</span><span class="def">Share of eventual underperformers flagged act by day 45. The prototype measured 44% and showed that more costs false alarms, so the target is set just under it. It also replaced the first assumption in the funnel.</span></div>
+        <span class="target">≥ 40%<small>Was 70%; revised in v2</small></span>
       </div>
       <div class="metric guard" role="listitem" id="guardrails">
         <span class="role">Guardrail</span>
-        <div><span class="name">False-positive rate</span><span class="def">Share of flagged contracts that closed at or above target. Every false alarm costs Ops a review and erodes trust in the next flag.</span></div>
+        <div><span class="name">False-positive rate</span><span class="def">Share of contracts flagged act that closed at or above target. Every false alarm costs Ops a review and erodes trust in the next flag.</span></div>
         <span class="target">≤ 40%</span>
       </div>
       <div class="metric guard" role="listitem">
         <span class="role">Guardrail</span>
-        <div><span class="name">Alert volume</span><span class="def">New flags per week across the book. Keeps review cost near the ~$13K a year sized above.</span></div>
+        <div><span class="name">Alert volume</span><span class="def">New act flags per week across the book. Keeps review cost near the ~$13K a year sized above.</span></div>
         <span class="target">≤ 25 / week</span>
+      </div>
+      <div class="metric guard" role="listitem">
+        <span class="role">Guardrail</span>
+        <div><span class="name">Watch list size</span><span class="def">Contracts on watch at once. Watch flags are context for Ops, not reviews, so they carry no false-positive guardrail; this keeps the list readable. Added in v2.</span></div>
+        <span class="target">≤ 40<small>On 95% of days</small></span>
       </div>
       <div class="metric guard" role="listitem">
         <span class="role">Guardrail</span>
@@ -271,8 +287,9 @@ cost_side:
     <h2 id="pilot">The pilot bet</h2>
     <p>The pilot tests one claim: a simple pacing flag, computed daily from data Second Avenue already has, catches underperforming contracts weeks earlier than today without burying Ops in false alarms. If that holds, the dollars can follow. If it doesn't, nothing more sophisticated is worth building on top of it.</p>
 
-    <h3>Why linear pacing first</h3>
-    <p>Linear pacing compares sales to date with a straight line from zero to the target. It needs no history, Ops can check it in their head, and it is enough to test whether earlier flags are useful at all. Pacing against the historical sales curves of similar contracts is more accurate, especially for live auctions, and comes next once the pilot shows where linear pacing is wrong.</p>
+    <h3 id="flag">What the flag measures</h3>
+    <p>The first version compared sales to date with a straight line from zero to the target. It needed no history, and the prototype showed it doesn't work: early in a contract, being behind mostly means the big items haven't sold yet, and 80% of its flags were false alarms.</p>
+    <p>The pilot flag projects each contract's final value from what has sold <em>and</em> what is still unsold, priced by how its sold items are fetching against their appraisals. Flags come in two tiers. <strong>Act</strong> means enough of the contract has sold to trust the signal, and Ops reviews it. <strong>Watch</strong> means the projection is low but the evidence is thin, and it is shown as context. The evidence is on the <a href="phase-4-prototype.html">Phase 4 page</a>.</p>
 
     <h3 id="cadence">Why a daily refresh</h3>
     <p>Discovery left open how fresh the signal needs to be. David can work with weekly, Priya heard stakeholders ask for near-real-time, and she would trade speed for consistency. Tying cadence to the decision it supports settles it.</p>
@@ -282,17 +299,19 @@ cost_side:
     <p>Before Ops relies on the flag, it is replayed over the last 12 months of closed contracts, whose final outcomes are already known. The pilot goes live with Ops when, on that backtest:</p>
     <ul>
       <li>median detection lead time is at least 30 days,</li>
-      <li>at least 70% of underperformers are flagged by day 45,</li>
-      <li>no more than 40% of flags are false alarms,</li>
-      <li>new flags stay at or below 25 a week, and</li>
+      <li>at least 40% of underperformers are flagged act by day 45 (was 70% before the prototype),</li>
+      <li>no more than 40% of act flags are false alarms,</li>
+      <li>new act flags stay at or below 25 a week,</li>
+      <li>no more than 40 contracts are on watch at once, on 95% of days, and</li>
       <li>every active contract reconciles across the three sources.</li>
     </ul>
-    <p>The 80% threshold and the day-15 floor are starting values, not commitments. The backtest sweeps both and picks the setting that best meets the lead-time target while staying inside the guardrails.</p>
+    <p>The flag's settings are chosen by the backtest, not assumed. On the prototype's backtest, scored on contracts the settings weren't tuned on, the flag meets every criterion except reconciliation, which needs the real source systems and is part of the production build.</p>
 
     <h3 id="pilot-risks">Risks to the bet</h3>
     <ul>
-      <li><strong>Back-loaded contracts look worse than they are.</strong> A contract whose assets are scheduled into a live auction late in the window will pace low until the auction and then catch up. Linear pacing will flag it. This is the main reason historical-curve pacing comes next, and the false-positive rate by channel will show how large the effect is.</li>
-      <li><strong>Single-asset contracts are all or nothing.</strong> A contract covering one high-value item shows $0 realized until it sells, so pacing says little about it. False positives by contract size will show whether this segment needs separate handling.</li>
+      <li><strong>Half of the underperformers still look healthy at halfway.</strong> With sales and appraisals alone, about 44% can be flagged with confidence by day 45. Catching more needs new evidence, such as listing views, watchers, bids or price drops, which is next in scope.</li>
+      <li><strong>The flag leans on appraisals.</strong> It prices unsold items from their appraised values. Missing or much noisier appraisals than the prototype assumed would weaken it, so appraisal coverage is checked before go-live.</li>
+      <li><strong>Some segments are noisier than others.</strong> Auction-heavy and single-asset contracts were the noisiest under linear pacing. The weekly scorecard tracks false alarms by channel and contract size.</li>
       <li><strong>The backtest can't prove the dollars.</strong> Payouts avoided depend on Ops acting on a flag, which history can't show. The pilot proves the signal; logging Ops actions, planned next, is what proves the dollars.</li>
     </ul>
     <p>The <a href="phase-3-prd.html">PRD</a> turns the pilot into requirements for Engineering.</p>
@@ -308,9 +327,9 @@ cost_side:
 (function () {
   var TOTAL = 3600000;
   var S = {
-    low:  { w: 0.5, a: 0.3, r: 0.2 },
-    base: { w: 0.7, a: 0.5, r: 0.4 },
-    high: { w: 0.9, a: 0.7, r: 0.6 }
+    low:  { w: 0.44, a: 0.3, r: 0.2 },
+    base: { w: 0.44, a: 0.5, r: 0.4 },
+    high: { w: 0.44, a: 0.7, r: 0.6 }
   };
   function fmt(v) {
     return v >= 1e6 ? '$' + (v / 1e6).toFixed(2) + 'M' : '$' + Math.round(v / 1e3) + 'K';
