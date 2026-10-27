@@ -155,6 +155,8 @@ def main() -> None:
     c, d, today = load(project, dataset)
     win = windows(today)
     s = sell_through(d, c, win["train"])
+    pd.DataFrame({"period": range(6), "day_from": [15 * i for i in range(6)],
+                  "day_to": [15 * i + 14 for i in range(6)], "sell_through": s}).to_csv(OUT / "sell_through.csv", index=False)
 
     # Consistency check: variant A at the pilot default over the full year must reproduce step 2.
     flag, _ = signals(d, "A", dict(threshold=0.80, floor=15), s)

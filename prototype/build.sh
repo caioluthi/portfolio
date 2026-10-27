@@ -14,9 +14,12 @@ DATASET="${2:-second_avenue}"
 HERE="$(cd "$(dirname "$0")" && pwd)"
 DATA="$HERE/data"
 
-# Flag settings for the pilot. Change them here; no definition changes.
-FLAG_THRESHOLD="${FLAG_THRESHOLD:-0.80}"
-FLAG_DAY_FLOOR="${FLAG_DAY_FLOOR:-15}"
+# Flag settings for the pilot, chosen by the Phase 4 test (experiment/DESIGN.md).
+# Change them here; no definition changes.
+FLAG_THRESHOLD="${FLAG_THRESHOLD:-0.95}"
+FLAG_DAY_FLOOR="${FLAG_DAY_FLOOR:-21}"
+REALIZATION_PRIOR_SHARE="${REALIZATION_PRIOR_SHARE:-0.15}"
+ACT_EVIDENCE_MIN="${ACT_EVIDENCE_MIN:-0.15}"
 TODAY="$(python3 -c "import yaml;print(yaml.safe_load(open('$HERE/generator/config.yaml'))['today'])")"
 
 echo "1/5 Generating the book of contracts"
@@ -24,7 +27,10 @@ python3 "$HERE/generator/generate.py" --out "$DATA" --report
 
 echo "2/5 Loading into $PROJECT:$DATASET"
 bq --project_id="$PROJECT" mk --force --dataset --location=US "$PROJECT:$DATASET" >/dev/null
-printf 'today,flag_threshold,flag_day_floor\n%s,%s,%s\n' "$TODAY" "$FLAG_THRESHOLD" "$FLAG_DAY_FLOOR" > "$DATA/flag_parameters.csv"
+printf 'today,flag_threshold,flag_day_floor,realization_prior_share,act_evidence_min\n%s,%s,%s,%s,%s\n' \
+  "$TODAY" "$FLAG_THRESHOLD" "$FLAG_DAY_FLOOR" "$REALIZATION_PRIOR_SHARE" "$ACT_EVIDENCE_MIN" > "$DATA/flag_parameters.csv"
+# Sell-through by 15-day period, learned from training contracts by experiment/run.py
+cp "$HERE/experiment/results/sell_through.csv" "$DATA/sell_through.csv"
 load() {
   bq --quiet --project_id="$PROJECT" load --replace --source_format=CSV --skip_leading_rows=1 \
     "$DATASET.$1" "$DATA/$2.csv" "$3" >/dev/null
@@ -35,7 +41,8 @@ load raw_contracts   contracts  "contract_id:STRING,consignor_id:STRING,start_da
 load raw_assets      assets     "asset_id:STRING,contract_id:STRING,asset_type:STRING,estimate_usd:FLOAT64"
 load raw_listings    listings   "listing_id:STRING,asset_id:STRING,listing_channel:STRING,listed_date:DATE,ended_date:DATE,listing_status:STRING"
 load raw_sales       sales      "sale_id:STRING,asset_id:STRING,sale_date:DATE,gross_amount:FLOAT64,channel:STRING,region:STRING"
-load flag_parameters flag_parameters "today:DATE,flag_threshold:FLOAT64,flag_day_floor:INT64"
+load flag_parameters flag_parameters "today:DATE,flag_threshold:FLOAT64,flag_day_floor:INT64,realization_prior_share:FLOAT64,act_evidence_min:FLOAT64"
+load sell_through_by_period sell_through "period:INT64,day_from:INT64,day_to:INT64,sell_through:FLOAT64"
 
 echo "3/5 Creating the calculated-field views"
 for f in "$HERE"/sql/[0-9]*.sql; do

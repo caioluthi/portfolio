@@ -86,10 +86,23 @@ positive at the smaller size.
   timing and demand are modeled in `generator/config.yaml`.
 - The test set has 174 underperformers, so rates move by a few points either
   way.
+- The split falls 182 days before today, so contracts closing on 2026-04-01
+  are in training. DESIGN.md gives the test window as starting on that date;
+  the code, which ran as committed, is one day off from that wording.
 - Sell-through by period is learned from the training contracts. A production
   version would re-learn it regularly.
+
+## Adopted as the pilot definition
+
+Variant C at its chosen setting is now the governed definition in BigQuery
+(`sql/02_contract_daily.sql`, `sql/03_contract_outcome.sql`), with
+`sell_through.csv` loaded as `sell_through_by_period`. On the same test
+contracts, the views reproduce this table exactly: 982 contracts, 43.7% recall
+at halfway, 35.5% false positives, a 30-day median lead time and 8.5 flags a
+week.
 
 ## Files
 
 - `grid_A.csv`, `grid_B.csv`, `grid_C.csv`: every setting, scored on training
 - `summary.json`: chosen settings, training and test scores, checks
+- `sell_through.csv`: sell-through by 15-day period, learned from training

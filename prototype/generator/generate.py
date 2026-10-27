@@ -181,7 +181,8 @@ def generate(cfg: dict) -> dict[str, pd.DataFrame]:
 def add_worked_example(t: dict[str, pd.DataFrame], today: date) -> None:
     """The PRD's worked example as a fixed contract, so the metrics can be checked against it.
 
-    $50,000 target, 90 days: $6,500 sold by day 15, $11,000 by day 30, closes at $36,000.
+    $50,000 target, 90 days, eight items appraised at $56,000 in total.
+    $6,500 sold by day 15, $11,000 by day 30 (items appraised at $14,000), closes at $36,000.
     """
     start = today - timedelta(days=200)
     cid, cons = "CT-EXAMPLE", t["consignors"].consignor_id.iloc[0]
@@ -190,12 +191,14 @@ def add_worked_example(t: dict[str, pd.DataFrame], today: date) -> None:
         "expiry_date": start + timedelta(days=90), "target_price": 50000.0,
         "tier_schedule": tier_schedule(np.random.default_rng(0)), "status": "closed", "region": "Northeast",
     }])], ignore_index=True)
-    path = [(5, 3000), (12, 3500), (22, 2000), (28, 2500), (44, 5000), (58, 6000), (74, 6000), (88, 8000)]
+    # (sale day, sale amount, appraised value)
+    path = [(5, 3000, 3600), (12, 3500, 4400), (22, 2000, 2700), (28, 2500, 3300),
+            (44, 5000, 9000), (58, 6000, 10000), (74, 6000, 10000), (88, 8000, 13000)]
     a, l, s = [], [], []
-    for i, (day, amount) in enumerate(path, start=1):
+    for i, (day, amount, estimate) in enumerate(path, start=1):
         aid = f"AS-EX{i:03d}"
         d = start + timedelta(days=day)
-        a.append({"asset_id": aid, "contract_id": cid, "asset_type": "furniture", "estimate_usd": float(amount)})
+        a.append({"asset_id": aid, "contract_id": cid, "asset_type": "furniture", "estimate_usd": float(estimate)})
         l.append({"listing_id": f"LS-EX{i:03d}", "asset_id": aid, "listing_channel": "website",
                   "listed_date": start, "ended_date": d, "listing_status": "sold"})
         s.append({"sale_id": f"SL-EX{i:03d}", "asset_id": aid, "sale_date": d, "gross_amount": float(amount),
