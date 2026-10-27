@@ -1,0 +1,354 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<link rel="canonical" href="phase-2-opportunity.html">
+<title>Phase 2 · Opportunity &amp; success metrics (revision 1, archived) | Second Avenue</title>
+<meta name="description" content="Problem statement framed around contract pacing, opportunity sizing for late-detected underperforming Risk contracts, and the success metrics that judge the product.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&family=Newsreader:opsz,wght@6..72,500;6..72,600&display=swap">
+<link rel="stylesheet" href="assets/site.css">
+<style>
+/* Scenario picker */
+.scenarios { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0.75rem; margin-top: 0.5rem; }
+.scenario {
+  font: inherit;
+  color: var(--fg);
+  text-align: left;
+  background: var(--surface);
+  border: 1px solid var(--rule);
+  border-radius: 6px;
+  padding: 0.875rem 1rem;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  gap: 0.125rem;
+  min-width: 0;
+}
+.scenario:hover { border-color: var(--accent); }
+.scenario[aria-pressed="true"] { border-color: var(--accent); background: var(--accent-soft); box-shadow: inset 0 0 0 1px var(--accent); }
+.scenario .name { font-family: var(--font-mono); font-size: 0.75rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+.scenario[aria-pressed="true"] .name { color: var(--accent); }
+.scenario .amount { font-family: var(--font-mono); font-size: clamp(1.125rem, 4.4vw, 1.625rem); font-weight: 500; font-variant-numeric: tabular-nums; }
+.scenario .share { font-size: 0.8125rem; color: var(--muted); }
+/* Metric tree: one row per metric, role in the left rail so the hierarchy reads top to bottom. */
+.tree { display: flex; flex-direction: column; border-top: 1px solid var(--rule); }
+.metric { display: grid; grid-template-columns: 7rem minmax(0, 1fr) 9.5rem; gap: 0.25rem 1rem; padding: 0.875rem 0; border-bottom: 1px solid var(--rule); align-items: baseline; }
+.metric .role { font-family: var(--font-mono); font-size: 0.6875rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+.metric.primary .role, .metric.primary .target { color: var(--accent); }
+.metric.guard .role { color: var(--risk); }
+.metric .name { font-weight: 600; }
+.metric .def { display: block; font-size: 0.875rem; color: var(--muted); line-height: 1.5; margin-top: 0.125rem; }
+.metric .target { font-family: var(--font-mono); font-size: 0.875rem; font-weight: 500; text-align: right; font-variant-numeric: tabular-nums; }
+.metric .target small { display: block; font-weight: 400; color: var(--muted); font-size: 0.75rem; }
+.metric.primary { background: var(--accent-soft); margin: 0 -0.75rem; padding-left: 0.75rem; padding-right: 0.75rem; border-radius: 4px; }
+@media (max-width: 34rem) {
+  .metric { grid-template-columns: minmax(0, 1fr) auto; }
+  .metric .role { grid-column: 1 / -1; }
+}
+.caption { font-size: 0.8125rem; color: var(--muted); margin-top: -0.25rem; }
+
+/* Funnel */
+.funnel { display: flex; flex-direction: column; margin-top: 0.5rem; border-top: 1px solid var(--rule); }
+.step { display: grid; grid-template-columns: minmax(0, 12rem) minmax(0, 1fr) 4.5rem; gap: 0.25rem 1rem; align-items: center; padding: 0.875rem 0; border-bottom: 1px solid var(--rule); }
+.step .what { min-width: 0; }
+.step .what strong { display: block; font-weight: 500; font-size: 0.9375rem; line-height: 1.35; }
+.step .what span { display: block; font-size: 0.8125rem; color: var(--muted); line-height: 1.4; margin-top: 0.125rem; }
+.step .mult { font-family: var(--font-mono); font-size: 0.8125rem; color: var(--accent); font-variant-numeric: tabular-nums; }
+.track { height: 1.25rem; background: color-mix(in srgb, var(--rule) 55%, transparent); border-radius: 2px; min-width: 0; }
+.bar { height: 100%; background: var(--bar-total); border-radius: 2px; width: 100%; }
+.step.result .bar { background: var(--accent); }
+.step .val { font-family: var(--font-mono); font-size: 0.9375rem; font-weight: 500; text-align: right; font-variant-numeric: tabular-nums; }
+.step.result .val { color: var(--accent); }
+@media (prefers-reduced-motion: no-preference) { .bar { transition: width 0.35s ease; } }
+@media (max-width: 34rem) {
+  .step { grid-template-columns: minmax(0, 1fr) auto; }
+  .step .what { grid-column: 1 / -1; }
+  .step .track { grid-column: 1; }
+  .step .val { grid-column: 2; }
+}
+
+</style>
+</head>
+<body>
+<main class="page">
+  <nav class="sitenav" aria-label="Case study">
+    <a class="home" href="index.html">Second Avenue</a>
+    <a href="phase-1-discovery.html">1 · Discovery</a>
+    <a href="phase-2-opportunity.html">2 · Opportunity</a>
+    <a href="phase-3-prd.html">3 · PRD</a>
+    <a href="phase-4-prototype.html">4 · Prototype</a>
+  </nav>
+
+  <aside class="revision archived" aria-labelledby="arch-h">
+    <p class="label" id="arch-h">Archived · revision 1</p>
+    <p>This is the opportunity page as written before the Phase 4 prototype, kept unchanged to show what the prototype changed. It has been superseded.</p>
+    <p><a href="phase-2-opportunity.html">Read the current version</a> · <a href="phase-4-prototype.html#changed">What the prototype changed</a></p>
+  </aside>
+
+  <header>
+    <p class="eyebrow">Phase 2 · Opportunity &amp; success metrics</p>
+    <h1>Second Avenue finds out a Risk contract is underperforming only when it is too late to act.</h1>
+    <p class="note">Second Avenue is a fictional consignment retailer and every figure on this page is simulated. The evidence behind it is in the <a href="phase-1-discovery.html">product discovery write-up</a>.</p>
+  </header>
+
+  <aside class="tldr" aria-labelledby="tldr-h">
+    <p class="label" id="tldr-h">TL;DR</p>
+    <dl>
+      <dt>Problem</dt>
+      <dd>Nobody sees a Risk contract falling behind its target until it has expired. About 15% of contracts underperformed over the last 12 months, costing roughly $3.6M a year in shortfall payouts.</dd>
+      <dt>Opportunity</dt>
+      <dd>Flagging contracts that pace below target while they are still running could recover about $110K to $1.4M a year, with a base case near $500K. Ops review time costs about $13K a year.</dd>
+      <dt>Success</dt>
+      <dd>Flag underperformers a median of at least 30 days before expiry, against under a week today, with no more than 40% false alarms and 25 new flags a week.</dd>
+      <dt>Pilot</dt>
+      <dd>Test a linear pacing flag, refreshed daily, against last year's contracts, and go live with Ops only if it meets the success targets.</dd>
+      <dt>Next</dt>
+      <dd>The <a href="phase-3-prd-v1.html">PRD</a> turns this into the requirements Engineering sizes.</dd>
+    </dl>
+  </aside>
+
+  <section class="section" aria-labelledby="problem">
+    <h2 id="problem">The problem</h2>
+    <p>Under a Risk contract, Second Avenue guarantees the consignor a target price. If sales fall short, the company pays the difference. If they beat the target, the company keeps a tiered share of the overage: 20% on the first $10K, 30% from $10K to $20K, and 70% above that, unless the contract negotiates other tiers.</p>
+    <p>That makes every Risk contract a standing exposure. The only way to manage it is to act while the contract is still running: move assets to a better channel, reprice them, or put them into a live auction.</p>
+    <p>Today nobody can see whether a contract is on pace to hit its target. Contract data sits in ConsignTrack, listings and sales sit in other systems, and the only exposure report is the quarterly Risk Book Summary, which looks backward. Ops relies on individual judgment and Finance sees the damage after the contract expires. A one-off view takes an analyst about 8 hours, arrives monthly at best, and drifts out of sync between systems.</p>
+
+    <h3>What it costs</h3>
+    <p>About 15% of contracts underperformed over the trailing 12 months, and 18% over the trailing 6. Estimated shortfall payouts come to roughly $3.6M a year. Nobody can say how many of those contracts showed warning signs at the halfway mark, or what could have been done if someone had seen them.</p>
+
+    <h3>Reframe</h3>
+    <p>Risk is a leading indicator. It should be measured as pacing against the target over the contract's lifetime, so a contract that is falling behind shows up while there is still time to intervene.</p>
+
+    <div class="hmw">
+      <p><span class="lead">How might we</span> give Ops and Finance a trusted, early view of which Risk contracts are pacing below target, so they can act before the contract expires?</p>
+    </div>
+
+    <p class="note" style="margin-top:0">Out of scope for this framing: predicting final outcomes with historical models, planned for a later version, and automating the interventions themselves.</p>
+  </section>
+
+  <section class="section" aria-labelledby="opportunity">
+    <h2 id="opportunity">The opportunity</h2>
+    <p>Not every shortfall dollar can be saved. A dollar is recoverable only if the contract showed warning signs early enough, an action was still available, and that action worked. Each condition cuts the total, so the three shares multiply. Pick a scenario to see the funnel.</p>
+
+    <div class="scenarios" role="group" aria-label="Scenario">
+      <button class="scenario" type="button" data-k="low" aria-pressed="false">
+        <span class="name">Low</span>
+        <span class="amount">~$110K</span>
+        <span class="share">3% of total</span>
+      </button>
+      <button class="scenario" type="button" data-k="base" aria-pressed="true">
+        <span class="name">Base</span>
+        <span class="amount">~$500K</span>
+        <span class="share">14% of total</span>
+      </button>
+      <button class="scenario" type="button" data-k="high" aria-pressed="false">
+        <span class="name">High</span>
+        <span class="amount">~$1.4M</span>
+        <span class="share">38% of total</span>
+      </button>
+    </div>
+    <p class="caption">Recoverable shortfall per year, against roughly $3.6M in annual payouts.</p>
+
+    <div class="funnel" aria-live="polite">
+      <div class="step">
+        <div class="what"><strong>Annual shortfall payouts</strong><span>Finance interview, one-off manual pull</span></div>
+        <div class="track"><div class="bar" id="bar0" style="width:100%"></div></div>
+        <div class="val" id="val0">$3.60M</div>
+      </div>
+      <div class="step">
+        <div class="what"><strong>Showed warning signs by the halfway mark <span class="mult" id="mult1" style="display:inline">× 70%</span></strong><span>Judgment, informed by the Finance interview</span></div>
+        <div class="track"><div class="bar" id="bar1" style="width:70%"></div></div>
+        <div class="val" id="val1">$2.52M</div>
+      </div>
+      <div class="step">
+        <div class="what"><strong>An action was still available <span class="mult" id="mult2" style="display:inline">× 50%</span></strong><span>Judgment, informed by the Finance and Ops interviews</span></div>
+        <div class="track"><div class="bar" id="bar2" style="width:35%"></div></div>
+        <div class="val" id="val2">$1.26M</div>
+      </div>
+      <div class="step result">
+        <div class="what"><strong>Shortfall recovered when acted on <span class="mult" id="mult3" style="display:inline">× 40%</span></strong><span>Assumption with no interview evidence</span></div>
+        <div class="track"><div class="bar" id="bar3" style="width:14%"></div></div>
+        <div class="val" id="val3">$504K</div>
+      </div>
+    </div>
+
+    <h3>The book behind the numbers</h3>
+    <div class="scroll">
+      <table>
+        <thead><tr><th>Measure</th><th class="num">Figure</th><th class="how">How it is derived</th></tr></thead>
+        <tbody>
+          <tr><td>Active book</td><td class="num">$25M</td><td class="how">About 500 active contracts at an average of $50,000</td></tr>
+          <tr><td>Annual contract volume</td><td class="num">~$100M</td><td class="how">About 2,000 contracts a year on a 90-day lifecycle</td></tr>
+          <tr><td>Underperformers per year</td><td class="num">~300</td><td class="how">15% of annual contracts</td></tr>
+          <tr><td>Average shortfall</td><td class="num">~$12K</td><td class="how">A typical miss of about 24% against target</td></tr>
+          <tr><td>Shortfall payouts</td><td class="num">~$3.6M</td><td class="how">About 3.6% of annual volume</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>What earlier flags cost</h3>
+    <p>Earlier flags create review work for Ops, and some of them will be false alarms. At 10 minutes per review and a loaded cost of $60 an hour:</p>
+    <div class="scroll">
+      <table>
+        <thead><tr><th>Alerts per week</th><th class="num">Review cost per year</th></tr></thead>
+        <tbody>
+          <tr><td>10</td><td class="num">~$5K</td></tr>
+          <tr><td>25</td><td class="num">~$13K</td></tr>
+          <tr><td>60</td><td class="num">~$31K</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>Even the highest case is small next to the low-case recovery. Alert volume is what the false-positive guardrail in <a href="#guardrails">success metrics</a> below control.</p>
+
+    <h3>What this page does not claim</h3>
+    <ul>
+      <li>The $3.6M and the 15% and 18% rates come from a one-off manual pull, so they are estimates and not monitored figures.</li>
+      <li>Recovery when acted on is the weakest input. Once pacing is tracked, the product produces the data to replace it with a measured rate.</li>
+      <li>The sizing counts avoided shortfall only. It leaves out upside from better channel placement and the analyst time saved, about 8 hours per report today.</li>
+    </ul>
+
+    <details>
+      <summary>Sizing inputs (assumptions.yaml)</summary>
+<pre>book:
+  active_contracts: 500
+  avg_contract_value_usd: 50000
+  lifecycle_days: 90
+
+observed:
+  underperformance_rate_12m: 0.15
+  underperformance_rate_6m: 0.18
+  annual_shortfall_payouts_usd: 3600000
+
+funnel:            # low / base / high
+  warning_by_halfway:  {low: 0.50, base: 0.70, high: 0.90}
+  action_available:    {low: 0.30, base: 0.50, high: 0.70}
+  recovery_when_acted: {low: 0.20, base: 0.40, high: 0.60}
+
+cost_side:
+  alerts_per_week: {low: 10, base: 25, high: 60}
+  minutes_per_review: 10
+  loaded_hourly_cost_usd: 60</pre>
+    </details>
+  </section>
+
+  <section class="section" aria-labelledby="metrics">
+    <h2 id="metrics">What success looks like</h2>
+    <p>Reducing the $3.6M in shortfall payouts is the reason the product exists, but it is a poor primary metric. Whether a dollar is saved depends on the product noticing the contract, on Ops acting, and on the action working. The funnel above flagged that last step, the recovery rate, as its weakest assumption.</p>
+    <p>The product directly controls only the first step: how early it raises the flag. So detection lead time is the primary metric, and dollars saved sit above it as the outcome it should drive. If lead time improves and payouts don't fall, the problem is in the intervention, not the signal, and the metrics make that visible instead of blurring it.</p>
+
+    <div class="tree" role="list">
+      <div class="metric" role="listitem">
+        <span class="role">Outcome</span>
+        <div><span class="name">Shortfall payouts avoided</span><span class="def">Annual payouts against the ~$3.6M baseline. Tracked over quarters, not a launch gate.</span></div>
+        <span class="target">~$500K / yr<small>Base case above</small></span>
+      </div>
+      <div class="metric primary" role="listitem">
+        <span class="role">Primary</span>
+        <div><span class="name">Detection lead time</span><span class="def">Days from a contract's first risk flag to its expiry, for contracts that closed below target. An underperformer that was never flagged counts as 0 days, so missed contracts pull the number down instead of disappearing.</span></div>
+        <span class="target">Median ≥ 30 days<small>Today: under ~7</small></span>
+      </div>
+      <div class="metric" role="listitem">
+        <span class="role">Supporting</span>
+        <div><span class="name">Recall at halfway</span><span class="def">Share of eventual underperformers flagged by day 45. This replaces the first assumption in the funnel with a measured number.</span></div>
+        <span class="target">≥ 70%<small>Base case above</small></span>
+      </div>
+      <div class="metric guard" role="listitem" id="guardrails">
+        <span class="role">Guardrail</span>
+        <div><span class="name">False-positive rate</span><span class="def">Share of flagged contracts that closed at or above target. Every false alarm costs Ops a review and erodes trust in the next flag.</span></div>
+        <span class="target">≤ 40%</span>
+      </div>
+      <div class="metric guard" role="listitem">
+        <span class="role">Guardrail</span>
+        <div><span class="name">Alert volume</span><span class="def">New flags per week across the book. Keeps review cost near the ~$13K a year sized above.</span></div>
+        <span class="target">≤ 25 / week</span>
+      </div>
+      <div class="metric guard" role="listitem">
+        <span class="role">Guardrail</span>
+        <div><span class="name">Reconciliation</span><span class="def">Share of active contracts whose status and sales agree across Contracts, Listings and Sales at each refresh. Priya's one essential requirement.</span></div>
+        <span class="target">100%</span>
+      </div>
+    </div>
+    <p class="note" style="margin-top:0">The baseline lead time comes from the Ops interview: contracts are opened near the 90-day deadline, often with days rather than weeks left. Before launch, the backtest measures it properly by replaying today's practice, a manual review in the final week, over last year's contracts.</p>
+    <p>The primary metric and the false-positive guardrail pull against each other. A looser threshold flags contracts earlier, which raises lead time, and also flags more contracts that would have recovered on their own. The targets are set so that neither can be bought at the other's expense. How each metric is calculated is specified in the <a href="phase-3-prd-v1.html#calculated">PRD</a>.</p>
+  </section>
+
+  <section class="section" aria-labelledby="pilot">
+    <h2 id="pilot">The pilot bet</h2>
+    <p>The pilot tests one claim: a simple pacing flag, computed daily from data Second Avenue already has, catches underperforming contracts weeks earlier than today without burying Ops in false alarms. If that holds, the dollars can follow. If it doesn't, nothing more sophisticated is worth building on top of it.</p>
+
+    <h3>Why linear pacing first</h3>
+    <p>Linear pacing compares sales to date with a straight line from zero to the target. It needs no history, Ops can check it in their head, and it is enough to test whether earlier flags are useful at all. Pacing against the historical sales curves of similar contracts is more accurate, especially for live auctions, and comes next once the pilot shows where linear pacing is wrong.</p>
+
+    <h3 id="cadence">Why a daily refresh</h3>
+    <p>Discovery left open how fresh the signal needs to be. David can work with weekly, Priya heard stakeholders ask for near-real-time, and she would trade speed for consistency. Tying cadence to the decision it supports settles it.</p>
+    <p>The decision is Ops choosing to reprice, switch channel or move a contract into an auction, and it plays out over days. A weekly refresh could spend up to 7 of the days the primary metric is trying to win. Real-time adds cost and makes it harder to keep the three source systems consistent, which is Priya's essential requirement. A daily refresh keeps every system on the same snapshot and gives Maria her morning list.</p>
+
+    <h3 id="go-live">How we decide to go live</h3>
+    <p>Before Ops relies on the flag, it is replayed over the last 12 months of closed contracts, whose final outcomes are already known. The pilot goes live with Ops when, on that backtest:</p>
+    <ul>
+      <li>median detection lead time is at least 30 days,</li>
+      <li>at least 70% of underperformers are flagged by day 45,</li>
+      <li>no more than 40% of flags are false alarms,</li>
+      <li>new flags stay at or below 25 a week, and</li>
+      <li>every active contract reconciles across the three sources.</li>
+    </ul>
+    <p>The 80% threshold and the day-15 floor are starting values, not commitments. The backtest sweeps both and picks the setting that best meets the lead-time target while staying inside the guardrails.</p>
+
+    <h3 id="pilot-risks">Risks to the bet</h3>
+    <ul>
+      <li><strong>Back-loaded contracts look worse than they are.</strong> A contract whose assets are scheduled into a live auction late in the window will pace low until the auction and then catch up. Linear pacing will flag it. This is the main reason historical-curve pacing comes next, and the false-positive rate by channel will show how large the effect is.</li>
+      <li><strong>Single-asset contracts are all or nothing.</strong> A contract covering one high-value item shows $0 realized until it sells, so pacing says little about it. False positives by contract size will show whether this segment needs separate handling.</li>
+      <li><strong>The backtest can't prove the dollars.</strong> Payouts avoided depend on Ops acting on a flag, which history can't show. The pilot proves the signal; logging Ops actions, planned next, is what proves the dollars.</li>
+    </ul>
+    <p>The <a href="phase-3-prd-v1.html">PRD</a> turns the pilot into requirements for Engineering.</p>
+  </section>
+  <nav class="pager" aria-label="Phases">
+    <a href="phase-1-discovery.html"><span class="dir">Previous</span>Phase 1 · Discovery</a>
+    <a class="next" href="phase-3-prd-v1.html"><span class="dir">Next</span>Phase 3 · Product requirements</a>
+  </nav>
+  <p class="foot">The sizing inputs and model will be version-controlled in this repository so every figure above can be reproduced.</p>
+</main>
+
+<script>
+(function () {
+  var TOTAL = 3600000;
+  var S = {
+    low:  { w: 0.5, a: 0.3, r: 0.2 },
+    base: { w: 0.7, a: 0.5, r: 0.4 },
+    high: { w: 0.9, a: 0.7, r: 0.6 }
+  };
+  function fmt(v) {
+    return v >= 1e6 ? '$' + (v / 1e6).toFixed(2) + 'M' : '$' + Math.round(v / 1e3) + 'K';
+  }
+  function render(k) {
+    var s = S[k];
+    var v1 = TOTAL * s.w, v2 = v1 * s.a, v3 = v2 * s.r;
+    var vals = [TOTAL, v1, v2, v3];
+    var mults = [null, s.w, s.a, s.r];
+    for (var i = 0; i < 4; i++) {
+      var bar = document.getElementById('bar' + i);
+      var val = document.getElementById('val' + i);
+      if (bar) bar.style.width = Math.max(vals[i] / TOTAL * 100, 1.5) + '%';
+      if (val) val.textContent = fmt(vals[i]);
+      if (i > 0) {
+        var m = document.getElementById('mult' + i);
+        if (m) m.textContent = '× ' + Math.round(mults[i] * 100) + '%';
+      }
+    }
+    var btns = document.querySelectorAll('.scenario');
+    for (var j = 0; j < btns.length; j++) {
+      btns[j].setAttribute('aria-pressed', btns[j].getAttribute('data-k') === k ? 'true' : 'false');
+    }
+  }
+  var buttons = document.querySelectorAll('.scenario');
+  for (var b = 0; b < buttons.length; b++) {
+    buttons[b].addEventListener('click', function () { render(this.getAttribute('data-k')); });
+  }
+})();
+</script>
+</body>
+</html>

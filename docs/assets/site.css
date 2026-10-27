@@ -72,6 +72,8 @@ strong { font-weight: 600; }
 .revision { margin-top: 1rem; border-left: 3px solid var(--accent); background: var(--accent-soft); border-radius: 0 6px 6px 0; padding: 1rem 1.25rem; max-width: 38rem; display: flex; flex-direction: column; gap: 0.5rem; font-size: 0.9375rem; }
 .revision .label { font-family: var(--font-mono); font-size: 0.75rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent); margin: 0; }
 .revision ul { gap: 0.25rem; }
+.revision.archived { margin: 0 0 1.5rem; border-left-color: var(--muted); background: var(--surface); }
+.revision.archived .label { color: var(--muted); }
 
 .hmw { background: var(--accent-soft); padding: 1.25rem 1.5rem; border-radius: 4px; max-width: 38rem; margin-top: 0.5rem; }
 .hmw .lead { color: var(--accent); }
