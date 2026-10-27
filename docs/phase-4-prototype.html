@@ -19,6 +19,10 @@ td.n { font-family: var(--font-mono); font-size: 0.8125rem; color: var(--muted);
 .pending { background: var(--surface); border: 1px dashed var(--rule); border-radius: 6px; padding: 1rem 1.25rem; color: var(--muted); font-size: 0.9375rem; max-width: 38rem; }
 .pending strong { color: var(--fg); }
 td.win { color: var(--accent); font-weight: 600; }
+td.locked { color: var(--risk); }
+td.num:not(:last-child), th.num:not(:last-child) { padding-right: 1.25rem; }
+tr.total td { font-weight: 600; }
+caption.tcap { caption-side: top; text-align: left; font-size: 0.8125rem; color: var(--muted); padding-bottom: 0.5rem; }
 td.miss { color: var(--risk); }
 table.changes td:nth-child(2) { white-space: nowrap; }
 </style>
@@ -49,7 +53,7 @@ table.changes td:nth-child(2) { white-space: nowrap; }
       <dt>Output</dt>
       <dd>A go-live verdict, chosen flag settings, the failure cases sized, and a revised PRD.</dd>
       <dt>So far</dt>
-      <dd>The simple flag failed: 80% of its flags were false alarms. Counting unsold inventory brought that to 36% on contracts it wasn't tuned on. The prototype also measured that 44% of underperformers can be caught with confidence by halfway, which resized the opportunity to about $320K a year.</dd>
+      <dd>The simple flag failed: 80% of its flags were false alarms. Counting unsold inventory brought that to 36% on contracts it wasn't tuned on. The prototype also measured that 44% of underperformers can be caught with confidence by halfway, which resized the opportunity to about $320K a year. The morning list and Finance rollups are built, and channel attribution is settled.</dd>
       <dt>Next</dt>
       <dd>Phase 5 plans the production build from the revised PRD, with Engineering.</dd>
     </dl>
@@ -110,8 +114,8 @@ table.changes td:nth-child(2) { white-space: nowrap; }
           <tr><td class="n">1</td><td>Simulated book of contracts and the calculated fields, checked against the PRD's worked example</td><td>Groundwork</td><td><span class="status done">Done</span></td></tr>
           <tr><td class="n">2</td><td>Backtest, parameter sweep and go-live report</td><td>Q1, Q2, Q3</td><td><span class="status done">Done</span></td></tr>
           <tr><td class="n">2b</td><td>A better signal and a two-tier flag, tested on contracts the settings weren't tuned on. Added after step 2 failed.</td><td>Q1, Q2</td><td><span class="status done">Done</span></td></tr>
-          <tr><td class="n">3</td><td>Morning list, Finance rollups and channel attribution</td><td>Q4</td><td><span class="status wip">Next</span></td></tr>
-          <tr><td class="n">4</td><td>Plain-language questions and the evaluation set</td><td>Q5</td><td><span class="status">Planned</span></td></tr>
+          <tr><td class="n">3</td><td>Morning list, Finance rollups and channel attribution</td><td>Q4</td><td><span class="status done">Done</span></td></tr>
+          <tr><td class="n">4</td><td>Plain-language questions and the evaluation set</td><td>Q5</td><td><span class="status wip">Next</span></td></tr>
           <tr><td class="n">5</td><td>Feedback from Ops and Finance, and the PRD revision</td><td>Q6</td><td><span class="status">Planned</span></td></tr>
         </tbody>
       </table>
@@ -168,6 +172,40 @@ table.changes td:nth-child(2) { white-space: nowrap; }
 
     <h3>Q3 · Where does it fall short?</h3>
     <p>Recall at halfway. Across every setting tested, staying under 40% false alarms caps it at about 41%; reaching 70% means going back to about 70% false alarms. On sales and appraisals alone, roughly half of eventual underperformers look like healthy contracts at day 45. The 70% target came from a judgment in the Phase 2 sizing funnel, so the prototype replaced that judgment with a measurement, and the target moved with it, as recorded <a href="#changed">below</a>. Under linear pacing, auction-heavy contracts were the noisiest segment (87% false alarms), but no segment explained the overall failure: every channel and contract size was between 77% and 83%.</p>
+    <h3 id="q4">Q4 · How should a contract count in rollups by channel?</h3>
+    <p>By its items, not as a whole. Channel and asset type belong to items, and most flagged contracts mix them: 21 of the 37 contracts flagged act had no channel holding 80% of their unsold value. Assigning each contract wholly to its main channel moved 7 to 15% of exposure between channels and understated live auction by 13%. So each contract's projected shortfall is split over its unsold items by appraised value. Every rollup then adds up to the book total, which the build now checks on every run.</p>
+
+    <h3 id="snapshot">What Maria and David see</h3>
+    <p>The book on the prototype's "today": 464 active contracts, 37 flagged act and 3 on watch, with <strong>$336K</strong> of exposure at risk.</p>
+    <div class="scroll">
+      <table>
+        <caption class="tcap">Maria's morning list, top of the act tier</caption>
+        <thead><tr><th class="num">#</th><th>Contract</th><th>Region</th><th class="num">Days left</th><th class="num">Projected</th><th class="num">Shortfall</th><th class="num">Unsold</th><th>Mostly on</th></tr></thead>
+        <tbody>
+          <tr><td class="num">1</td><td>CT-02195</td><td>Midwest</td><td class="num">31</td><td class="num">53%</td><td class="num">$49.7K</td><td class="num locked">Locked in</td><td>app</td></tr>
+          <tr><td class="num">2</td><td>CT-02063</td><td>Southeast</td><td class="num">7</td><td class="num">62%</td><td class="num">$29.5K</td><td class="num">$67.7K</td><td>app</td></tr>
+          <tr><td class="num">3</td><td>CT-02097</td><td>Midwest</td><td class="num">13</td><td class="num">87%</td><td class="num">$21.8K</td><td class="num">$74.1K</td><td>app</td></tr>
+          <tr><td class="num">4</td><td>CT-02141</td><td>West</td><td class="num">21</td><td class="num">64%</td><td class="num">$20.3K</td><td class="num">$32.2K</td><td>website</td></tr>
+          <tr><td class="num">5</td><td>CT-02278</td><td>Southeast</td><td class="num">46</td><td class="num">72%</td><td class="num">$15.1K</td><td class="num locked">Locked in</td><td>app</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>Two of the top five have nothing left to sell. Across the list, 4 of 37 act contracts and <strong>23% of the exposure</strong> are losses already locked in, so the list now marks them: they still matter to Finance, but there is nothing left for Ops to reprice or move.</p>
+    <div class="scroll">
+      <table>
+        <caption class="tcap">David's exposure by region</caption>
+        <thead><tr><th>Region</th><th class="num">Exposure at risk</th><th class="num">Act contracts</th><th class="num">Active contracts</th></tr></thead>
+        <tbody>
+          <tr><td>Midwest</td><td class="num">$164K</td><td class="num">17</td><td class="num">130</td></tr>
+          <tr><td>Southeast</td><td class="num">$94K</td><td class="num">9</td><td class="num">96</td></tr>
+          <tr><td>West</td><td class="num">$56K</td><td class="num">7</td><td class="num">116</td></tr>
+          <tr><td>Northeast</td><td class="num">$22K</td><td class="num">4</td><td class="num">122</td></tr>
+          <tr class="total"><td>Book</td><td class="num">$336K</td><td class="num">37</td><td class="num">464</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>The Midwest holds 49% of the exposure with 28% of the active contracts. And the item-level view answers the discovery question about channels: art fetches <strong>1.18×</strong> its appraisal at live auction against 0.74× on the app, and furniture 1.09× against 0.81×, while handbags do better on the app. That is the lever Ops pulls when a contract is flagged.</p>
+
     <p class="note" style="margin-top:0">Reports, data and code: <a href="https://github.com/caioluthi/portfolio/blob/main/prototype/backtest/results/report.md">step 2 report</a>, <a href="https://github.com/caioluthi/portfolio/blob/main/prototype/experiment/DESIGN.md">step 2b design</a> and <a href="https://github.com/caioluthi/portfolio/blob/main/prototype/experiment/results/report.md">step 2b results</a>. Each selection rule was committed before its run.</p>
   </section>
 
@@ -190,6 +228,8 @@ table.changes td:nth-child(2) { white-space: nowrap; }
           <tr><td>Recall-at-halfway target 70% → 40%</td><td><a href="phase-2-opportunity.html#metrics">Opportunity, success metrics</a></td><td>No setting reaches more than ~41% inside the false-alarm guardrail</td></tr>
           <tr><td>Opportunity base case ~$500K → ~$320K a year</td><td><a href="phase-2-opportunity.html#opportunity">Opportunity, sizing</a></td><td>The funnel's first step is measured at 44%, not judged at 70%</td></tr>
           <tr><td>Success counts from the first act flag; a watch-list size guardrail is added</td><td><a href="phase-2-opportunity.html#metrics">Opportunity, success metrics</a></td><td>Decided before the step 2b run, as part of its design</td></tr>
+          <tr><td>Exposure by channel and asset type is split over each contract's unsold items, settling OQ-6</td><td><a href="phase-3-prd.html#dpr-4">PRD, DPR-4</a></td><td>Assigning whole contracts to one channel moved 7–15% of exposure; 21 of 37 flagged contracts were mixed</td></tr>
+          <tr><td>The morning list marks losses already locked in</td><td><a href="phase-3-prd.html#dpr-5">PRD, DPR-5</a></td><td>4 of 37 act contracts, 23% of exposure, had nothing left to sell</td></tr>
           <tr><td>Next scope adds listing activity (views, watchers, bids, price drops)</td><td><a href="phase-3-prd.html#scope">PRD, scope</a></td><td>Sales and appraisals alone cap recall at halfway near 41%; going further needs new evidence. Not yet tested</td></tr>
         </tbody>
       </table>
