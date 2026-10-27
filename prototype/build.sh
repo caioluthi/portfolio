@@ -6,7 +6,7 @@
 # Sandbox tables and views expire after 60 days, so the whole prototype is
 # rebuilt by this one command: generate the book, load it, create the views,
 # describe every table and column, and check the metrics against the PRD's
-# worked example.
+# worked example and that exposure adds up.
 set -euo pipefail
 
 PROJECT="${1:?usage: ./build.sh PROJECT_ID [DATASET]}"
@@ -22,10 +22,10 @@ REALIZATION_PRIOR_SHARE="${REALIZATION_PRIOR_SHARE:-0.15}"
 ACT_EVIDENCE_MIN="${ACT_EVIDENCE_MIN:-0.15}"
 TODAY="$(python3 -c "import yaml;print(yaml.safe_load(open('$HERE/generator/config.yaml'))['today'])")"
 
-echo "1/5 Generating the book of contracts"
+echo "1/6 Generating the book of contracts"
 python3 "$HERE/generator/generate.py" --out "$DATA" --report
 
-echo "2/5 Loading into $PROJECT:$DATASET"
+echo "2/6 Loading into $PROJECT:$DATASET"
 bq --project_id="$PROJECT" mk --force --dataset --location=US "$PROJECT:$DATASET" >/dev/null
 printf 'today,flag_threshold,flag_day_floor,realization_prior_share,act_evidence_min\n%s,%s,%s,%s,%s\n' \
   "$TODAY" "$FLAG_THRESHOLD" "$FLAG_DAY_FLOOR" "$REALIZATION_PRIOR_SHARE" "$ACT_EVIDENCE_MIN" > "$DATA/flag_parameters.csv"
@@ -44,14 +44,17 @@ load raw_sales       sales      "sale_id:STRING,asset_id:STRING,sale_date:DATE,g
 load flag_parameters flag_parameters "today:DATE,flag_threshold:FLOAT64,flag_day_floor:INT64,realization_prior_share:FLOAT64,act_evidence_min:FLOAT64"
 load sell_through_by_period sell_through "period:INT64,day_from:INT64,day_to:INT64,sell_through:FLOAT64"
 
-echo "3/5 Creating the calculated-field views"
+echo "3/6 Creating the calculated-field views"
 for f in "$HERE"/sql/[0-9]*.sql; do
   sed "s/{dataset}/$PROJECT.$DATASET/g" "$f" | bq --project_id="$PROJECT" query --use_legacy_sql=false --quiet >/dev/null
   echo "    $(basename "$f")"
 done
 
-echo "4/5 Describing every table, view and column"
+echo "4/6 Describing every table, view and column"
 python3 "$HERE/apply_metadata.py" "$PROJECT" "$DATASET"
 
-echo "5/5 Checking the metrics against the PRD worked example"
+echo "5/6 Checking the metrics against the PRD worked example"
 python3 "$HERE/checks/check_worked_example.py" "$PROJECT" "$DATASET"
+
+echo "6/6 Checking that exposure adds up"
+python3 "$HERE/checks/check_rollups.py" "$PROJECT" "$DATASET"
