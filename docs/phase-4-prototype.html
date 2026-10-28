@@ -22,9 +22,14 @@ td.win { color: var(--accent); font-weight: 600; }
 td.locked { color: var(--risk); }
 td.num:not(:last-child), th.num:not(:last-child) { padding-right: 1.25rem; }
 tr.total td { font-weight: 600; }
+.qa { display: flex; flex-direction: column; gap: 1rem; }
+.qa p.q { font-weight: 600; font-size: 0.9375rem; }
+.qa p.a { font-size: 0.9375rem; color: var(--fg); margin-top: 0.25rem; }
 caption.tcap { caption-side: top; text-align: left; font-size: 0.8125rem; color: var(--muted); padding-bottom: 0.5rem; }
 td.miss { color: var(--risk); }
 table.changes td:nth-child(2) { white-space: nowrap; }
+table.decisions td:first-child { width: 40%; }
+table.decisions td:last-child { white-space: nowrap; }
 </style>
 </head>
 <body>
@@ -53,7 +58,7 @@ table.changes td:nth-child(2) { white-space: nowrap; }
       <dt>Output</dt>
       <dd>A go-live verdict, chosen flag settings, the failure cases sized, and a revised PRD.</dd>
       <dt>So far</dt>
-      <dd>The simple flag failed: 80% of its flags were false alarms. Counting unsold inventory brought that to 36% on contracts it wasn't tuned on. The prototype also measured that 44% of underperformers can be caught with confidence by halfway, which resized the opportunity to about $320K a year. The morning list and Finance rollups are built, and channel attribution is settled.</dd>
+      <dd>The simple flag failed: 80% of its flags were false alarms. Counting unsold inventory brought that to 36% on contracts it wasn't tuned on. The prototype also measured that 44% of underperformers can be caught with confidence by halfway, which resized the opportunity to about $320K a year. The morning list and Finance rollups are built, channel attribution is settled, and the Ops, Finance and Data feedback has been folded into the PRD.</dd>
       <dt>Next</dt>
       <dd>Phase 5 plans the production build from the revised PRD, with Engineering.</dd>
     </dl>
@@ -116,7 +121,7 @@ table.changes td:nth-child(2) { white-space: nowrap; }
           <tr><td class="n">2b</td><td>A better signal and a two-tier flag, tested on contracts the settings weren't tuned on. Added after step 2 failed.</td><td>Q1, Q2</td><td><span class="status done">Done</span></td></tr>
           <tr><td class="n">3</td><td>Morning list, Finance rollups and channel attribution</td><td>Q4</td><td><span class="status done">Done</span></td></tr>
           <tr><td class="n">4</td><td>Plain-language questions and the evaluation set</td><td>Q5</td><td><span class="status wip">Next</span></td></tr>
-          <tr><td class="n">5</td><td>Feedback from Ops and Finance, and the PRD revision</td><td>Q6</td><td><span class="status">Planned</span></td></tr>
+          <tr><td class="n">5</td><td>Feedback from Ops and Finance, and the PRD revision</td><td>Q6</td><td><span class="status done">Done</span></td></tr>
         </tbody>
       </table>
     </div>
@@ -211,7 +216,81 @@ table.changes td:nth-child(2) { white-space: nowrap; }
 
   <section class="section" aria-labelledby="feedback">
     <h2 id="feedback">6. What Ops and Finance said</h2>
-    <p class="pending"><strong>To come.</strong> Maria's reaction to the morning list and David's to the rollups, in the same format as the discovery interviews.</p>
+    <p>The three people from discovery each saw the prototype's output for its "today", 30 September, and got the same opening question: what would you do with this tomorrow morning? Like the discovery interviews, the sessions are simulated. The numbers they react to are the prototype's.</p>
+
+    <h3>Maria, Contract Operations Manager</h3>
+    <p class="note" style="margin-top:0">Shown: the morning list as built in step 3, act and watch tiers.</p>
+    <blockquote><p>"Number one has nothing left to sell. That's a Finance conversation, not mine."</p></blockquote>
+    <details>
+      <summary>Session notes</summary>
+      <div class="inner qa">
+        <div><p class="q">What would you do with this list tomorrow morning?</p><p class="a">"Start at the top, except I'd skip number one. It has nothing left to sell. That's a Finance conversation, not mine. If it's on my list I'll look at it every morning and feel bad about it, and it pushes the ones I can still fix down the page."</p></div>
+        <div><p class="q">Take the next one: seven days left. What can you do?</p><p class="a">"Price. That's it. Live auction catalogs close two weeks before the sale, so anything with under fourteen days can't go into an auction anymore. I'd want the list to tell me that, so I'm not checking the calendar for every contract."</p></div>
+        <div><p class="q">Thirty-odd contracts flagged act. Is that workable?</p><p class="a">"If they don't all change every morning, yes. What I really need is which ones are new since yesterday and which ones I've already worked. Otherwise I'm rereading the same list."</p></div>
+        <div><p class="q">What's missing?</p><p class="a">"Tell me which items are in the wrong place. If a painting is sitting on the app, I know it belongs in an auction, but I have to open the contract and go find it. I don't need the system to tell me what to do. I need it to show me where to look."</p></div>
+        <div><p class="q">And the contracts on watch?</p><p class="a">"Three is fine. I'd glance at them on Fridays. If watch got to thirty, I'd stop reading it."</p></div>
+      </div>
+    </details>
+    <ul>
+      <li><strong>Contracts with nothing left to sell don't belong on Ops' list.</strong> They are 4 of the 37 act contracts and $78K of exposure, already lost.</li>
+      <li><strong>What Ops can still do depends on time.</strong> Of the 33 act contracts that still have something to sell, 12 have under 14 days left, so repricing is their only lever.</li>
+      <li><strong>She wants facts about where things are, not recommendations.</strong> That matches what she said in discovery: "I know my options. I just can't see the problem in time." 25 of the 33 have unsold items on a channel where their type sells at least 15 points below its best channel, $359K of appraised value.</li>
+      <li><strong>"Already worked" needs a record of Ops actions,</strong> the same data that would measure the recovery rate. That item in Next scope now has two reasons behind it.</li>
+    </ul>
+
+    <h3>David, Finance Manager</h3>
+    <p class="note" style="margin-top:0">Shown: exposure by region, channel and asset type, and 13 weeks of daily exposure.</p>
+    <blockquote><p>"If I report that number up, someone will ask what happened every week, and the answer will mostly be nothing."</p></blockquote>
+    <details>
+      <summary>Session notes</summary>
+      <div class="inner qa">
+        <div><p class="q">What would you do with this tomorrow?</p><p class="a">"Send the region view to the regional directors. I'd have guessed the Midwest, but I've never been able to prove it. Half the exposure from about a quarter of the book is a conversation I can now have."</p></div>
+        <div><p class="q">Could you report exposure at risk upward?</p><p class="a">"The trend, yes, but not the daily number. It moved between $229K and $366K over the summer. If I report that up, someone will ask what happened every week, and the answer will mostly be nothing. Give me a four-week average next to it."</p></div>
+        <div><p class="q">What would you do with the $336K itself?</p><p class="a">"My instinct is to book it as the shortfall reserve for the quarter. It's better than what I use now."</p></div>
+        <div><p class="q">Which part of it are you surest about?</p><p class="a">"The money on contracts with nothing left to sell. That's not a projection anymore, it's a bill. Show me that on its own."</p></div>
+        <div><p class="q">And watch?</p><p class="a">"Keep it separate. Thirty thousand on watch is a footnote, not a number I'd report."</p></div>
+      </div>
+    </details>
+    <ul>
+      <li><strong>The surest number is the locked-in part,</strong> $78K of the $336K today. It's the same change Maria asked for, seen from the other side.</li>
+      <li><strong>The daily figure is too noisy to report.</strong> A 4-week average goes beside it: $307K today, between $271K and $336K since July.</li>
+      <li><strong>Exposure at risk is not a reserve.</strong> It is built to rank and flag contracts, and it has never been tested as a forecast of payouts. Using it for accounting would need its own calibration against actual payouts. The PRD now says so, so the number isn't used for something it can't support.</li>
+    </ul>
+
+    <h3>Priya, Data Analyst</h3>
+    <p class="note" style="margin-top:0">Shown: the data contract in the PRD and the checks that run on every build.</p>
+    <blockquote><p>"'Appraised value at intake' doesn't exist as a clean field today."</p></blockquote>
+    <details>
+      <summary>Session notes</summary>
+      <div class="inner qa">
+        <div><p class="q">Looking at the data contract, what worries you?</p><p class="a">"The appraisal field. In ConsignTrack, when Ops reprices an item, the estimate gets overwritten with the new price. And some lots get appraised as one line, not item by item. So 'appraised value at intake' doesn't exist as a clean field today."</p></div>
+        <div><p class="q">What would you need?</p><p class="a">"Keep the intake appraisal as its own field nobody can edit, next to the current asking price. And tell me every day how many items are missing one, because the flag will quietly get worse if that number drifts."</p></div>
+        <div><p class="q">How would you handle the lots?</p><p class="a">"Split the appraisal across the items using the appraiser's notes, or treat the lot as one item. Either works, as long as it's the same every time."</p></div>
+        <div><p class="q">Anything you'd keep from the prototype?</p><p class="a">"The checks that fail the build. If the rollups don't add up, nothing ships. I never had that. I found my mistakes when David did."</p></div>
+      </div>
+    </details>
+    <ul>
+      <li><strong>The flag's key input isn't clean in the source system.</strong> The intake appraisal becomes its own field that repricing can't overwrite. Until now that was only an open question.</li>
+      <li><strong>Completeness becomes a requirement.</strong> Appraisal coverage is reported on every refresh, and contracts below 95% are marked instead of silently projected. The prototype now checks it on every build; the simulated book is complete.</li>
+    </ul>
+
+    <h3 id="decisions">What we decided</h3>
+    <div class="scroll">
+      <table class="decisions">
+        <thead><tr><th>What we heard</th><th>Decision</th><th>Where</th></tr></thead>
+        <tbody>
+          <tr><td>Contracts with nothing left to sell clutter Ops' list, and they are Finance's surest number</td><td><strong>Change.</strong> Off the morning list; shown to Finance as exposure locked in</td><td><a href="phase-3-prd.html#dpr-5">DPR-4, DPR-5</a> · built</td></tr>
+          <tr><td>Under 14 days left, an auction is no longer possible</td><td><strong>Change.</strong> Each contract shows whether a live auction is still possible</td><td><a href="phase-3-prd.html#dpr-5">DPR-5</a> · built</td></tr>
+          <tr><td>Show where unsold items are, not what to do</td><td><strong>Change.</strong> Unsold value on a weak channel for its type. Suggested actions stay in Next scope</td><td><a href="phase-3-prd.html#dpr-5">DPR-5</a> · built</td></tr>
+          <tr><td>Which contracts are new, and which have been worked</td><td><strong>Partly.</strong> New today is built. Already worked needs logging of Ops actions, which stays next but now has two reasons</td><td><a href="phase-3-prd.html#scope">Next scope</a></td></tr>
+          <tr><td>The daily exposure figure is too noisy to report</td><td><strong>Change.</strong> A 4-week average beside the daily figure</td><td><a href="phase-3-prd.html#dpr-4">DPR-4</a> · built</td></tr>
+          <tr><td>Use exposure at risk as the quarter's reserve</td><td><strong>No.</strong> Built to rank, never tested as a forecast of payouts. Stated out of scope</td><td><a href="phase-3-prd.html#scope">PRD scope</a></td></tr>
+          <tr><td>Repricing overwrites the appraisal today</td><td><strong>Change.</strong> The intake appraisal is its own field that can't be overwritten</td><td><a href="phase-3-prd.html#fields">Required fields</a></td></tr>
+          <tr><td>Missing appraisals would quietly degrade the flag</td><td><strong>Change.</strong> Coverage reported on every refresh; contracts below 95% are marked</td><td><a href="phase-3-prd.html#nfr">NFR-5</a> · check built</td></tr>
+          <tr><td>Some lots are appraised as one line</td><td><strong>Open.</strong> A question for Engineering: split the appraisal or treat the lot as one item</td><td><a href="phase-3-prd.html#questions">Open questions</a></td></tr>
+        </tbody>
+      </table>
+    </div>
   </section>
 
   <section class="section" aria-labelledby="changed">
@@ -229,7 +308,8 @@ table.changes td:nth-child(2) { white-space: nowrap; }
           <tr><td>Opportunity base case ~$500K → ~$320K a year</td><td><a href="phase-2-opportunity.html#opportunity">Opportunity, sizing</a></td><td>The funnel's first step is measured at 44%, not judged at 70%</td></tr>
           <tr><td>Success counts from the first act flag; a watch-list size guardrail is added</td><td><a href="phase-2-opportunity.html#metrics">Opportunity, success metrics</a></td><td>Decided before the step 2b run, as part of its design</td></tr>
           <tr><td>Exposure by channel and asset type is split over each contract's unsold items, settling OQ-6</td><td><a href="phase-3-prd.html#dpr-4">PRD, DPR-4</a></td><td>Assigning whole contracts to one channel moved 7–15% of exposure; 21 of 37 flagged contracts were mixed</td></tr>
-          <tr><td>The morning list marks losses already locked in</td><td><a href="phase-3-prd.html#dpr-5">PRD, DPR-5</a></td><td>4 of 37 act contracts, 23% of exposure, had nothing left to sell</td></tr>
+          <tr><td>Losses already locked in leave the morning list and show in Finance's view</td><td><a href="phase-3-prd.html#dpr-5">PRD, DPR-4 and DPR-5</a></td><td>4 of 37 act contracts, 23% of exposure, had nothing left to sell; Maria and David both asked for it</td></tr>
+          <tr><td>Five more changes, one partial change, one explicit no and one new open question from the feedback sessions</td><td><a href="phase-3-prd.html">PRD</a></td><td><a href="#decisions">What we decided</a>, section 6</td></tr>
           <tr><td>Next scope adds listing activity (views, watchers, bids, price drops)</td><td><a href="phase-3-prd.html#scope">PRD, scope</a></td><td>Sales and appraisals alone cap recall at halfway near 41%; going further needs new evidence. Not yet tested</td></tr>
         </tbody>
       </table>

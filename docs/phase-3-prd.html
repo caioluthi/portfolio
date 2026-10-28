@@ -61,7 +61,14 @@ td.id { font-family: var(--font-mono); font-size: 0.8125rem; font-weight: 500; c
       <li>New required field: an appraised estimate per asset, from ConsignTrack.</li>
       <li>Pilot settings are now chosen by the prototype's test: 95% of target, from day 21, act at 15% of appraised value sold.</li>
       <li>Exposure is spread over each contract's unsold items, so it rolls up by channel and asset type; this settles open question 6 (DPR-4).</li>
-      <li>The morning list marks contracts with nothing left to sell as a loss already locked in (DPR-5).</li>
+    </ul>
+    <p class="label" style="margin-top:0.25rem">And after the Ops, Finance and Data feedback sessions</p>
+    <ul>
+      <li>Contracts with nothing left to sell leave the morning list; Finance sees them as exposure already locked in (DPR-4, DPR-5).</li>
+      <li>The morning list says whether a live auction is still possible and how much unsold value sits on a weak channel for its item type (DPR-5).</li>
+      <li>Finance gets a 4-week average beside the daily exposure figure (DPR-4).</li>
+      <li>The intake appraisal is its own field that repricing can't overwrite, and its completeness is checked on every refresh (NFR-5).</li>
+      <li>Exposure at risk is not an accounting reserve; that is now stated out of scope.</li>
     </ul>
     <p>Why, with the evidence: <a href="phase-4-prototype.html#changed">what the prototype changed</a>. The earlier version is archived as <a href="phase-3-prd-v1.html">revision 1</a>.</p>
   </aside>
@@ -120,11 +127,11 @@ td.id { font-family: var(--font-mono); font-size: 0.8125rem; font-weight: 500; c
           <li>Signals from listing activity, such as views, watchers, bids and price drops, to catch more underperformers by halfway</li>
           <li>Sell-through curves by asset type, channel and region, instead of one curve for the whole book</li>
           <li>Suggested interventions per flagged contract</li>
-          <li>Logging of Ops actions, so the recovery rate can be measured instead of assumed</li>
+          <li>Logging of Ops actions, so the recovery rate can be measured instead of assumed and Ops can see which contracts they've already worked</li>
         </ul>
       </article>
     </div>
-    <p class="note" style="margin-top:0">Out of scope for both: automated repricing or channel moves, real-time streaming, what-if simulation of moving assets between channels, and optimizing the upside tiers.</p>
+    <p class="note" style="margin-top:0">Out of scope for both: automated repricing or channel moves, real-time streaming, what-if simulation of moving assets between channels, optimizing the upside tiers, and using exposure at risk as an accounting reserve. It is built to rank and flag contracts, not tested as a forecast of payouts.</p>
   </section>
 
   <section class="section" aria-labelledby="dpr">
@@ -149,12 +156,12 @@ td.id { font-family: var(--font-mono); font-size: 0.8125rem; font-weight: 500; c
       </div>
       <div class="req" role="listitem" id="dpr-4">
         <span class="id">DPR-4</span>
-        <div class="body"><span class="name">Exposure rollups for Finance</span><span class="def">Exposure at risk and the share of contracts flagged roll up by region, channel, asset type and consignor, from contract level to the whole book. Every rollup adds up to the book total. For channel and asset type, which belong to items rather than contracts, each contract's exposure is split over its unsold items by appraised value.</span><span class="trace">For David. Replaces the quarterly Risk Book Summary as the view of exposure.</span></div>
+        <div class="body"><span class="name">Exposure rollups for Finance</span><span class="def">Exposure at risk and the share of contracts flagged roll up by region, channel, asset type and consignor, from contract level to the whole book. Every rollup adds up to the book total. For channel and asset type, which belong to items rather than contracts, each contract's exposure is split over its unsold items by appraised value. Exposure already locked in, on contracts with nothing left to sell, is shown on its own, and a 4-week average sits beside the daily figure.</span><span class="trace">For David. Replaces the quarterly Risk Book Summary as the view of exposure. The locked-in split and the average came from his feedback session.</span></div>
         <span class="pri must">Must</span>
       </div>
       <div class="req" role="listitem" id="dpr-5">
         <span class="id">DPR-5</span>
-        <div class="body"><span class="name">Ranked morning list for Ops</span><span class="def">Each morning, before the working day starts, Ops sees the contracts flagged <strong>act</strong>, ranked by projected shortfall, with projected final value, days to expiry and sales so far by channel. Contracts on <strong>watch</strong> are listed separately, as context rather than work. A contract with nothing left to sell is marked as a loss already locked in, since there is nothing left for Ops to reprice or move.</span><span class="trace">For Maria, who described wanting a short list of which contracts to open first. The two tiers came out of the Phase 4 prototype.</span></div>
+        <div class="body"><span class="name">Ranked morning list for Ops</span><span class="def">Each morning, before the working day starts, Ops sees the contracts flagged <strong>act</strong>, ranked by projected shortfall, with projected final value, days to expiry and sales so far by channel. Contracts on <strong>watch</strong> are listed separately, as context rather than work. Each contract shows whether a live auction is still possible and how much of its unsold value sits on a channel where that item type sells poorly. Contracts with nothing left to sell are left off: Ops can't change them, and Finance sees them as exposure locked in.</span><span class="trace">For Maria, who described wanting a short list of which contracts to open first. The two tiers came out of the Phase 4 prototype; the rest came from her feedback session.</span></div>
         <span class="pri must">Must</span>
       </div>
       <div class="req" role="listitem" id="dpr-6">
@@ -200,7 +207,7 @@ td.id { font-family: var(--font-mono); font-size: 0.8125rem; font-weight: 500; c
           <tr><td></td><td><code>region</code></td><td>Region that manages the contract</td><td>ConsignTrack</td><td class="how">Exposure rollups by region</td></tr>
           <tr><td>Asset</td><td><code>asset_id</code></td><td>Unique asset; belongs to one contract</td><td>ConsignTrack</td><td class="how">Realized sales</td></tr>
           <tr><td></td><td><code>asset_type</code></td><td>Category, such as furniture or jewelry</td><td>ConsignTrack</td><td class="how">Rollups by asset type</td></tr>
-          <tr class="new"><td></td><td><code>estimate_usd</code></td><td>Appraised value at intake, in USD <span class="tag-new">new in v2</span></td><td>ConsignTrack</td><td class="how">Projected final value, price realization, evidence share</td></tr>
+          <tr class="new"><td></td><td><code>estimate_usd</code></td><td>Appraised value at intake, in USD, kept as its own field that repricing never overwrites <span class="tag-new">new in v2</span></td><td>ConsignTrack</td><td class="how">Projected final value, price realization, evidence share</td></tr>
           <tr><td></td><td><code>listing_status, listing_channel</code></td><td>Where and whether the asset is listed</td><td>Listings</td><td class="how">Reconciliation, sales by channel on the Ops list</td></tr>
           <tr><td>Sale event</td><td><code>sale_id, asset_id</code></td><td>Unique sale of one asset</td><td>Sales</td><td class="how">Realized sales</td></tr>
           <tr><td></td><td><code>sale_date</code></td><td>Date the sale closed</td><td>Sales</td><td class="how">Realized sales to date</td></tr>
@@ -208,6 +215,7 @@ td.id { font-family: var(--font-mono); font-size: 0.8125rem; font-weight: 500; c
           <tr><td></td><td><code>channel</code></td><td>App, website or live</td><td>Sales</td><td class="how">Rollups and Ops list by channel</td></tr>
           <tr><td></td><td><code>region</code></td><td>Region where the sale happened</td><td>Sales</td><td class="how">Sales performance by region</td></tr>
           <tr><td>Parameter</td><td><code>flag_threshold, flag_day_floor, realization_prior_share, act_evidence_min</code></td><td>95% of target, day 21, a prior worth 15% of target, and act at 15% of appraised value sold, for the pilot</td><td>Configuration</td><td class="how">Risk flag and tier</td></tr>
+          <tr class="new"><td></td><td><code>live_catalog_lead_days, weak_channel_gap</code></td><td>Live auction catalogs close 14 days before the sale; a channel is weak for an item type when it sells 15 points or more below that type's best channel</td><td>Configuration, from Ops</td><td class="how">Morning list</td></tr>
           <tr class="new"><td></td><td><code>sell_through</code></td><td>Share of still-unsold appraised value that sells by expiry, per 15-day period <span class="tag-new">new in v2</span></td><td>Learned from closed contracts</td><td class="how">Projected final value</td></tr>
           <tr><td>Snapshot</td><td><code>as_of_date</code></td><td>Day the snapshot represents</td><td>Pipeline</td><td class="how">Every daily metric</td></tr>
         </tbody>
@@ -233,6 +241,10 @@ td.id { font-family: var(--font-mono); font-size: 0.8125rem; font-weight: 500; c
           <tr class="changed"><td>Risk tier</td><td><strong>act</strong> when the risk flag holds and evidence share is at least 15%; <strong>watch</strong> when it holds with less evidence</td><td class="how">risk flag, evidence share, act_evidence_min</td><td>Contract, daily</td></tr>
           <tr><td>Pacing % (context)</td><td><span class="formula">realized ÷ (target × elapsed_share)</span>. Shown to Ops as context; it no longer drives the flag.</td><td class="how">realized sales, target_price, elapsed share</td><td>Contract, daily</td></tr>
           <tr class="changed"><td>Exposure at risk</td><td>Sum of projected shortfall across contracts flagged act. For channel and asset type, each contract's shortfall is first split over its unsold items in proportion to their appraised value</td><td class="how">projected shortfall, risk tier</td><td>Any rollup: region, channel, asset type, consignor</td></tr>
+          <tr class="changed"><td>Exposure locked in</td><td>Exposure at risk on contracts with nothing left to sell</td><td class="how">projected shortfall, unsold appraised value</td><td>Any rollup, and daily</td></tr>
+          <tr class="changed"><td>Exposure, 4-week average</td><td>Average of daily exposure at risk over the last 28 days</td><td class="how">exposure at risk, as_of_date</td><td>Book, daily</td></tr>
+          <tr class="changed"><td>Live auction possible</td><td>At least 14 days to expiry, so unsold items can still go into an auction</td><td class="how">days to expiry, live_catalog_lead_days</td><td>Contract, daily</td></tr>
+          <tr class="changed"><td>Unsold value on a weak channel</td><td>Appraised value of unsold items listed where their type's price realization is 15 points or more below its best channel</td><td class="how">price realization by channel and asset type, unsold appraised value, weak_channel_gap</td><td>Contract, daily</td></tr>
           <tr><td>Reconciled</td><td>True when status and sales agree across ConsignTrack, Listings and Sales</td><td class="how">status, listing_status, sales from each source</td><td>Contract, daily</td></tr>
           <tr><td>Closed below target</td><td>Realized sales at expiry below target_price</td><td class="how">realized sales, target_price, status</td><td>Contract, at close</td></tr>
           <tr class="changed"><td>First flag date, first act date</td><td>Earliest as_of_date on which the contract was flagged at either tier, and on which it was flagged act</td><td class="how">risk flag and tier history (DPR-6)</td><td>Contract</td></tr>
@@ -310,6 +322,7 @@ td.id { font-family: var(--font-mono); font-size: 0.8125rem; font-weight: 500; c
           <tr><td class="id">NFR-2</td><td><strong>One definition per metric.</strong> Lists, rollups and answers to questions all read the governed metrics; none recomputes them.</td></tr>
           <tr><td class="id">NFR-3</td><td><strong>Reproducible by date.</strong> Any day's output can be regenerated for that as-of date and comes out the same.</td></tr>
           <tr><td class="id">NFR-4</td><td><strong>Read-only access for questions.</strong> The question layer can't change data and can't query raw source tables directly.</td></tr>
+          <tr><td class="id">NFR-5</td><td><strong>Appraisal completeness.</strong> Every refresh reports the share of items with an intake appraisal. A contract below 95% is marked rather than silently projected, because the flag prices unsold items from their appraisals.</td></tr>
         </tbody>
       </table>
     </div>
@@ -343,7 +356,8 @@ td.id { font-family: var(--font-mono); font-size: 0.8125rem; font-weight: 500; c
       <li><strong>Delivery.</strong> Where does Maria's morning list live: a dashboard, an email, or the question interface?</li>
       <li><strong>Day boundary.</strong> Which time zone defines a contract day, for the day-21 floor and for expiry?</li>
       <li><strong>Channel attribution.</strong> <em>Resolved by the prototype.</em> Exposure is split over each contract's unsold items by appraised value. Assigning a whole contract to its main channel shifted 7 to 15% of exposure between channels, because 21 of 37 flagged contracts were spread across channels. Both options turned out to need only each item's current listing, not listing history.</li>
-      <li><strong>Appraisals.</strong> Is an estimate recorded for every item at intake, and is it kept when an item is later repriced? The flag needs the intake value, unchanged, alongside any later asking price.</li>
+      <li><strong>Appraisals.</strong> <em>Resolved in feedback.</em> Repricing overwrites the estimate in ConsignTrack today, so the intake appraisal becomes its own field (see required fields) and its completeness is checked on every refresh (NFR-5).</li>
+      <li><strong>Lots.</strong> Some consignments are appraised as one line rather than item by item. Do we split the appraisal across the items or treat the lot as one item? Either works if it is applied the same way every time.</li>
       <li><strong>Question layer.</strong> What hosting and cost envelope does DPR-9 need, and how is its accuracy tested before Ops sees it?</li>
     </ol>
   </section>
