@@ -17,8 +17,8 @@ Second Avenue guarantees each consignor a target price and pays the difference w
 | 1 | [Discovery](docs/phase-1-discovery.html) | `docs/` | Done |
 | 2 | [Opportunity & success metrics](docs/phase-2-opportunity.html) | `docs/`, sizing model in `sizing/` (to come) | Done |
 | 3 | [Product requirements (PRD)](docs/phase-3-prd.html) | `docs/` | Done |
-| 4 | [Prototype & validation](docs/phase-4-prototype.html): test the pilot bet, then show what it changed | BigQuery sandbox, Claude API | In progress |
-| 5 | Backlog and roadmap: epics and stories, Engineering sizing, Now / Next / Later | `backlog/`, GitHub Issues | Planned |
+| 4 | [Prototype & validation](docs/phase-4-prototype.html): test the pilot bet, then show what it changed. The plain-language question layer is deferred to the end | BigQuery sandbox, Claude API | Done |
+| 5 | Backlog and roadmap: epics and stories, Engineering sizing, Now / Next / Later | `backlog/`, GitHub Issues | Next |
 | 6 | Package and deliver | Case study, AI skills, walkthrough | Planned |
 
 ### Why the prototype comes before the backlog
