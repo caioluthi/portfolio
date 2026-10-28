@@ -1,6 +1,8 @@
 -- David's exposure rollups (PRD DPR-4), as of today. One row per dimension value, in
 -- long form so every rollup comes from the same allocation and adds up to the book.
 -- Exposure at risk counts act contracts only; watch contracts are reported apart.
+-- The part of it that is already locked in - contracts with nothing left to sell - is
+-- shown on its own, because Ops can no longer change it (feedback session, Phase 4).
 CREATE OR REPLACE VIEW `{dataset}.finance_exposure` AS
 WITH x AS (
   SELECT *, consignor_id AS consignor FROM `{dataset}.exposure_allocation`
@@ -15,6 +17,7 @@ long AS (
 SELECT
   dimension, value,
   SUM(IF(risk_tier = 'act', allocated_shortfall, 0)) AS exposure_at_risk,
+  SUM(IF(risk_tier = 'act' AND loss_locked_in, allocated_shortfall, 0)) AS exposure_locked_in,
   SUM(IF(risk_tier = 'watch', allocated_shortfall, 0)) AS exposure_on_watch,
   COUNT(DISTINCT IF(risk_tier = 'act', contract_id, NULL)) AS contracts_act,
   COUNT(DISTINCT IF(risk_tier = 'watch', contract_id, NULL)) AS contracts_watch,

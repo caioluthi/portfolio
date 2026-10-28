@@ -20,6 +20,9 @@ FLAG_THRESHOLD="${FLAG_THRESHOLD:-0.95}"
 FLAG_DAY_FLOOR="${FLAG_DAY_FLOOR:-21}"
 REALIZATION_PRIOR_SHARE="${REALIZATION_PRIOR_SHARE:-0.15}"
 ACT_EVIDENCE_MIN="${ACT_EVIDENCE_MIN:-0.15}"
+# Ops rules from the Phase 4 feedback session
+LIVE_CATALOG_LEAD_DAYS="${LIVE_CATALOG_LEAD_DAYS:-14}"
+WEAK_CHANNEL_GAP="${WEAK_CHANNEL_GAP:-0.15}"
 TODAY="$(python3 -c "import yaml;print(yaml.safe_load(open('$HERE/generator/config.yaml'))['today'])")"
 
 echo "1/6 Generating the book of contracts"
@@ -27,8 +30,9 @@ python3 "$HERE/generator/generate.py" --out "$DATA" --report
 
 echo "2/6 Loading into $PROJECT:$DATASET"
 bq --project_id="$PROJECT" mk --force --dataset --location=US "$PROJECT:$DATASET" >/dev/null
-printf 'today,flag_threshold,flag_day_floor,realization_prior_share,act_evidence_min\n%s,%s,%s,%s,%s\n' \
-  "$TODAY" "$FLAG_THRESHOLD" "$FLAG_DAY_FLOOR" "$REALIZATION_PRIOR_SHARE" "$ACT_EVIDENCE_MIN" > "$DATA/flag_parameters.csv"
+printf 'today,flag_threshold,flag_day_floor,realization_prior_share,act_evidence_min,live_catalog_lead_days,weak_channel_gap\n%s,%s,%s,%s,%s,%s,%s\n' \
+  "$TODAY" "$FLAG_THRESHOLD" "$FLAG_DAY_FLOOR" "$REALIZATION_PRIOR_SHARE" "$ACT_EVIDENCE_MIN" \
+  "$LIVE_CATALOG_LEAD_DAYS" "$WEAK_CHANNEL_GAP" > "$DATA/flag_parameters.csv"
 # Sell-through by 15-day period, learned from training contracts by experiment/run.py
 cp "$HERE/experiment/results/sell_through.csv" "$DATA/sell_through.csv"
 load() {
@@ -41,7 +45,7 @@ load raw_contracts   contracts  "contract_id:STRING,consignor_id:STRING,start_da
 load raw_assets      assets     "asset_id:STRING,contract_id:STRING,asset_type:STRING,estimate_usd:FLOAT64"
 load raw_listings    listings   "listing_id:STRING,asset_id:STRING,listing_channel:STRING,listed_date:DATE,ended_date:DATE,listing_status:STRING"
 load raw_sales       sales      "sale_id:STRING,asset_id:STRING,sale_date:DATE,gross_amount:FLOAT64,channel:STRING,region:STRING"
-load flag_parameters flag_parameters "today:DATE,flag_threshold:FLOAT64,flag_day_floor:INT64,realization_prior_share:FLOAT64,act_evidence_min:FLOAT64"
+load flag_parameters flag_parameters "today:DATE,flag_threshold:FLOAT64,flag_day_floor:INT64,realization_prior_share:FLOAT64,act_evidence_min:FLOAT64,live_catalog_lead_days:INT64,weak_channel_gap:FLOAT64"
 load sell_through_by_period sell_through "period:INT64,day_from:INT64,day_to:INT64,sell_through:FLOAT64"
 
 echo "3/6 Creating the calculated-field views"
@@ -56,5 +60,6 @@ python3 "$HERE/apply_metadata.py" "$PROJECT" "$DATASET"
 echo "5/6 Checking the metrics against the PRD worked example"
 python3 "$HERE/checks/check_worked_example.py" "$PROJECT" "$DATASET"
 
-echo "6/6 Checking that exposure adds up"
+echo "6/6 Checking that exposure adds up and appraisals are complete"
 python3 "$HERE/checks/check_rollups.py" "$PROJECT" "$DATASET"
+python3 "$HERE/checks/check_data_quality.py" "$PROJECT" "$DATASET"

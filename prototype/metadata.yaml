@@ -74,6 +74,12 @@ columns:
   unsold_value: Appraised value of the contract's items not yet sold. What Ops can still reprice or move.
   loss_locked_in: TRUE when nothing is left to sell. The shortfall still costs money, but Ops has no inventory left to act on.
   main_unsold_channel: Channel holding the largest share of the contract's unsold appraised value. A label for Ops; exposure is split by item, not assigned to this channel.
+  live_catalog_lead_days: Days before a live auction that its catalog closes. An item can only go into an auction if the contract has at least this many days left. 14, from Ops.
+  weak_channel_gap: How far below its best channel an item type's price realization must be for a channel to count as weak for that type. 0.15.
+  live_auction_possible: TRUE when the contract has at least live_catalog_lead_days left, so unsold items can still go into a live auction. Otherwise repricing is the only lever.
+  unsold_on_weak_channel: Appraised value of unsold items listed on a channel where their item type sells at least weak_channel_gap below its best channel. A fact for Ops, not a recommendation.
+  exposure_locked_in: Exposure at risk from contracts with nothing left to sell. Already lost; Ops can no longer change it.
+  exposure_at_risk_4wk_avg: Average of exposure_at_risk over the 28 days up to as_of_date. Smooths week-to-week swings for reporting.
   new_today: TRUE when the contract was flagged act for the first time today.
   dimension: Which rollup the row belongs to - book, region, channel, asset_type or consignor.
   value: The value of that dimension, such as Midwest or live.
@@ -109,7 +115,16 @@ tables:
     columns:
       channel: Channel the item is currently listed on - app, website or live - or not yet listed (live items are listed 14 days before their auction).
   ops_morning_list:
-    description: Ops' morning list as of today (PRD DPR-5). One row per flagged contract; act contracts ranked by projected shortfall, then watch contracts as context.
+    description: Ops' morning list as of today (PRD DPR-5). One row per flagged contract that still has something to sell; act contracts ranked by projected shortfall, then watch contracts as context. Contracts with nothing left to sell appear in Finance's exposure as locked in.
+  finance_exposure_trend:
+    description: Finance's exposure over time (PRD DPR-4). One row per day, replayed as it was known that day, with a 4-week average.
+    columns:
+      exposure_at_risk: Sum of projected_shortfall for contracts flagged act that day.
+      exposure_locked_in: Part of exposure_at_risk from contracts with nothing left to sell that day.
+      exposure_on_watch: Sum of projected_shortfall for contracts on watch that day.
+      contracts_act: Contracts flagged act that day.
+      contracts_watch: Contracts on watch that day.
+      contracts_active: Active contracts that day.
   finance_exposure:
     description: Finance's exposure rollups as of today (PRD DPR-4), in long form - one row per dimension value. Every dimension adds up to the book total.
     columns:

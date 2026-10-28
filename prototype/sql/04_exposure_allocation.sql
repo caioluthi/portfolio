@@ -40,6 +40,7 @@ basis AS (
 )
 SELECT
   contract_id, consignor_id, region, risk_tier, asset_id, asset_type, channel,
+  (unsold_estimate <= 0) AS loss_locked_in,
   basis_estimate,
   projected_shortfall * SAFE_DIVIDE(basis_estimate, contract_basis) AS allocated_shortfall
 FROM basis
