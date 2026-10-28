@@ -71,15 +71,16 @@ table.decisions td:last-child { white-space: nowrap; }
       <table>
         <thead><tr><th>#</th><th>Question</th><th>Evidence it produces</th></tr></thead>
         <tbody>
-          <tr><td class="n">Q1</td><td><strong>Does the bet hold?</strong> Does a linear pacing flag meet the five go-live criteria on last year's contracts?</td><td>A backtest against today's practice, a review in the final week, with each criterion met or not met</td></tr>
-          <tr><td class="n">Q2</td><td><strong>What should the flag settings be?</strong></td><td>A sweep of threshold and day floor that replaces the 80% and day-15 starting values</td></tr>
-          <tr><td class="n">Q3</td><td><strong>Where does linear pacing fail?</strong></td><td>False positives by channel and by contract size, sizing the back-loaded-auction and single-asset risks</td></tr>
+          <tr><td class="n">Q1</td><td><strong>Does the bet hold?</strong> Would the flag have met the go-live criteria on last year's contracts?</td><td>The flag replayed day by day over last year's contracts, whose outcomes are already known, and compared with what Ops does today, a review in the final week. Each criterion comes out met or not met</td></tr>
+          <tr><td class="n">Q2</td><td><strong>What should the flag's settings be?</strong></td><td>Every combination of settings tested on last year's contracts, and the best one chosen by a rule fixed in advance, rather than keeping the starting guesses of 80% and day 15</td></tr>
+          <tr><td class="n">Q3</td><td><strong>Where does the flag get it wrong?</strong></td><td>False alarms broken down by channel and by contract size, to see whether items that sell late at auction, or contracts with a single item, cause most of them</td></tr>
           <tr><td class="n">Q4</td><td><strong>How should a contract count in rollups by channel?</strong> Open question OQ-6 in the PRD.</td><td>Both attribution options built side by side, one chosen with a reason</td></tr>
           <tr><td class="n">Q5</td><td><strong>Can questions be answered from the governed fields alone?</strong></td><td>A fixed set of about 30 questions, with the four from discovery, paraphrases and out-of-scope ones, and a pass rate</td></tr>
           <tr><td class="n">Q6</td><td><strong>Is the morning list what Ops needs?</strong> Open question OQ-4 in the PRD.</td><td>A feedback session with Maria on the list and David on the rollups</td></tr>
         </tbody>
       </table>
     </div>
+    <p class="note" style="margin-top:0">These are the questions as first asked, when the flag compared sales to date with a straight line to the target. <a href="#results">Section 5</a> shows how the answers changed the flag.</p>
   </section>
 
   <section class="section" aria-labelledby="scope">
