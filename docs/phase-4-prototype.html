@@ -31,6 +31,9 @@ td.miss { color: var(--risk); }
 table.changes td:nth-child(2) { white-space: nowrap; }
 table.decisions td:first-child { width: 40%; }
 table.decisions td:last-child { white-space: nowrap; }
+table.ledger td.src { color: var(--muted); font-size: 0.875rem; width: 13%; }
+table.ledger td:first-child { width: 36%; }
+table.ledger td:nth-child(3) { width: 33%; }
 </style>
 </head>
 <body>
@@ -279,6 +282,7 @@ table.decisions td:last-child { white-space: nowrap; }
     </ul>
 
     <h3 id="decisions">What we decided</h3>
+    <p>Every point raised in the sessions and what we did with it, including what we chose not to change. The changes also appear in <a href="#changed">section 7</a>, alongside everything else Phase 4 changed.</p>
     <div class="scroll">
       <table class="decisions">
         <thead><tr><th>What we heard</th><th>Decision</th><th>Where</th></tr></thead>
@@ -299,22 +303,29 @@ table.decisions td:last-child { white-space: nowrap; }
 
   <section class="section" aria-labelledby="changed">
     <h2 id="changed">7. What the prototype changed</h2>
-    <p>Every change below is now in the published pages, with the evidence that prompted it. The backlog in Phase 5 is planned from these revised versions. The versions written before the prototype are archived for comparison: <a href="phase-2-opportunity-v1.html">opportunity, revision 1</a> and <a href="phase-3-prd-v1.html">PRD, revision 1</a>.</p>
+    <p>Every change made to the requirements and the opportunity during Phase 4, and what prompted it. All of them are in the published pages, and the backlog in Phase 5 is planned from these revised versions. The versions written before the prototype are archived for comparison: <a href="phase-2-opportunity-v1.html">opportunity, revision 1</a> and <a href="phase-3-prd-v1.html">PRD, revision 1</a>.</p>
     <div class="scroll">
-      <table class="changes">
-        <thead><tr><th>Change</th><th>Where</th><th>Evidence</th></tr></thead>
+      <table class="ledger">
+        <thead><tr><th>Change</th><th>Prompted by</th><th>Evidence</th><th>Where</th></tr></thead>
         <tbody>
-          <tr><td>The risk flag projects the final value from what has sold and what is still unsold, replacing linear pacing</td><td><a href="phase-3-prd.html#calculated">PRD, DPR-3</a></td><td>False alarms 66% → 37% on held-out contracts</td></tr>
-          <tr><td>Flags have two tiers: act, which Ops reviews, and watch, shown as context</td><td><a href="phase-3-prd.html#dpr-5">PRD, DPR-3 and DPR-5</a></td><td>+6 points of recall at halfway; watch list of at most 10 on 95% of days</td></tr>
-          <tr><td>New required field: an appraised estimate per asset</td><td><a href="phase-3-prd.html#fields">PRD, required fields</a></td><td>The projection can't price unsold items without it</td></tr>
-          <tr><td>Pilot settings: 95% of target, day 21, prior 15% of target, act at 15% sold</td><td><a href="phase-3-prd.html#fields">PRD, parameters</a></td><td>Chosen by the pre-set rule on training contracts</td></tr>
-          <tr><td>Recall-at-halfway target 70% → 40%</td><td><a href="phase-2-opportunity.html#metrics">Opportunity, success metrics</a></td><td>No setting reaches more than ~41% inside the false-alarm guardrail</td></tr>
-          <tr><td>Opportunity base case ~$500K → ~$320K a year</td><td><a href="phase-2-opportunity.html#opportunity">Opportunity, sizing</a></td><td>The funnel's first step is measured at 44%, not judged at 70%</td></tr>
-          <tr><td>Success counts from the first act flag; a watch-list size guardrail is added</td><td><a href="phase-2-opportunity.html#metrics">Opportunity, success metrics</a></td><td>Decided before the step 2b run, as part of its design</td></tr>
-          <tr><td>Exposure by channel and asset type is split over each contract's unsold items, settling OQ-6</td><td><a href="phase-3-prd.html#dpr-4">PRD, DPR-4</a></td><td>Assigning whole contracts to one channel moved 7–15% of exposure; 21 of 37 flagged contracts were mixed</td></tr>
-          <tr><td>Losses already locked in leave the morning list and show in Finance's view</td><td><a href="phase-3-prd.html#dpr-5">PRD, DPR-4 and DPR-5</a></td><td>4 of 37 act contracts, 23% of exposure, had nothing left to sell; Maria and David both asked for it</td></tr>
-          <tr><td>Five more changes, one partial change, one explicit no and one new open question from the feedback sessions</td><td><a href="phase-3-prd.html">PRD</a></td><td><a href="#decisions">What we decided</a>, section 6</td></tr>
-          <tr><td>Next scope adds listing activity (views, watchers, bids, price drops)</td><td><a href="phase-3-prd.html#scope">PRD, scope</a></td><td>Sales and appraisals alone cap recall at halfway near 41%; going further needs new evidence. Not yet tested</td></tr>
+          <tr><td>The risk flag projects the final value from what has sold and what is still unsold, replacing the straight-line comparison</td><td class="src">Step 2b test</td><td>False alarms 66% → 37% on contracts not used for tuning</td><td><a href="phase-3-prd.html#calculated">PRD, DPR-3</a></td></tr>
+          <tr><td>Flags have two tiers: act, which Ops reviews, and watch, shown as context</td><td class="src">Step 2b test</td><td>+6 points caught by halfway; at most 10 on watch on 95% of days</td><td><a href="phase-3-prd.html#dpr-5">PRD, DPR-3 and DPR-5</a></td></tr>
+          <tr><td>New required field: an appraised value per item</td><td class="src">Step 2b test</td><td>The projection can't price unsold items without it</td><td><a href="phase-3-prd.html#fields">PRD, required fields</a></td></tr>
+          <tr><td>Pilot settings: 95% of target, from day 21, a cushion worth 15% of target, act once 15% has sold</td><td class="src">Step 2b test</td><td>Chosen by a rule fixed before the run</td><td><a href="phase-3-prd.html#fields">PRD, parameters</a></td></tr>
+          <tr><td>Target for underperformers caught by halfway: 70% → 40%</td><td class="src">Step 2b test</td><td>No setting caught more than about 41% within the false-alarm limit</td><td><a href="phase-2-opportunity.html#metrics">Opportunity, success metrics</a></td></tr>
+          <tr><td>Opportunity base case: ~$500K → ~$320K a year</td><td class="src">Step 2b test</td><td>The funnel's first step is measured at 44%, not judged at 70%</td><td><a href="phase-2-opportunity.html#opportunity">Opportunity, sizing</a></td></tr>
+          <tr><td>Success counts from the first act flag; a limit on the size of the watch list</td><td class="src">Step 2b design</td><td>Decided before the run, as part of its design</td><td><a href="phase-2-opportunity.html#metrics">Opportunity, success metrics</a></td></tr>
+          <tr><td>Next scope adds listing activity: views, watchers, bids, price drops</td><td class="src">Step 2b test</td><td>Sales and appraisals alone cap the halfway catch near 41%. Not yet tested</td><td><a href="phase-3-prd.html#scope">PRD, scope</a></td></tr>
+          <tr><td>Exposure by channel and item type is split over each contract's unsold items</td><td class="src">Building Finance's views</td><td>Counting whole contracts under one channel moved 7–15% of exposure; 21 of 37 flagged contracts were mixed</td><td><a href="phase-3-prd.html#dpr-4">PRD, DPR-4</a></td></tr>
+          <tr><td>Contracts with nothing left to sell leave the morning list and show in Finance's view as locked in</td><td class="src">Maria's and David's sessions</td><td>4 of 37 act contracts, 23% of exposure</td><td><a href="phase-3-prd.html#dpr-5">PRD, DPR-4 and DPR-5</a></td></tr>
+          <tr><td>Each contract shows whether a live auction is still possible</td><td class="src">Maria's session</td><td>12 of 33 act contracts have under 14 days left</td><td><a href="phase-3-prd.html#dpr-5">PRD, DPR-5</a></td></tr>
+          <tr><td>Each contract shows its unsold value on a weak channel for the item type</td><td class="src">Maria's session</td><td>25 of 33 act contracts, $359K of appraised value</td><td><a href="phase-3-prd.html#dpr-5">PRD, DPR-5</a></td></tr>
+          <tr><td>Logging Ops actions, in Next scope, now also shows which contracts have been worked</td><td class="src">Maria's session</td><td>She needs to know what's new and what she's already handled</td><td><a href="phase-3-prd.html#scope">PRD, scope</a></td></tr>
+          <tr><td>A 4-week average beside the daily exposure figure</td><td class="src">David's session</td><td>Daily exposure swung between $229K and $366K over the summer</td><td><a href="phase-3-prd.html#dpr-4">PRD, DPR-4</a></td></tr>
+          <tr><td>Exposure at risk is stated as not an accounting reserve</td><td class="src">David's session</td><td>Built to rank contracts, never tested as a forecast of payouts</td><td><a href="phase-3-prd.html#scope">PRD, scope</a></td></tr>
+          <tr><td>The intake appraisal becomes its own field that repricing can't overwrite</td><td class="src">Priya's session</td><td>Repricing overwrites the appraisal in ConsignTrack today</td><td><a href="phase-3-prd.html#fields">PRD, required fields</a></td></tr>
+          <tr><td>Appraisal completeness reported on every refresh; contracts below 95% are marked</td><td class="src">Priya's session</td><td>Missing appraisals would quietly degrade the flag</td><td><a href="phase-3-prd.html#nfr">PRD, NFR-5</a></td></tr>
+          <tr><td>New open question: how to handle lots appraised as one line</td><td class="src">Priya's session</td><td>Some consignments aren't appraised item by item</td><td><a href="phase-3-prd.html#questions">PRD, open questions</a></td></tr>
         </tbody>
       </table>
     </div>
