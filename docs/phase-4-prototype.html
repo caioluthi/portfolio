@@ -20,6 +20,7 @@ td.n { font-family: var(--font-mono); font-size: 0.8125rem; color: var(--muted);
 .pending strong { color: var(--fg); }
 td.win { color: var(--accent); font-weight: 600; }
 td.locked { color: var(--risk); }
+.pivot { color: var(--risk); font-weight: 600; }
 td.num:not(:last-child), th.num:not(:last-child) { padding-right: 1.25rem; }
 tr.total td { font-weight: 600; }
 .qa { display: flex; flex-direction: column; gap: 1rem; }
@@ -119,8 +120,8 @@ table.decisions td:last-child { white-space: nowrap; }
         <thead><tr><th>#</th><th>Step</th><th>Answers</th><th>Status</th></tr></thead>
         <tbody>
           <tr><td class="n">1</td><td>Simulated book of contracts and the calculated fields, checked against the PRD's worked example</td><td>Groundwork</td><td><span class="status done">Done</span></td></tr>
-          <tr><td class="n">2</td><td>Backtest, parameter sweep and go-live report</td><td>Q1, Q2, Q3</td><td><span class="status done">Done</span></td></tr>
-          <tr><td class="n">2b</td><td>A better signal and a two-tier flag, tested on contracts the settings weren't tuned on. Added after step 2 failed.</td><td>Q1, Q2</td><td><span class="status done">Done</span></td></tr>
+          <tr><td class="n">2</td><td>Replay the flag over last year's contracts, test every combination of settings, and report against the go-live criteria</td><td>Q1, Q2, Q3</td><td><span class="status done">Done</span></td></tr>
+          <tr><td class="n">2b</td><td>A better signal and a two-tier flag, tested on contracts the settings weren't tuned on. <span class="pivot">Added after step 2 failed.</span></td><td>Q1, Q2</td><td><span class="status done">Done</span></td></tr>
           <tr><td class="n">3</td><td>Morning list, Finance rollups and channel attribution</td><td>Q4</td><td><span class="status done">Done</span></td></tr>
           <tr><td class="n">4</td><td>Plain-language questions and the evaluation set</td><td>Q5</td><td><span class="status wip">Next</span></td></tr>
           <tr><td class="n">5</td><td>Feedback from Ops and Finance, and the PRD revision</td><td>Q6</td><td><span class="status done">Done</span></td></tr>
