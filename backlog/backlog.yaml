@@ -18,6 +18,26 @@ issues: https://github.com/caioluthi/portfolio/issues
 
 tech_lead: Tomás, Tech Lead, Data Platform
 
+# Every requirement in the PRD and its priority; the checker uses it for coverage.
+requirements:
+  DPR-1: must
+  DPR-2: must
+  DPR-3: must
+  DPR-4: must
+  DPR-5: must
+  DPR-6: must
+  DPR-7: must
+  DPR-8: should
+  DPR-9: should
+  NFR-1: must
+  NFR-2: must
+  NFR-3: must
+  NFR-4: must
+  NFR-5: must
+
+# The PRD anchors every NFR on one table.
+trace_anchors: {NFR: nfr}
+
 personas:
   maria: Maria, Ops contract manager
   david: David, Finance
@@ -67,6 +87,7 @@ open_questions:
   OQ-7:
     question: Question layer. Hosting, cost envelope and how accuracy is tested before Ops sees it.
     decision: Open. Refined when E6 comes up.
+    by: [engineering, product]
   OQ-8:
     question: Lots. Split a lot's appraisal across its items, or treat the lot as one item.
     decision: One item per lot for the pilot; the completeness report shows the appraised value in lots.
@@ -104,11 +125,15 @@ releases:
     who_gets_what: Every region on a dashboard, David's exposure view, the weekly scorecard, operating commitments.
     success: The scorecard stays inside its guardrails, and Priya stops checking reconciliation by hand.
     depends_on_gates: [appraisal_recovery, go_live]
+  R4:
+    name: Later · Questions in plain language
+    stories: [E6-S1, E6-S2]
+    who_gets_what: Plain-language questions for Ops and Finance.
+    success: The question layer passes its evaluation set and Ops has access.
 
 epics:
 
   - key: E1
-
     issue: 1
     title: Trusted contract data
     outcome: One daily, reconciled, reproducible snapshot of every contract, its assets and sales.
@@ -117,7 +142,6 @@ epics:
     stories:
 
       - key: E1-S1
-
         issue: 2
         title: One daily snapshot of every contract
         as: priya
@@ -132,8 +156,8 @@ epics:
         tasks: []
 
       - key: E1-S2
-
         issue: 3
+        release: R2   # needed before the Midwest pilot
         title: A trustworthy intake appraisal
         as: priya
         so_that: the flag's key input can't be overwritten or quietly go missing
@@ -154,7 +178,6 @@ epics:
           - {key: T7, owner: analytics eng, task: Coverage report for gate appraisal_recovery.}
 
       - key: E1-S3
-
         issue: 4
         title: Reconciliation across the three systems
         as: priya
@@ -168,7 +191,6 @@ epics:
         tasks: []
 
   - key: E2
-
     issue: 5
     title: Governed risk metrics
     outcome: The projection, flag and exposure defined once, with daily flag history.
@@ -177,8 +199,8 @@ epics:
     stories:
 
       - key: E2-S1
-
         issue: 6
+        release: R2   # needed before the Midwest pilot
         title: A daily projection and risk flag per contract
         as: maria
         so_that: falling-behind contracts reach me while there's still time to act
@@ -190,7 +212,6 @@ epics:
         tasks: []
 
       - key: E2-S2
-
         issue: 7
         title: Exposure and the facts Ops acts on
         as: [david, maria]
@@ -202,8 +223,8 @@ epics:
         tasks: []
 
       - key: E2-S3
-
         issue: 8
+        release: R2   # needed before the Midwest pilot
         title: Flag history and evaluation fields
         as: david
         so_that: lead time and the other success metrics can be measured at all
@@ -215,7 +236,6 @@ epics:
         tasks: []
 
   - key: E3
-
     issue: 9
     title: Go-live backtest
     outcome: The pilot settings proven on real history, ending in a go/no-go report.
@@ -225,8 +245,8 @@ epics:
     stories:
 
       - key: E3-S1
-
         issue: 10
+        release: R2   # needed before the Midwest pilot
         title: Replay the pilot flag against today's practice
         as: david
         so_that: we know how much earlier it would have caught last year's underperformers
@@ -234,13 +254,13 @@ epics:
         depends_on: [E1-S2]
         acceptance:
           - The last 12 months are rebuilt as they stood on each day, and every day is replayed from that view, never from later data, beside a baseline where contracts are noticed in the final week.
-        changed_in_refinement: Gained the 12-month historical rebuild from E1-S1.
           - The pilot settings stay fixed. The full settings sweep is reported, but any change to the settings goes back to Product.
+        changed_in_refinement: Gained the 12-month historical rebuild from E1-S1.
         tasks: []
 
       - key: E3-S2
-
         issue: 11
+        release: R2   # needed before the Midwest pilot
         title: Go-live report
         as: david
         so_that: the go-live decision is made on evidence, not opinion
@@ -252,7 +272,6 @@ epics:
         tasks: []
 
   - key: E4
-
     issue: 12
     title: Ops and Finance views
     outcome: The contract book, Maria's morning list and David's exposure rollups.
@@ -261,7 +280,6 @@ epics:
     stories:
 
       - key: E4-S1
-
         issue: 13
         title: Maria's morning list
         as: maria
@@ -277,7 +295,6 @@ epics:
         tasks: []
 
       - key: E4-S2
-
         issue: 14
         title: David's exposure view
         as: david
@@ -290,7 +307,6 @@ epics:
         tasks: []
 
       - key: E4-S3
-
         issue: 15
         title: The contract book
         as: [priya, david, maria]
@@ -304,7 +320,6 @@ epics:
         tasks: []
 
   - key: E5
-
     issue: 16
     title: Run it as a product
     outcome: An owner, commitments people can rely on, and the weekly success scorecard.
@@ -313,7 +328,6 @@ epics:
     stories:
 
       - key: E5-S1
-
         issue: 17
         title: Operating commitments
         as: priya
@@ -326,7 +340,6 @@ epics:
         tasks: []
 
       - key: E5-S2
-
         issue: 18
         title: Weekly success scorecard
         as: david
@@ -338,7 +351,6 @@ epics:
         tasks: []
 
   - key: E6
-
     issue: 19
     title: Questions in plain language
     outcome: Ops and Finance ask the discovery questions and get governed, tested answers.
@@ -347,7 +359,6 @@ epics:
     stories:
 
       - key: E6-S1
-
         issue: 20
         title: Answer the discovery questions
         as: maria
@@ -360,7 +371,6 @@ epics:
         tasks: []
 
       - key: E6-S2
-
         issue: 21
         title: Safe and tested before Ops sees it
         as: david
