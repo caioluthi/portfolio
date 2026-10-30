@@ -18,7 +18,7 @@ Second Avenue guarantees each consignor a target price and pays the difference w
 | 2 | [Opportunity & success metrics](docs/phase-2-opportunity.html) | `docs/`, sizing model in `sizing/` (to come) | Done |
 | 3 | [Product requirements (PRD)](docs/phase-3-prd.html) | `docs/` | Done |
 | 4 | [Prototype & validation](docs/phase-4-prototype.html): test the pilot bet, then show what it changed. The plain-language question layer is deferred to the end | BigQuery sandbox, Claude API | Done |
-| 5 | Backlog and roadmap: epics and stories, Engineering sizing, Now / Next / Later | `backlog/`, GitHub Issues | Next |
+| 5 | [Backlog and roadmap](docs/phase-5-backlog-roadmap.html): six epics and their functional stories, refinement with the Tech Lead, Now / Next / Later | `backlog/`, GitHub Issues | Done |
 | 6 | Package and deliver | Case study, AI skills, walkthrough | Planned |
 
 ### Why the prototype comes before the backlog
@@ -29,7 +29,7 @@ The riskiest assumption is that a simple pacing flag catches underperforming con
 
 ```
 docs/      Case study pages (GitHub Pages site)
-backlog/   Draft backlog: epics and stories traced to the PRD, revised after the prototype
+backlog/   Backlog: epics and functional stories traced to the PRD
 ```
 
 More folders are added as the build phases land.

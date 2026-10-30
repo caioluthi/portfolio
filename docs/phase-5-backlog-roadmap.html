@@ -1,0 +1,523 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Phase 5 · Backlog &amp; roadmap | Second Avenue</title>
+<meta name="description" content="Second Avenue's production backlog, planned from the revised PRD: six epics, functional stories traced to each requirement, refinement with the Tech Lead, and a Now / Next / Later roadmap.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&family=Newsreader:opsz,wght@6..72,500;6..72,600&display=swap">
+<link rel="stylesheet" href="assets/site.css">
+<style>
+td.n { font-family: var(--font-mono); font-size: 0.8125rem; color: var(--muted); white-space: nowrap; }
+.scope .tag.in { color: var(--accent); }
+.scope .tag.out { color: var(--risk); }
+.ms { font-family: var(--font-mono); font-size: 0.6875rem; letter-spacing: 0.08em; text-transform: uppercase; white-space: nowrap; color: var(--muted); }
+.ms.now { color: var(--accent); }
+.ms.next { color: var(--fg); }
+.trace { font-family: var(--font-mono); font-size: 0.75rem; color: var(--muted); white-space: nowrap; }
+table.epics td:nth-child(2) { width: 24%; } table.epics td:nth-child(3) { width: 40%; }
+.pending { background: var(--surface); border: 1px dashed var(--rule); border-radius: 6px; padding: 1rem 1.25rem; color: var(--muted); font-size: 0.9375rem; max-width: 38rem; }
+.pending strong { color: var(--fg); }
+.framing { counter-reset: f; list-style: none; padding: 0; }
+.framing li { position: relative; padding-left: 2rem; }
+.framing li::before { counter-increment: f; content: counter(f); position: absolute; left: 0; top: 0.1rem; font-family: var(--font-mono); font-size: 0.8125rem; color: var(--accent); }
+details.epic summary { display: flex; flex-wrap: wrap; gap: 0.25rem 0.75rem; align-items: baseline; }
+details.epic summary .ms { margin-left: auto; }
+details.epic summary .count { font-family: var(--font-mono); font-size: 0.75rem; color: var(--muted); }
+.epic-goal { color: var(--muted); font-size: 0.9375rem; max-width: 38rem; }
+.story { border-top: 1px solid var(--rule); padding-top: 1rem; display: flex; flex-direction: column; gap: 0.375rem; }
+.story:first-of-type { border-top: 0; padding-top: 0; }
+.story .head { display: flex; flex-wrap: wrap; gap: 0.25rem 0.75rem; align-items: baseline; }
+.story .id { font-family: var(--font-mono); font-size: 0.8125rem; color: var(--accent); }
+.story .who { font-size: 0.8125rem; color: var(--muted); }
+.story .so { font-size: 0.9375rem; font-style: italic; color: var(--fg); max-width: 38rem; }
+.story ul { font-size: 0.9375rem; max-width: 38rem; gap: 0.25rem; }
+.story .ac { font-family: var(--font-mono); font-size: 0.6875rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); margin-top: 0.25rem; }
+.crit { font-family: var(--font-mono); font-size: 0.6875rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--risk); background: var(--risk-soft); border-radius: 3px; padding: 0.05rem 0.375rem; white-space: nowrap; }
+.legend { font-size: 0.8125rem; color: var(--muted); max-width: 38rem; }
+.qa { display: flex; flex-direction: column; gap: 1rem; }
+.qa p.q { font-weight: 600; font-size: 0.9375rem; }
+.qa p.a { font-size: 0.9375rem; margin-top: 0.25rem; }
+.qa p.d { font-size: 0.875rem; color: var(--accent); margin-top: 0.375rem; }
+.owner { font-family: var(--font-mono); font-size: 0.6875rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+.ext { color: var(--risk); font-weight: 500; }
+table.decisions td:first-child { width: 36%; }
+table.decisions td:last-child { white-space: nowrap; color: var(--muted); font-size: 0.875rem; }
+table.sprints td:first-child { white-space: nowrap; font-family: var(--font-mono); font-size: 0.8125rem; }
+table.sprints td:last-child { color: var(--muted); font-size: 0.875rem; }
+.layer { display: flex; align-items: baseline; gap: 0.75rem; flex-wrap: wrap; margin-top: 0.5rem; }
+/* Roadmap timeline */
+.tl { display: grid; grid-template-columns: 8.5rem repeat(5, minmax(3.25rem, 1fr)) minmax(4.5rem, 1.2fr); min-width: 34rem; font-size: 0.8125rem; }
+.tl > div { padding: 0.5rem 0.375rem; border-bottom: 1px solid var(--rule); display: flex; align-items: center; }
+.tl .hd { font-family: var(--font-mono); font-size: 0.6875rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); justify-content: center; }
+.tl .hd.lbl { justify-content: flex-start; }
+.tl .row { font-weight: 500; }
+.tl .row small { display: block; font-weight: 400; color: var(--muted); font-size: 0.75rem; }
+.tl .row { flex-direction: column; align-items: flex-start; justify-content: center; }
+.tl .bar { height: 0.875rem; border-radius: 3px; background: var(--accent); align-self: center; width: 100%; padding: 0; }
+.tl .cell { justify-content: center; padding: 0.5rem 0.125rem; }
+.tl .cell .bar { flex: 1; }
+.tl .bar.next { background: var(--muted); }
+.tl .bar.later { background: transparent; border: 1px dashed var(--muted); }
+.tl .bar.ext { background: var(--risk); }
+.tl .bar.talk { background: transparent; border: 1px dashed var(--risk); }
+.tl .gate { color: var(--risk); font-family: var(--font-mono); font-size: 0.75rem; justify-content: center; font-weight: 500; }
+.tl .weeks { font-family: var(--font-mono); font-size: 0.6875rem; color: var(--muted); justify-content: center; border-bottom: 0; padding-top: 0.25rem; }
+.tl-key { display: flex; flex-wrap: wrap; gap: 0.5rem 1.25rem; font-size: 0.8125rem; color: var(--muted); }
+.tl-key span { display: inline-flex; align-items: center; gap: 0.375rem; }
+.tl-key i { display: inline-block; width: 1.25rem; height: 0.625rem; border-radius: 2px; }
+.gates { display: grid; grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr)); gap: 0.75rem; }
+.gates .card { border-left: 3px solid var(--risk); }
+.gates .when { font-family: var(--font-mono); font-size: 0.75rem; color: var(--risk); }
+.gates dl { margin: 0; display: grid; grid-template-columns: 4.25rem minmax(0,1fr); gap: 0.375rem 0.75rem; font-size: 0.875rem; }
+.gates dt { font-family: var(--font-mono); font-size: 0.6875rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); padding-top: 0.15rem; }
+.gates dd { margin: 0; }
+.tl .rel { color: var(--accent); font-family: var(--font-mono); font-size: 0.75rem; justify-content: center; font-weight: 500; }
+table.releases td:first-child { white-space: nowrap; }
+table.releases td.when { font-family: var(--font-mono); font-size: 0.8125rem; white-space: nowrap; color: var(--accent); }
+table.releases td:last-child { color: var(--muted); font-size: 0.875rem; }
+</style>
+</head>
+<body>
+<main class="page">
+  <nav class="sitenav" aria-label="Case study">
+    <a class="home" href="index.html">Second Avenue</a>
+    <a href="phase-1-discovery.html">1 · Discovery</a>
+    <a href="phase-2-opportunity.html">2 · Opportunity</a>
+    <a href="phase-3-prd.html">3 · PRD</a>
+    <a href="phase-4-prototype.html">4 · Prototype</a>
+    <a href="phase-5-backlog-roadmap.html" aria-current="page">5 · Backlog</a>
+  </nav>
+
+  <header>
+    <p class="eyebrow">Phase 5 · Backlog &amp; roadmap</p>
+    <h1>Plan the production build from what the prototype learned.</h1>
+    <p class="note">Second Avenue is a fictional consignment retailer and every figure on this page is simulated. The backlog is planned from the <a href="phase-3-prd.html">revised PRD</a>, and every story names the requirement it satisfies.</p>
+  </header>
+
+  <aside class="tldr" aria-labelledby="tldr-h">
+    <p class="label" id="tldr-h">TL;DR</p>
+    <dl>
+      <dt>Why</dt>
+      <dd>The prototype tested the product bet. What is left is data and delivery risk: real source systems, a key field that isn't clean today, and a go-live test that has only run on simulated data.</dd>
+      <dt>What</dt>
+      <dd>Six epics, each an outcome someone can sign off on, with two or three functional stories each. Fifteen stories in all, traced to the requirements.</dd>
+      <dt>Output</dt>
+      <dd>A backlog refined with the Tech Lead, Engineering's sprint plan, and a Now / Next / Later roadmap built around the two decisions that can move the date.</dd>
+      <dt>Result</dt>
+      <dd>Three releases instead of one at week 10. The contract book in week 4 ends the manual report and shows the losses already locked in, without depending on the flag. A Midwest pilot follows in week 7, as soon as the flag passes its test on real history, and the full pilot in week 10. If last year's appraisals can't be recovered, the pilot moves to about week 20, but the contract book doesn't.</dd>
+      <dt>Next</dt>
+      <dd>Phase 6 packages the case study. The backlog becomes GitHub Issues from the same source file.</dd>
+    </dl>
+  </aside>
+
+  <section class="section" aria-labelledby="framing">
+    <h2 id="framing">1. From prototype to production</h2>
+    <p>The prototype answered the product questions: which flag works, with which settings, and what Ops and Finance need to see. What the production build still has to prove is different.</p>
+    <div class="cards scope">
+      <article class="card">
+        <span class="tag in">The prototype proved</span>
+        <ul>
+          <li>A projection that counts unsold inventory flags underperformers a median of 30 days early, with 36% false alarms</li>
+          <li>The pilot settings, chosen by a rule fixed before the run</li>
+          <li>How exposure counts by channel: split over each contract's unsold items</li>
+          <li>What Ops and Finance need on their views, from the feedback sessions</li>
+        </ul>
+      </article>
+      <article class="card">
+        <span class="tag out">Production still has to prove</span>
+        <ul>
+          <li>The three real source systems can be landed, joined and reconciled every day</li>
+          <li>An intake appraisal exists for every item. Today repricing overwrites it</li>
+          <li>The flag holds on real history, not only on a simulated book</li>
+          <li>The product can be run and relied on: an owner, freshness, monitoring, access</li>
+        </ul>
+      </article>
+    </div>
+    <p>Three choices shape the backlog:</p>
+    <ol class="framing">
+      <li><strong>Milestones, not a feature list.</strong> Epics are grouped by the decision each milestone unlocks: <em>does it hold on real data</em>, then <em>pilot live with Ops and Finance</em>, then <em>self-serve questions</em>. That grouping is the roadmap.</li>
+      <li><strong>The prototype is a reference, not code to ship.</strong> Product hands over the metric definitions, the <a href="phase-3-prd.html#worked-example">worked example</a> as acceptance tests, and the prototype's queries as a reference. How it is built is Engineering's call.</li>
+      <li><strong>What the prototype skipped is first-class work.</strong> Landing, reconciliation, reproducibility and the production wrapper were <a href="phase-4-prototype.html#scope">deliberately left out</a> of the prototype. Here they are epics and stories, so they aren't cut as overhead.</li>
+    </ol>
+  </section>
+
+  <section class="section" aria-labelledby="epics">
+    <h2 id="epics">2. Epics at a glance</h2>
+    <p>Each epic is an outcome someone could sign off on. Risks that need to stay visible are flagged on a story or drawn as a gate on the roadmap, rather than promoted to an epic of their own.</p>
+    <div class="scroll">
+      <table class="epics">
+        <thead><tr><th>#</th><th>Epic</th><th>Outcome</th><th>Traces</th><th>When</th></tr></thead>
+        <tbody>
+          <tr><td class="n">E1</td><td><strong>Trusted contract data</strong></td><td>One daily, reconciled, reproducible snapshot of every contract, its assets and sales</td><td class="trace"><a href="phase-3-prd.html#dpr-1">DPR-1</a>, <a href="phase-3-prd.html#dpr-2">2</a> · NFR-1, 3, 5</td><td><span class="ms now">Now</span></td></tr>
+          <tr><td class="n">E2</td><td><strong>Governed risk metrics</strong></td><td>The projection, flag and exposure defined once, with daily flag history</td><td class="trace"><a href="phase-3-prd.html#dpr-3">DPR-3</a>, <a href="phase-3-prd.html#dpr-6">6</a> · NFR-2</td><td><span class="ms now">Now</span></td></tr>
+          <tr><td class="n">E3</td><td><strong>Go-live backtest</strong></td><td>The pilot settings proven on real history, ending in a go/no-go report</td><td class="trace"><a href="phase-3-prd.html#dpr-7">DPR-7</a></td><td><span class="ms now">Now · gate</span></td></tr>
+          <tr><td class="n">E4</td><td><strong>Ops and Finance views</strong></td><td>The contract book, Maria's morning list and David's exposure rollups</td><td class="trace"><a href="phase-3-prd.html#dpr-1">DPR-1</a>, <a href="phase-3-prd.html#dpr-4">4</a>, <a href="phase-3-prd.html#dpr-5">5</a></td><td><span class="ms now">Now</span> → <span class="ms next">Next</span></td></tr>
+          <tr><td class="n">E5</td><td><strong>Run it as a product</strong></td><td>An owner, commitments people can rely on, and the weekly success scorecard</td><td class="trace"><a href="phase-3-prd.html#dpr-8">DPR-8</a> · NFR-1–5</td><td><span class="ms next">Next</span></td></tr>
+          <tr><td class="n">E6</td><td><strong>Questions in plain language</strong></td><td>Ops and Finance ask the discovery questions and get governed, tested answers</td><td class="trace"><a href="phase-3-prd.html#dpr-9">DPR-9</a> · NFR-4</td><td><span class="ms">Later</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="note" style="margin-top:0">The Next scope in the PRD, such as listing-activity signals and logging Ops actions, isn't broken into stories. It waits for the pilot readout.</p>
+  </section>
+
+  <section class="section" aria-labelledby="stories">
+    <h2 id="stories">3. Stories</h2>
+    <p>Two or three functional stories per epic, written as outcomes. Product writes who it's for, why, and what done looks like. Engineering breaks each story into technical tasks in refinement, in <a href="#refinement">section 4</a>.</p>
+    <p class="legend">Persona names are from <a href="phase-1-discovery.html">discovery</a>: Maria in Ops, David in Finance, Priya in Data. Refinement changed E1-S1, E3-S1 and E4-S1 and added E4-S3; the versions shown here are after it.</p>
+
+    <details class="epic" open>
+      <summary><span>E1 · Trusted contract data</span><span class="count">3 stories</span><span class="ms now">Now</span></summary>
+      <div class="inner">
+        <p class="epic-goal">One daily, reconciled, reproducible snapshot of every contract, its assets and sales.</p>
+
+        <div class="story">
+          <div class="head"><span class="id">E1-S1</span><h4>One daily snapshot of every contract</h4><span class="who">Priya · DPR-1, NFR-1, NFR-3</span></div>
+          <p class="so">So that a report becomes a query instead of an eight-hour project.</p>
+          <p class="ac">Done when</p>
+          <ul>
+            <li>Every Risk contract, active or closed, is joined with its consignor, assets and sales, and carries every <a href="phase-3-prd.html#fields">required field</a>.</li>
+            <li>The three sources reflect the same point in time and land before the Ops day starts. A missing source fails the run instead of landing partial data.</li>
+            <li>Any day's snapshot, from the first day of landing, can be regenerated and comes out the same.</li>
+          </ul>
+        </div>
+
+        <div class="story">
+          <div class="head"><span class="id">E1-S2</span><h4>A trustworthy intake appraisal</h4><span class="crit">Critical path</span><span class="who">Priya · NFR-5</span></div>
+          <p class="so">So that the flag's key input can't be overwritten or quietly go missing.</p>
+          <p class="ac">Done when</p>
+          <ul>
+            <li>The intake appraisal is its own field that repricing can't change, and lots appraised as one line are handled by one rule, the same way every time.</li>
+            <li>Intake values for the last 12 months are recovered from ConsignTrack's change history. If coverage is below 95%, the backtest falls back to a shadow period on new contracts, and the decision is recorded on the roadmap.</li>
+            <li>Every refresh reports appraisal coverage, and contracts below 95% are marked.</li>
+          </ul>
+        </div>
+
+        <div class="story">
+          <div class="head"><span class="id">E1-S3</span><h4>Reconciliation across the three systems</h4><span class="who">Priya · DPR-2</span></div>
+          <p class="so">So that nobody acts on a number only one system believes.</p>
+          <p class="ac">Done when</p>
+          <ul>
+            <li>Every active contract is marked reconciled or not on every refresh, and the day's rate is one published number.</li>
+            <li>Each disagreement shows the contract, the field and the value in each system. Nothing is silently overwritten.</li>
+            <li>One documented rule decides which status the flag uses when systems disagree.</li>
+          </ul>
+        </div>
+      </div>
+    </details>
+
+    <details class="epic">
+      <summary><span>E2 · Governed risk metrics</span><span class="count">3 stories</span><span class="ms now">Now</span></summary>
+      <div class="inner">
+        <p class="epic-goal">The projection, flag and exposure defined once, with daily flag history. The PRD's worked example is the acceptance test throughout.</p>
+
+        <div class="story">
+          <div class="head"><span class="id">E2-S1</span><h4>A daily projection and risk flag per contract</h4><span class="who">Maria · DPR-3</span></div>
+          <p class="so">So that falling-behind contracts reach me while there's still time to act.</p>
+          <p class="ac">Done when</p>
+          <ul>
+            <li>The projection, flag and tier match their <a href="phase-3-prd.html#calculated">PRD definitions</a>. In the worked example the contract projects to about $40,800 by day 30, goes on watch on day 21 and moves to act on day 22.</li>
+            <li>Flag settings and sell-through rates are parameters: changing them changes the results, not a definition or code.</li>
+            <li>Sell-through rates are re-learned from closed contracts on a schedule, and every run records which version it used.</li>
+          </ul>
+        </div>
+
+        <div class="story">
+          <div class="head"><span class="id">E2-S2</span><h4>Exposure and the facts Ops acts on</h4><span class="who">David, Maria · DPR-3</span></div>
+          <p class="so">So that both views read the same numbers.</p>
+          <p class="ac">Done when</p>
+          <ul>
+            <li>Exposure at risk counts act contracts only, exposure locked in covers contracts with nothing left to sell, and shortfall is split over unsold items by appraised value.</li>
+            <li>Each contract shows whether a live auction is still possible and how much unsold value sits on a weak channel for its item type.</li>
+          </ul>
+        </div>
+
+        <div class="story">
+          <div class="head"><span class="id">E2-S3</span><h4>Flag history and evaluation fields</h4><span class="who">David · DPR-6, NFR-2</span></div>
+          <p class="so">So that lead time and the other success metrics can be measured at all.</p>
+          <p class="ac">Done when</p>
+          <ul>
+            <li>Each contract's flag and tier are kept per day, append-only, so any past morning list can be rebuilt.</li>
+            <li>First act date, lead time and false positive match the PRD. In the worked example the lead time is 68 days.</li>
+            <li>Every calculated field is in one catalog under its PRD name, and nothing downstream recomputes one.</li>
+          </ul>
+        </div>
+      </div>
+    </details>
+
+    <details class="epic">
+      <summary><span>E3 · Go-live backtest</span><span class="count">2 stories</span><span class="ms now">Now · gate</span></summary>
+      <div class="inner">
+        <p class="epic-goal">The pilot settings were chosen on a simulated book. Real history is a fresh test of that choice, and its result decides go-live.</p>
+
+        <div class="story">
+          <div class="head"><span class="id">E3-S1</span><h4>Replay the pilot flag against today's practice</h4><span class="who">David · DPR-7</span></div>
+          <p class="so">So that we know how much earlier it would have caught last year's underperformers.</p>
+          <p class="ac">Done when</p>
+          <ul>
+            <li>The last 12 months are rebuilt as they stood on each day, and every day is replayed from that view, never from later data, beside a baseline where contracts are noticed in the final week.</li>
+            <li>The pilot settings stay fixed. The full settings sweep is reported, but any change to the settings goes back to Product.</li>
+          </ul>
+        </div>
+
+        <div class="story">
+          <div class="head"><span class="id">E3-S2</span><h4>Go-live report</h4><span class="who">David · DPR-7</span></div>
+          <p class="so">So that the go-live decision is made on evidence, not opinion.</p>
+          <p class="ac">Done when</p>
+          <ul>
+            <li>Each <a href="phase-2-opportunity.html#go-live">go-live criterion</a> is shown as met or not met, with its value, beside the prototype's simulated result.</li>
+            <li>False alarms are broken out by channel and by contract size, and the appraisal coverage of the contracts tested is shown.</li>
+            <li>The report regenerates with one command.</li>
+          </ul>
+        </div>
+      </div>
+    </details>
+
+    <details class="epic">
+      <summary><span>E4 · Ops and Finance views</span><span class="count">3 stories</span><span class="ms next">Now → Next</span></summary>
+      <div class="inner">
+        <p class="epic-goal">Put the flag in front of the people who act on it, with the changes from the <a href="phase-4-prototype.html#decisions">feedback sessions</a>.</p>
+
+        <div class="story">
+          <div class="head"><span class="id">E4-S1</span><h4>Maria's morning list</h4><span class="who">Maria · DPR-5</span></div>
+          <p class="so">So that I open the contracts that matter most first.</p>
+          <p class="ac">Done when</p>
+          <ul>
+            <li>Act contracts are ranked by projected shortfall, watch contracts are listed apart, and contracts with nothing left to sell are left off.</li>
+            <li>Each row shows days to expiry, whether a live auction is still possible, unsold value on a weak channel, and whether it is new today.</li>
+            <li>Contracts that failed reconciliation are marked, not hidden, and the list is ready before the working day.</li>
+            <li>It reaches the Midwest first, as a morning email, then every region in Tableau.</li>
+          </ul>
+        </div>
+
+        <div class="story">
+          <div class="head"><span class="id">E4-S2</span><h4>David's exposure view</h4><span class="who">David · DPR-4</span></div>
+          <p class="so">So that I can see where the book is at risk without waiting for the quarterly report.</p>
+          <p class="ac">Done when</p>
+          <ul>
+            <li>Exposure rolls up by region, channel, asset type and consignor, and every rollup adds up to the book total.</li>
+            <li>Locked-in exposure is shown on its own, with a 4-week average beside the daily figure.</li>
+            <li>Every number shows its as-of date.</li>
+          </ul>
+        </div>
+
+        <div class="story">
+          <div class="head"><span class="id">E4-S3</span><h4>The contract book</h4><span class="who">Priya, David, Maria · DPR-1, DPR-4</span></div>
+          <p class="so">So that the monthly report stops being built by hand, and the losses already locked in are visible before any prediction is.</p>
+          <p class="ac">Done when</p>
+          <ul>
+            <li>Every contract appears with its sales to date, days to expiry and pacing, shown as information, not as a flag, and refreshed daily.</li>
+            <li>Exposure already locked in, on contracts below target with nothing left to sell, is shown by region and in total.</li>
+            <li>The reconciliation rate and appraisal coverage for the day are shown on the book.</li>
+          </ul>
+        </div>
+      </div>
+    </details>
+
+    <details class="epic">
+      <summary><span>E5 · Run it as a product</span><span class="count">2 stories</span><span class="ms next">Next</span></summary>
+      <div class="inner">
+        <p class="epic-goal">What turns a pipeline into something people can rely on and judge. Both stories are needed by the first week of the pilot.</p>
+
+        <div class="story">
+          <div class="head"><span class="id">E5-S1</span><h4>Operating commitments</h4><span class="who">Priya · NFR-1 to NFR-5</span></div>
+          <p class="so">So that people can rely on it without checking it themselves.</p>
+          <p class="ac">Done when</p>
+          <ul>
+            <li>The product has a named owner, a freshness commitment, and alerts when a refresh is late or a check fails.</li>
+            <li>Data contracts are agreed with the owners of ConsignTrack, Listings and Sales.</li>
+            <li>It has a catalog entry, lineage from source to metric, and access policies.</li>
+          </ul>
+        </div>
+
+        <div class="story">
+          <div class="head"><span class="id">E5-S2</span><h4>Weekly success scorecard</h4><span class="who">David · DPR-8</span></div>
+          <p class="so">So that we notice if the flag drifts outside its guardrails.</p>
+          <p class="ac">Done when</p>
+          <ul>
+            <li>Each <a href="phase-2-opportunity.html#metrics">success metric</a> is aggregated from the evaluation fields and shown against its target, by channel and contract size.</li>
+            <li>A metric outside its guardrail is visibly marked, from the first week of the pilot.</li>
+          </ul>
+        </div>
+      </div>
+    </details>
+
+    <details class="epic">
+      <summary><span>E6 · Questions in plain language</span><span class="count">2 stories</span><span class="ms">Later</span></summary>
+      <div class="inner">
+        <p class="epic-goal">The four discovery questions answered from the governed metrics, without a new report.</p>
+
+        <div class="story">
+          <div class="head"><span class="id">E6-S1</span><h4>Answer the discovery questions</h4><span class="who">Maria · DPR-9</span></div>
+          <p class="so">So that I don't need an analyst for each question.</p>
+          <p class="ac">Done when</p>
+          <ul>
+            <li>The <a href="phase-3-prd.html#questions-map">four discovery questions</a>, and rewordings of them, are answered only from catalog fields.</li>
+            <li>Every answer names the metric it used and the as-of date.</li>
+          </ul>
+        </div>
+
+        <div class="story">
+          <div class="head"><span class="id">E6-S2</span><h4>Safe and tested before Ops sees it</h4><span class="who">David · DPR-9, NFR-4</span></div>
+          <p class="so">So that I never get an invented number.</p>
+          <p class="ac">Done when</p>
+          <ul>
+            <li>Questions outside the governed metrics get a plain "not supported" that says what is supported.</li>
+            <li>Access is read-only and limited to catalog fields; attempts beyond that are logged.</li>
+            <li>A versioned set of at least 30 questions with known answers passes before Ops gets access.</li>
+          </ul>
+        </div>
+      </div>
+    </details>
+  </section>
+
+  <section class="section" aria-labelledby="refinement">
+    <h2 id="refinement">4. Refinement with the Tech Lead</h2>
+    <p>Tomás leads the Data Platform team: two data engineers and an analytics engineer, in two-week sprints. He read the PRD and the stories before the session, and we went through them in milestone order. His job in the room was the how and the when; mine was to answer what each story is for and to make the product calls only Product can make. Like the interviews, the session is simulated.</p>
+    <blockquote><p>"Most of this I can plan today. The two things I can't are the ones that aren't ours: the ConsignTrack change and the data contracts."</p></blockquote>
+
+    <details>
+      <summary>Session notes</summary>
+      <div class="inner qa">
+        <div><p class="q">Where would you start?</p><p class="a">"E1-S2. Before we commit to anything, I want a three-day spike on ConsignTrack's change history. If it keeps every edit to the estimate, recovery is a query. If it doesn't, your fallback kicks in, and I'd rather find that out in week one than in week six."</p><p class="d">→ The spike goes first, and its result is the first gate on the roadmap.</p></div>
+        <div><p class="q">Can E1-S1 hold up as written?</p><p class="a">"Not the last criterion. We can make every snapshot reproducible from the day we start landing them, but we can't reproduce snapshots we never took. For the last 12 months we rebuild the view as it stood each day, once, for the backtest. That's a different job, and it belongs with the backtest."</p><p class="d">→ Accepted. E1-S1 is reproducible from first landing; the 12-month rebuild moves into E3-S1.</p></div>
+        <div><p class="q">How do you want to take the three sources?</p><p class="a">"Full daily snapshots of all three, cut at the same timestamp. At a few thousand contracts it's cheap, and snapshots that never change give you reproducibility for free. We'd move to change capture only if volume grows."</p></div>
+        <div><p class="q">When systems disagree on status, which one wins?</p><p class="a">"That one's yours. Tell me and I'll build it."</p><p class="d">→ Product's call: ConsignTrack, the contract system of record. Disagreements are still reported.</p></div>
+        <div><p class="q">Which time zone defines a contract day?</p><p class="a">"Pacific, since that's where ConsignTrack sets expiry dates. But check it with Ops. It's a commercial date, not a technical one."</p><p class="d">→ Pacific by default, to confirm with Maria.</p></div>
+        <div><p class="q">And lots appraised as one line?</p><p class="a">"Treat a lot as one item for the pilot. Splitting it means parsing the appraisers' notes, and that's a project of its own."</p><p class="d">→ Accepted, with one condition: the completeness report shows how much appraised value sits in lots, so we see if the rule starts to matter.</p></div>
+        <div><p class="q">Where should Maria's morning list live?</p><p class="a">"Not the question interface; that's later. The Risk Book Summary is already in Tableau, so put the list there, and send a morning email with the top of the act tier and a link."</p></div>
+        <div><p class="q">Is the prototype useful to you?</p><p class="a">"As a spec, yes. We'll port the logic and use your worked example as the first test. The queries themselves don't ship."</p></div>
+        <div><p class="q">Ten weeks before anyone uses it is long. Can something ship earlier?</p><p class="a">"The contract book is cheap. It's mostly E1, which we build in the first two sprints anyway: a view and a page on top. The Midwest email is fine too, it's a query on tables we already have. What I won't do is pull the Tableau work into sprint 3. That competes with the backtest, and the backtest is the gate."</p><p class="d">→ The book ships in week 4 and the Midwest email right after the gate, in week 7. Tableau and the other regions stay in sprint 5. My trade: the Midwest pilot runs before the data contracts are signed, so Priya checks its reconciliation by hand.</p></div>
+        <div><p class="q">What worries you?</p><p class="a">"E5-S1. Data contracts with three other teams are mostly meetings. I can plan our side, not theirs. Start those conversations now, even if the epic is Next."</p><p class="d">→ I open the data contract conversations in sprint 1.</p></div>
+      </div>
+    </details>
+
+    <h3>What we decided</h3>
+    <div class="scroll">
+      <table class="decisions">
+        <thead><tr><th>Raised</th><th>Decision</th><th>Where</th></tr></thead>
+        <tbody>
+          <tr><td>Snapshots that were never taken can't be reproduced</td><td>E1-S1 is reproducible from first landing; the 12-month rebuild moves into the backtest</td><td>E1-S1, E3-S1</td></tr>
+          <tr><td>Recovering last year's appraisals is uncertain</td><td>A 3-day spike first; its result sets the first gate</td><td>E1-S2</td></tr>
+          <tr><td>How to take the three sources</td><td>Full daily snapshots, cut at one timestamp</td><td>Engineering</td></tr>
+          <tr><td>Which system wins on status</td><td>ConsignTrack; disagreements still reported</td><td>Product</td></tr>
+          <tr><td>Which time zone defines a day</td><td>Pacific, to confirm with Ops</td><td>Engineering, Ops</td></tr>
+          <tr><td>Lots appraised as one line</td><td>One item per lot; value in lots shown in the completeness report</td><td>Engineering, Product</td></tr>
+          <tr><td>Where the morning list lives</td><td>A Tableau view, plus a morning email with a link</td><td>Engineering</td></tr>
+          <tr><td>Data contracts depend on three other teams</td><td>Conversations start in sprint 1, ahead of the epic</td><td>Product</td></tr>
+          <tr><td>Nothing reaches users until week 10</td><td>Three releases: the contract book in week 4, a Midwest pilot in week 7, the full pilot in week 10. The gate stays in week 6</td><td>Product, Engineering</td></tr>
+          <tr><td>Hosting for the question layer</td><td>Open. Refined when E6 comes up</td><td>Later</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>One story, broken into technical tasks</h3>
+    <p>E1-S2, the intake appraisal, because it is the critical path and the clearest handoff. The tasks are Tomás's; the story above them is Product's.</p>
+    <div class="scroll">
+      <table>
+        <thead><tr><th>#</th><th>Task</th><th>Owner</th></tr></thead>
+        <tbody>
+          <tr><td class="n">T1</td><td>Spike, 3 days: does ConsignTrack's change history keep every estimate edit for 12 months? Output: a coverage estimate</td><td>Data eng</td></tr>
+          <tr><td class="n">T2</td><td>A write-once intake appraisal field in ConsignTrack, filled at intake</td><td class="ext">ConsignTrack team</td></tr>
+          <tr><td class="n">T3</td><td>Land the new field and add it to the data contract</td><td>Data eng</td></tr>
+          <tr><td class="n">T4</td><td>Recover historical intake values: the earliest estimate in change history for each item, marked as recovered, current or missing</td><td>Data eng</td></tr>
+          <tr><td class="n">T5</td><td>Apply the lot rule: one item per lot, with lot items marked</td><td>Analytics eng</td></tr>
+          <tr><td class="n">T6</td><td>Completeness check on every refresh: coverage, contracts below 95% marked, an alert if coverage drops</td><td>Analytics eng</td></tr>
+          <tr><td class="n">T7</td><td>Coverage report for the first gate</td><td>Analytics eng</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="note" style="margin-top:0">T2 sits in another team's release schedule. Their earliest slot is sprint 3, which is why the backtest runs on recovered history rather than waiting for the new field.</p>
+  </section>
+
+  <section class="section" aria-labelledby="roadmap">
+    <h2 id="roadmap">5. Roadmap</h2>
+    <p>Two layers, each owned by one side. Engineering planned the sprints, using their own method. I turned that plan into a roadmap: three releases so value reaches people before the full build is done, the two decisions that can move the date, and the dependencies outside the team.</p>
+
+    <div class="layer"><h3>Engineering's sprint plan</h3><span class="owner">Tomás</span></div>
+    <div class="scroll">
+      <table class="sprints">
+        <thead><tr><th>Sprint</th><th>Stories</th><th>Note</th></tr></thead>
+        <tbody>
+          <tr><td>1 · wk 1–2</td><td>E1-S1 snapshot, E1-S3 reconciliation, E1-S2 spike</td><td>Spike result in week 1</td></tr>
+          <tr><td>2 · wk 3–4</td><td>E1-S2 recovery and completeness, E2-S1 projection and flag, E2-S2 exposure, E4-S3 contract book</td><td>Release 1 at end of sprint</td></tr>
+          <tr><td>3 · wk 5–6</td><td>E2-S3 flag history, E3-S1 replay, E3-S2 go-live report</td><td>ConsignTrack ships the new field</td></tr>
+          <tr><td>4 · wk 7–8</td><td>E4-S1 morning list as a Midwest email, E5-S2 scorecard, E4-S2 exposure view</td><td>Release 2 in week 7</td></tr>
+          <tr><td>5 · wk 9–10</td><td>E4-S1 in Tableau for every region, E5-S1 operating commitments</td><td>Data contracts signed. Release 3</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="layer"><h3>The roadmap</h3><span class="owner">Product</span></div>
+    <figure>
+      <div class="scroll">
+        <div class="tl" role="img" aria-label="Roadmap over five two-week sprints. Now, sprints 1 to 3: trusted data, governed metrics, the contract book (release 1, week 4) and the backtest, with a gate on appraisal recovery in week 1 and a go/no-go gate at the end of week 6. Next, sprints 4 and 5: the Midwest pilot (release 2, week 7), then every region (release 3, week 10), and running it as a product. ConsignTrack ships its field in sprint 3, and data contract conversations run from sprint 1 to 5. Later: questions in plain language, after the pilot reads out.">
+          <div class="hd lbl"></div><div class="hd">S1</div><div class="hd">S2</div><div class="hd">S3</div><div class="hd">S4</div><div class="hd">S5</div><div class="hd">Later</div>
+
+          <div class="row">E1 Trusted data<small>Now</small></div><div class="cell"><div class="bar"></div></div><div class="cell"><div class="bar"></div></div><div></div><div></div><div></div><div></div>
+          <div class="row">E2 Risk metrics<small>Now</small></div><div></div><div class="cell"><div class="bar"></div></div><div class="cell"><div class="bar"></div></div><div></div><div></div><div></div>
+          <div class="row">E3 Backtest<small>Now · gate</small></div><div></div><div></div><div class="cell"><div class="bar"></div></div><div></div><div></div><div></div>
+          <div class="row">E4 Ops &amp; Finance<small>Now → Next</small></div><div></div><div class="cell"><div class="bar"></div></div><div></div><div class="cell"><div class="bar next"></div></div><div class="cell"><div class="bar next"></div></div><div></div>
+          <div class="row">E5 Run as product<small>Next</small></div><div></div><div></div><div></div><div class="cell"><div class="bar next"></div></div><div class="cell"><div class="bar next"></div></div><div></div>
+          <div class="row">E6 Questions<small>Later</small></div><div></div><div></div><div></div><div></div><div></div><div class="cell"><div class="bar later"></div></div>
+          <div class="row">ConsignTrack field<small>Other team</small></div><div></div><div></div><div class="cell"><div class="bar ext"></div></div><div></div><div></div><div></div>
+          <div class="row">Data contracts<small>Other teams</small></div><div class="cell"><div class="bar talk"></div></div><div class="cell"><div class="bar talk"></div></div><div class="cell"><div class="bar talk"></div></div><div class="cell"><div class="bar talk"></div></div><div class="cell"><div class="bar talk"></div></div><div></div>
+          <div class="row">Gates</div><div class="gate">◆ 1</div><div></div><div class="gate">◆ 2</div><div></div><div></div><div></div>
+          <div class="row">Releases</div><div></div><div class="rel">R1 book</div><div></div><div class="rel">R2 Midwest</div><div class="rel">R3 all</div><div></div>
+          <div class="weeks"></div><div class="weeks">wk 2</div><div class="weeks">wk 4</div><div class="weeks">wk 6</div><div class="weeks">wk 8</div><div class="weeks">wk 10</div><div class="weeks">after readout</div>
+        </div>
+      </div>
+      <div class="tl-key">
+        <span><i style="background:var(--accent)"></i>Now</span>
+        <span><i style="background:var(--muted)"></i>Next</span>
+        <span><i style="border:1px dashed var(--muted)"></i>Later</span>
+        <span><i style="background:var(--risk)"></i>Another team ships</span>
+        <span><i style="border:1px dashed var(--risk)"></i>Conversations with other teams</span>
+      </div>
+    </figure>
+
+    <h3>The two decisions that can move the date</h3>
+    <div class="gates">
+      <article class="card">
+        <span class="when">◆ 1 · Week 1</span>
+        <h4>Can last year's appraisals be recovered?</h4>
+        <dl>
+          <dt>Pass</dt><dd>At least 95% of items on last year's contracts have a recovered intake appraisal. The backtest runs on real history.</dd>
+          <dt>Fail</dt><dd>The flag runs in the background on new contracts from sprint 3, when the new field ships, until a full 90-day window has closed. Both pilots move to about week 20. The contract book still ships in week 4.</dd>
+          <dt>Why first</dt><dd>It's the cheapest test of the assumption that moves the date the most.</dd>
+        </dl>
+      </article>
+      <article class="card">
+        <span class="when">◆ 2 · Week 6</span>
+        <h4>Does the flag hold on real history?</h4>
+        <dl>
+          <dt>Pass</dt><dd>The go-live report shows every <a href="phase-2-opportunity.html#go-live">criterion</a> met. The Midwest pilot starts in week 7.</dd>
+          <dt>Fail</dt><dd>The settings come back to Product. If another setting meets every guardrail, I decide whether to switch. If none does, no pilot starts, listing-activity signals move up from Next scope, and the contract book carries on.</dd>
+          <dt>Why here</dt><dd>No prediction reaches Ops until the flag is proven. The contract book, which predicts nothing, ships before it.</dd>
+        </dl>
+      </article>
+    </div>
+
+    <h3>Three releases</h3>
+    <p>Each release gives someone something they can use, and each has its own measure of success. The first doesn't depend on the flag, so it holds even if both gates go against us.</p>
+    <div class="scroll">
+      <table class="releases">
+        <thead><tr><th>Release</th><th>When</th><th>Who gets what</th><th>Success looks like</th></tr></thead>
+        <tbody>
+          <tr><td><strong>R1 · Contract book</strong></td><td class="when">Week 4</td><td>Priya gets the daily, reconciled view of every contract. David sees the exposure already locked in. Maria can sort contracts by days left and sales so far. No prediction yet.</td><td>The monthly report is built from the book instead of by hand, and David reports locked-in exposure from it</td></tr>
+          <tr><td><strong>R2 · Midwest pilot</strong></td><td class="when">Week 7</td><td>Maria gets the act list for the Midwest as a morning email, right after the flag passes on real history. The Midwest holds about half the exposure and a quarter of the contracts.</td><td>Maria works the list daily, and the first real lead-time and false-alarm figures come in, three weeks earlier than a single release</td></tr>
+          <tr><td><strong>R3 · Full pilot</strong></td><td class="when">Week 10</td><td>Every region, in Tableau. David's exposure view and the weekly scorecard. Data contracts signed and the product run to its commitments.</td><td>The scorecard stays inside its guardrails, and Priya stops checking reconciliation by hand</td></tr>
+          <tr><td><strong>Later · Questions</strong></td><td class="when">After readout</td><td>Plain-language questions for Ops and Finance. The PRD's Next scope is weighed at the same readout.</td><td>The question layer passes its test set before Ops gets access</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <nav class="pager" aria-label="Phases">
+    <a href="phase-4-prototype.html"><span class="dir">Previous</span>Phase 4 · Prototype &amp; validation</a>
+  </nav>
+</main>
+</body>
+</html>
