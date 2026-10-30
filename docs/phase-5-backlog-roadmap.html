@@ -289,7 +289,7 @@ table.releases td:last-child { color: var(--muted); font-size: 0.875rem; }
             <li>Act contracts are ranked by projected shortfall, watch contracts are listed apart, and contracts with nothing left to sell are left off.</li>
             <li>Each row shows days to expiry, whether a live auction is still possible, unsold value on a weak channel, and whether it is new today.</li>
             <li>Contracts that failed reconciliation are marked, not hidden, and the list is ready before the working day.</li>
-            <li>It reaches the Midwest first, as a morning email, then every region in Tableau.</li>
+            <li>It reaches the Midwest first, as a morning email, then every region on a dashboard.</li>
           </ul>
         </div>
 
@@ -388,9 +388,9 @@ table.releases td:last-child { color: var(--muted); font-size: 0.875rem; }
         <div><p class="q">When systems disagree on status, which one wins?</p><p class="a">"That one's yours. Tell me and I'll build it."</p><p class="d">→ Product's call: ConsignTrack, the contract system of record. Disagreements are still reported.</p></div>
         <div><p class="q">Which time zone defines a contract day?</p><p class="a">"Pacific, since that's where ConsignTrack sets expiry dates. But check it with Ops. It's a commercial date, not a technical one."</p><p class="d">→ Pacific by default, to confirm with Maria.</p></div>
         <div><p class="q">And lots appraised as one line?</p><p class="a">"Treat a lot as one item for the pilot. Splitting it means parsing the appraisers' notes, and that's a project of its own."</p><p class="d">→ Accepted, with one condition: the completeness report shows how much appraised value sits in lots, so we see if the rule starts to matter.</p></div>
-        <div><p class="q">Where should Maria's morning list live?</p><p class="a">"Not the question interface; that's later. The Risk Book Summary is already in Tableau, so put the list there, and send a morning email with the top of the act tier and a link."</p></div>
+        <div><p class="q">Where should Maria's morning list live?</p><p class="a">"Not the question interface; that's later. Put the list on a dashboard next to the reports Ops and Finance already use, and send a morning email with the top of the act tier and a link."</p></div>
         <div><p class="q">Is the prototype useful to you?</p><p class="a">"As a spec, yes. We'll port the logic and use your worked example as the first test. The queries themselves don't ship."</p></div>
-        <div><p class="q">Ten weeks before anyone uses it is long. Can something ship earlier?</p><p class="a">"The contract book is cheap. It's mostly E1, which we build in the first two sprints anyway: a view and a page on top. The Midwest email is fine too, it's a query on tables we already have. What I won't do is pull the Tableau work into sprint 3. That competes with the backtest, and the backtest is the gate."</p><p class="d">→ The book ships in week 4 and the Midwest email right after the gate, in week 7. Tableau and the other regions stay in sprint 5. My trade: the Midwest pilot runs before the data contracts are signed, so Priya checks its reconciliation by hand.</p></div>
+        <div><p class="q">Ten weeks before anyone uses it is long. Can something ship earlier?</p><p class="a">"The contract book is cheap. It's mostly E1, which we build in the first two sprints anyway: a view and a page on top. The Midwest email is fine too, it's a query on tables we already have. What I won't do is pull the dashboard work into sprint 3. That competes with the backtest, and the backtest is the gate."</p><p class="d">→ The book ships in week 4 and the Midwest email right after the gate, in week 7. The dashboard and the other regions stay in sprint 5. My trade: the Midwest pilot runs before the data contracts are signed, so Priya checks its reconciliation by hand.</p></div>
         <div><p class="q">What worries you?</p><p class="a">"E5-S1. Data contracts with three other teams are mostly meetings. I can plan our side, not theirs. Start those conversations now, even if the epic is Next."</p><p class="d">→ I open the data contract conversations in sprint 1.</p></div>
       </div>
     </details>
@@ -406,7 +406,7 @@ table.releases td:last-child { color: var(--muted); font-size: 0.875rem; }
           <tr><td>Which system wins on status</td><td>ConsignTrack; disagreements still reported</td><td>Product</td></tr>
           <tr><td>Which time zone defines a day</td><td>Pacific, to confirm with Ops</td><td>Engineering, Ops</td></tr>
           <tr><td>Lots appraised as one line</td><td>One item per lot; value in lots shown in the completeness report</td><td>Engineering, Product</td></tr>
-          <tr><td>Where the morning list lives</td><td>A Tableau view, plus a morning email with a link</td><td>Engineering</td></tr>
+          <tr><td>Where the morning list lives</td><td>A dashboard, plus a morning email with a link</td><td>Engineering</td></tr>
           <tr><td>Data contracts depend on three other teams</td><td>Conversations start in sprint 1, ahead of the epic</td><td>Product</td></tr>
           <tr><td>Nothing reaches users until week 10</td><td>Three releases: the contract book in week 4, a Midwest pilot in week 7, the full pilot in week 10. The gate stays in week 6</td><td>Product, Engineering</td></tr>
           <tr><td>Hosting for the question layer</td><td>Open. Refined when E6 comes up</td><td>Later</td></tr>
@@ -446,7 +446,7 @@ table.releases td:last-child { color: var(--muted); font-size: 0.875rem; }
           <tr><td>2 · wk 3–4</td><td>E1-S2 recovery and completeness, E2-S1 projection and flag, E2-S2 exposure, E4-S3 contract book</td><td>Release 1 at end of sprint</td></tr>
           <tr><td>3 · wk 5–6</td><td>E2-S3 flag history, E3-S1 replay, E3-S2 go-live report</td><td>ConsignTrack ships the new field</td></tr>
           <tr><td>4 · wk 7–8</td><td>E4-S1 morning list as a Midwest email, E5-S2 scorecard, E4-S2 exposure view</td><td>Release 2 in week 7</td></tr>
-          <tr><td>5 · wk 9–10</td><td>E4-S1 in Tableau for every region, E5-S1 operating commitments</td><td>Data contracts signed. Release 3</td></tr>
+          <tr><td>5 · wk 9–10</td><td>E4-S1 on a dashboard for every region, E5-S1 operating commitments</td><td>Data contracts signed. Release 3</td></tr>
         </tbody>
       </table>
     </div>
@@ -509,7 +509,7 @@ table.releases td:last-child { color: var(--muted); font-size: 0.875rem; }
         <tbody>
           <tr><td><strong>R1 · Contract book</strong></td><td class="when">Week 4</td><td>Priya gets the daily, reconciled view of every contract. David sees the exposure already locked in. Maria can sort contracts by days left and sales so far. No prediction yet.</td><td>The monthly report is built from the book instead of by hand, and David reports locked-in exposure from it</td></tr>
           <tr><td><strong>R2 · Midwest pilot</strong></td><td class="when">Week 7</td><td>Maria gets the act list for the Midwest as a morning email, right after the flag passes on real history. The Midwest holds about half the exposure and a quarter of the contracts.</td><td>Maria works the list daily, and the first real lead-time and false-alarm figures come in, three weeks earlier than a single release</td></tr>
-          <tr><td><strong>R3 · Full pilot</strong></td><td class="when">Week 10</td><td>Every region, in Tableau. David's exposure view and the weekly scorecard. Data contracts signed and the product run to its commitments.</td><td>The scorecard stays inside its guardrails, and Priya stops checking reconciliation by hand</td></tr>
+          <tr><td><strong>R3 · Full pilot</strong></td><td class="when">Week 10</td><td>Every region, on a dashboard. David's exposure view and the weekly scorecard. Data contracts signed and the product run to its commitments.</td><td>The scorecard stays inside its guardrails, and Priya stops checking reconciliation by hand</td></tr>
           <tr><td><strong>Later · Questions</strong></td><td class="when">After readout</td><td>Plain-language questions for Ops and Finance. The PRD's Next scope is weighed at the same readout.</td><td>The question layer passes its test set before Ops gets access</td></tr>
         </tbody>
       </table>

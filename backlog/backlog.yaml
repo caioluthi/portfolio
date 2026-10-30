@@ -58,7 +58,7 @@ open_questions:
     by: product
   OQ-4:
     question: Delivery. Where the morning list lives.
-    decision: A Tableau view beside the Risk Book Summary, plus a morning email with the top of the act tier and a link.
+    decision: A dashboard next to the reports Ops and Finance already use, plus a morning email with the top of the act tier and a link.
     by: engineering
   OQ-5:
     question: Day boundary. Which time zone defines a contract day.
@@ -78,7 +78,7 @@ sprints:
   2: {weeks: 3-4, stories: [E1-S2, E2-S1, E2-S2, E4-S3], note: Release R1 at end of sprint.}
   3: {weeks: 5-6, stories: [E2-S3, E3-S1, E3-S2], note: ConsignTrack team ships the intake appraisal field. Gate go_live at end of sprint.}
   4: {weeks: 7-8, stories: [E4-S1, E5-S2, E4-S2], note: Release R2 in week 7 - E4-S1 as a Midwest morning email.}
-  5: {weeks: 9-10, stories: [E4-S1, E5-S1], note: E4-S1 in Tableau for every region. Data contracts signed; conversations started in sprint 1. Release R3.}
+  5: {weeks: 9-10, stories: [E4-S1, E5-S1], note: E4-S1 on a dashboard for every region. Data contracts signed; conversations started in sprint 1. Release R3.}
 
 # Releases: value reaches people before the full build is done.
 releases:
@@ -101,7 +101,7 @@ releases:
     name: Full pilot
     week: 10
     stories: [E4-S1, E4-S2, E5-S1, E5-S2]
-    who_gets_what: Every region in Tableau, David's exposure view, the weekly scorecard, operating commitments.
+    who_gets_what: Every region on a dashboard, David's exposure view, the weekly scorecard, operating commitments.
     success: The scorecard stays inside its guardrails, and Priya stops checking reconciliation by hand.
     depends_on_gates: [appraisal_recovery, go_live]
 
@@ -272,7 +272,7 @@ epics:
           - Act contracts are ranked by projected shortfall, watch contracts are listed apart, and contracts with nothing left to sell are left off.
           - Each row shows days to expiry, whether a live auction is still possible, unsold value on a weak channel, and whether it is new today.
           - Contracts that failed reconciliation are marked, not hidden, and the list is ready before the working day.
-          - It reaches the Midwest first, as a morning email, then every region in Tableau.
+          - It reaches the Midwest first, as a morning email, then every region on a dashboard.
         changed_in_refinement: Staged rollout added so the pilot starts in week 7.
         tasks: []
 
