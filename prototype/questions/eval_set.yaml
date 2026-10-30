@@ -1,0 +1,356 @@
+# Evaluation set for the plain-language question layer (Phase 4, Q5).
+#
+# Every question has the behavior it should get and, where it should be
+# answered, SQL that computes the right answer straight from the governed
+# views, without the model. The scorer runs that SQL at scoring time, so the
+# expected answers follow the data after any rebuild; nothing here is a
+# hand-typed number.
+#
+# Pass bar (docs/phase-4-prototype.html#done): every in-scope question answered
+# correctly, every out-of-scope question declined.
+#
+# behavior   answer | decline | clarify, or a list when more than one is right
+# truth      SQL over {dataset}; its rows are what the checks compare against
+# checks
+#   ids_exact    column: the answer's contract_ids must equal this set
+#   ids_include  column: the answer's contract_ids must include this set
+#   numbers      columns: each value (first row) must appear in the answer's
+#                figures, within 1% (or 0.01 for shares and ratios)
+#   pairs        [key column, value column]: every row must appear in the
+#                answer's pairs, such as art -> live
+#   tool         the answer must have used this tool
+#
+# "Today" is the prototype's today, flag_parameters.today (2026-09-30).
+
+groups:
+  discovery: The four questions Ops and Finance asked in discovery (Phase 1)
+  reworded: The same four, asked differently; each should get the same answer as its original
+  in_scope: Other questions the governed fields can answer
+  out_of_scope: Questions the product must decline, giving the governed fact where one exists
+  ambiguous: Questions that need a clarifying question, or an answer that keeps act and watch apart
+
+questions:
+
+  # ---------------------------------------------------------------- discovery
+  - id: D1
+    group: discovery
+    question: How are contracts for consignor CN-00580 performing?
+    behavior: answer
+    truth: |
+      SELECT
+        COUNTIF(o.contract_id IS NOT NULL) AS closed,
+        COUNTIF(o.closed_below_target) AS closed_below_target,
+        COUNTIF(d.contract_id IS NOT NULL) AS active,
+        COUNTIF(d.risk_tier = 'act') AS active_act
+      FROM `{dataset}.raw_contracts` c
+      LEFT JOIN `{dataset}.contract_outcome` o USING (contract_id)
+      LEFT JOIN (
+        SELECT d.* FROM `{dataset}.contract_daily` d, `{dataset}.flag_parameters` p
+        WHERE d.as_of_date = p.today
+      ) d USING (contract_id)
+      WHERE c.consignor_id = 'CN-00580' AND c.status != 'cancelled'
+    also: |
+      SELECT d.contract_id FROM `{dataset}.contract_daily` d, `{dataset}.flag_parameters` p
+      WHERE d.as_of_date = p.today AND d.consignor_id = 'CN-00580' AND d.risk_tier = 'act'
+    checks:
+      numbers: [closed, closed_below_target, active]
+      ids_include: contract_id   # from `also`: the one active contract flagged act
+
+  - id: D2
+    group: discovery
+    question: Which asset types are underperforming, and which channel sells each of them best?
+    behavior: answer
+    truth: |
+      SELECT asset_type, channel, value_realization
+      FROM `{dataset}.channel_performance`
+      QUALIFY ROW_NUMBER() OVER (PARTITION BY asset_type ORDER BY value_realization DESC) = 1
+    checks:
+      pairs: [asset_type, channel]
+
+  - id: D3
+    group: discovery
+    question: Which contracts are almost due, expiring in the next 30 days, while still performing below target?
+    behavior: answer
+    truth: |
+      SELECT contract_id FROM `{dataset}.ops_morning_list`
+      WHERE risk_tier = 'act' AND days_to_expiry <= 30
+    checks:
+      ids_exact: contract_id
+
+  - id: D4
+    group: discovery
+    question: Are there specific regions or channels with performance issues?
+    behavior: answer
+    truth: |
+      SELECT
+        MAX(IF(dimension = 'region', value, NULL)) AS top_region,
+        MAX(IF(dimension = 'region', exposure_at_risk, NULL)) AS top_region_exposure,
+        MAX(IF(dimension = 'channel', value, NULL)) AS top_channel,
+        MAX(IF(dimension = 'channel', exposure_at_risk, NULL)) AS top_channel_exposure
+      FROM (
+        SELECT * FROM `{dataset}.finance_exposure`
+        WHERE dimension IN ('region', 'channel')
+        QUALIFY ROW_NUMBER() OVER (PARTITION BY dimension ORDER BY exposure_at_risk DESC) = 1
+      )
+    checks:
+      numbers: [top_region_exposure, top_channel_exposure]
+
+  # ----------------------------------------------------------------- reworded
+  - id: R1
+    group: reworded
+    of: D1
+    question: What's the track record of consignor CN-00580?
+    behavior: answer
+    truth: |
+      SELECT COUNT(*) AS closed, COUNTIF(closed_below_target) AS closed_below_target
+      FROM `{dataset}.contract_outcome` WHERE consignor_id = 'CN-00580'
+    checks:
+      numbers: [closed, closed_below_target]
+
+  - id: R2
+    group: reworded
+    of: D1
+    question: How many of CN-00580's contracts have ended below target?
+    behavior: answer
+    truth: |
+      SELECT COUNTIF(closed_below_target) AS closed_below_target
+      FROM `{dataset}.contract_outcome` WHERE consignor_id = 'CN-00580'
+    checks:
+      numbers: [closed_below_target]
+
+  - id: R3
+    group: reworded
+    of: D2
+    question: Where do watches sell best?
+    behavior: answer
+    truth: |
+      SELECT asset_type, channel, value_realization
+      FROM `{dataset}.channel_performance` WHERE asset_type = 'watches'
+      QUALIFY ROW_NUMBER() OVER (ORDER BY value_realization DESC) = 1
+    checks:
+      pairs: [asset_type, channel]
+      numbers: [value_realization]
+
+  - id: R4
+    group: reworded
+    of: D2
+    question: Which item type fetches the least of its appraised value on the app?
+    behavior: answer
+    truth: |
+      SELECT asset_type, channel, value_realization
+      FROM `{dataset}.channel_performance` WHERE channel = 'app'
+      QUALIFY ROW_NUMBER() OVER (ORDER BY value_realization) = 1
+    checks:
+      pairs: [asset_type, channel]
+      numbers: [value_realization]
+
+  - id: R5
+    group: reworded
+    of: D3
+    question: What's at risk and running out of time, expiring within two weeks?
+    behavior: answer
+    truth: |
+      SELECT contract_id FROM `{dataset}.ops_morning_list`
+      WHERE risk_tier = 'act' AND days_to_expiry <= 14
+    checks:
+      ids_exact: contract_id
+
+  - id: R6
+    group: reworded
+    of: D3
+    question: Show me the flagged contracts closing in the next 30 days, biggest shortfall first.
+    behavior: answer
+    truth: |
+      SELECT contract_id FROM `{dataset}.ops_morning_list`
+      WHERE risk_tier = 'act' AND days_to_expiry <= 30
+    checks:
+      ids_exact: contract_id
+
+  - id: R7
+    group: reworded
+    of: D4
+    question: Which region has the most money at risk?
+    behavior: answer
+    truth: |
+      SELECT value AS region, exposure_at_risk FROM `{dataset}.finance_exposure`
+      WHERE dimension = 'region' ORDER BY exposure_at_risk DESC LIMIT 1
+    checks:
+      numbers: [exposure_at_risk]
+
+  - id: R8
+    group: reworded
+    of: D4
+    question: How much exposure sits on the live auction channel?
+    behavior: answer
+    truth: |
+      SELECT exposure_at_risk FROM `{dataset}.finance_exposure`
+      WHERE dimension = 'channel' AND value = 'live'
+    checks:
+      numbers: [exposure_at_risk]
+
+  # ----------------------------------------------------------------- in scope
+  - id: I1
+    group: in_scope
+    question: What's on the morning list today?
+    behavior: answer
+    truth: |
+      SELECT COUNTIF(risk_tier = 'act') AS act, COUNTIF(risk_tier = 'watch') AS watch
+      FROM `{dataset}.ops_morning_list`
+    checks:
+      numbers: [act, watch]
+
+  - id: I2
+    group: in_scope
+    question: What's our total exposure at risk right now?
+    behavior: answer
+    truth: |
+      SELECT exposure_at_risk FROM `{dataset}.finance_exposure` WHERE dimension = 'book'
+    checks:
+      numbers: [exposure_at_risk]
+
+  - id: I3
+    group: in_scope
+    question: How much of our exposure is already locked in, with nothing left to sell?
+    behavior: answer
+    truth: |
+      SELECT exposure_locked_in FROM `{dataset}.finance_exposure` WHERE dimension = 'book'
+    checks:
+      numbers: [exposure_locked_in]
+
+  - id: I4
+    group: in_scope
+    question: Has exposure gone up or down over the last four weeks?
+    behavior: answer
+    truth: |
+      SELECT
+        MAX(IF(t.as_of_date = p.today, t.exposure_at_risk, NULL)) AS today_exposure,
+        IF(MAX(IF(t.as_of_date = p.today, t.exposure_at_risk, NULL))
+           > MAX(IF(t.as_of_date = DATE_SUB(p.today, INTERVAL 28 DAY), t.exposure_at_risk, NULL)),
+           'up', 'down') AS direction,
+        'trend' AS trend
+      FROM `{dataset}.finance_exposure_trend` t, `{dataset}.flag_parameters` p
+      GROUP BY p.today
+    checks:
+      numbers: [today_exposure]
+      pairs: [trend, direction]
+
+  - id: I5
+    group: in_scope
+    question: What happened with contract CT-EXAMPLE?
+    behavior: answer
+    truth: |
+      SELECT target_price, realized_sales_at_close
+      FROM `{dataset}.contract_outcome` WHERE contract_id = 'CT-EXAMPLE'
+    checks:
+      numbers: [target_price, realized_sales_at_close]
+
+  - id: I6
+    group: in_scope
+    question: Which contracts were flagged act for the first time in the last week?
+    behavior: answer
+    truth: |
+      SELECT d.contract_id
+      FROM `{dataset}.contract_daily` d, `{dataset}.flag_parameters` p
+      WHERE d.as_of_date = p.today AND d.risk_tier = 'act'
+        AND d.contract_id IN (
+          SELECT contract_id FROM `{dataset}.contract_daily`
+          GROUP BY 1
+          HAVING MIN(IF(risk_tier = 'act', as_of_date, NULL)) > DATE_SUB(p.today, INTERVAL 7 DAY)
+        )
+    checks:
+      ids_exact: contract_id
+
+  - id: I7
+    group: in_scope
+    question: Which flagged contracts can still go into a live auction?
+    behavior: answer
+    truth: |
+      SELECT contract_id FROM `{dataset}.ops_morning_list`
+      WHERE risk_tier = 'act' AND live_auction_possible
+    checks:
+      ids_exact: contract_id
+
+  - id: I8
+    group: in_scope
+    question: What's the difference between act and watch?
+    behavior: answer
+    checks:
+      tool: definitions
+
+  # ------------------------------------------------------------- out of scope
+  - id: O1
+    group: out_of_scope
+    question: Should we move the unsold items on CT-02063 to a live auction?
+    behavior: decline
+    note: A recommendation. Decline it, but give the governed facts behind it.
+    truth: |
+      SELECT unsold_on_weak_channel FROM `{dataset}.ops_morning_list` WHERE contract_id = 'CT-02063'
+    checks:
+      numbers: [unsold_on_weak_channel]
+
+  - id: O2
+    group: out_of_scope
+    question: What's our profit on Risk contracts this quarter?
+    behavior: decline
+    note: No governed profit metric.
+
+  - id: O3
+    group: out_of_scope
+    question: How much upside revenue will the over-target tiers bring in this quarter?
+    behavior: decline
+    note: The tier schedule is carried for context and isn't used by pilot metrics.
+
+  - id: O4
+    group: out_of_scope
+    question: What will our total exposure be at the end of October?
+    behavior: decline
+    note: A forecast. Exposure is only known up to today.
+
+  - id: O5
+    group: out_of_scope
+    question: What's the phone number of the consignor behind CT-02063?
+    behavior: decline
+    note: No contact details in the data product, by design.
+
+  - id: O6
+    group: out_of_scope
+    question: What was our exposure in January 2025?
+    behavior: decline
+    note: Before the data starts (July 2025).
+
+  # ---------------------------------------------------------------- ambiguous
+  - id: A1
+    group: ambiguous
+    question: How are we doing?
+    behavior: clarify
+
+  - id: A2
+    group: ambiguous
+    question: Which contracts are at risk?
+    behavior: [answer, clarify]
+    note: If answered, act and watch must be kept apart, and the act count includes contracts with nothing left to sell.
+    truth: |
+      SELECT COUNTIF(risk_tier = 'act') AS act, COUNTIF(risk_tier = 'watch') AS watch
+      FROM `{dataset}.contract_daily` d, `{dataset}.flag_parameters` p
+      WHERE d.as_of_date = p.today
+    checks:
+      numbers: [act, watch]
+
+  - id: A3
+    group: ambiguous
+    question: Which contracts are pacing below target?
+    behavior: [answer, clarify]
+    note: >-
+      "Pacing" is the old linear flag. The answer should use the risk flag that replaced it and
+      say so, rather than list every contract with pacing_pct below 1.
+    truth: |
+      SELECT COUNTIF(risk_tier = 'act') AS act
+      FROM `{dataset}.contract_daily` d, `{dataset}.flag_parameters` p
+      WHERE d.as_of_date = p.today
+    checks:
+      numbers: [act]
+
+  - id: A4
+    group: ambiguous
+    question: Show me the big ones.
+    behavior: clarify

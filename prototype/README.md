@@ -23,6 +23,7 @@ example. Sandbox tables expire after 60 days, so this command is the prototype.
 | `sql/` | The PRD's calculated fields as BigQuery views, under the PRD's names |
 | `metadata.yaml` | A description for every table, view and column, applied on every build; the build fails if a column is undocumented |
 | `checks/` | The PRD's worked example as an automated check |
+| `questions/` | Plain-language questions over the governed metrics, the 30-question evaluation set and its scorer. See [its README](questions/README.md) |
 
 ## How the book is calibrated
 

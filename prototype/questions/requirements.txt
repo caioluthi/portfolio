@@ -1,0 +1,4 @@
+anthropic>=0.40
+google-cloud-bigquery>=3.20
+pyyaml>=6
+streamlit>=1.40
