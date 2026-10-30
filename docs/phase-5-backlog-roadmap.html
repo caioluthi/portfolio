@@ -30,7 +30,8 @@ details.epic summary .count { font-family: var(--font-mono); font-size: 0.75rem;
 .story { border-top: 1px solid var(--rule); padding-top: 1rem; display: flex; flex-direction: column; gap: 0.375rem; }
 .story:first-of-type { border-top: 0; padding-top: 0; }
 .story .head { display: flex; flex-wrap: wrap; gap: 0.25rem 0.75rem; align-items: baseline; }
-.story .id { font-family: var(--font-mono); font-size: 0.8125rem; color: var(--accent); }
+.story .id { font-family: var(--font-mono); font-size: 0.8125rem; color: var(--accent); text-decoration: none; }
+.story a.id:hover { text-decoration: underline; }
 .story .who { font-size: 0.8125rem; color: var(--muted); }
 .story .so { font-size: 0.9375rem; font-style: italic; color: var(--fg); max-width: 38rem; }
 .story ul { font-size: 0.9375rem; max-width: 38rem; gap: 0.25rem; }
@@ -151,12 +152,12 @@ table.releases td:last-child { color: var(--muted); font-size: 0.875rem; }
       <table class="epics">
         <thead><tr><th>#</th><th>Epic</th><th>Outcome</th><th>Traces</th><th>When</th></tr></thead>
         <tbody>
-          <tr><td class="n">E1</td><td><strong>Trusted contract data</strong></td><td>One daily, reconciled, reproducible snapshot of every contract, its assets and sales</td><td class="trace"><a href="phase-3-prd.html#dpr-1">DPR-1</a>, <a href="phase-3-prd.html#dpr-2">2</a> · NFR-1, 3, 5</td><td><span class="ms now">Now</span></td></tr>
-          <tr><td class="n">E2</td><td><strong>Governed risk metrics</strong></td><td>The projection, flag and exposure defined once, with daily flag history</td><td class="trace"><a href="phase-3-prd.html#dpr-3">DPR-3</a>, <a href="phase-3-prd.html#dpr-6">6</a> · NFR-2</td><td><span class="ms now">Now</span></td></tr>
-          <tr><td class="n">E3</td><td><strong>Go-live backtest</strong></td><td>The pilot settings proven on real history, ending in a go/no-go report</td><td class="trace"><a href="phase-3-prd.html#dpr-7">DPR-7</a></td><td><span class="ms now">Now · gate</span></td></tr>
-          <tr><td class="n">E4</td><td><strong>Ops and Finance views</strong></td><td>The contract book, Maria's morning list and David's exposure rollups</td><td class="trace"><a href="phase-3-prd.html#dpr-1">DPR-1</a>, <a href="phase-3-prd.html#dpr-4">4</a>, <a href="phase-3-prd.html#dpr-5">5</a></td><td><span class="ms now">Now</span> → <span class="ms next">Next</span></td></tr>
-          <tr><td class="n">E5</td><td><strong>Run it as a product</strong></td><td>An owner, commitments people can rely on, and the weekly success scorecard</td><td class="trace"><a href="phase-3-prd.html#dpr-8">DPR-8</a> · NFR-1–5</td><td><span class="ms next">Next</span></td></tr>
-          <tr><td class="n">E6</td><td><strong>Questions in plain language</strong></td><td>Ops and Finance ask the discovery questions and get governed, tested answers</td><td class="trace"><a href="phase-3-prd.html#dpr-9">DPR-9</a> · NFR-4</td><td><span class="ms">Later</span></td></tr>
+          <tr><td class="n"><a href="https://github.com/caioluthi/portfolio/issues/1">E1</a></td><td><strong>Trusted contract data</strong></td><td>One daily, reconciled, reproducible snapshot of every contract, its assets and sales</td><td class="trace"><a href="phase-3-prd.html#dpr-1">DPR-1</a>, <a href="phase-3-prd.html#dpr-2">2</a> · NFR-1, 3, 5</td><td><span class="ms now">Now</span></td></tr>
+          <tr><td class="n"><a href="https://github.com/caioluthi/portfolio/issues/5">E2</a></td><td><strong>Governed risk metrics</strong></td><td>The projection, flag and exposure defined once, with daily flag history</td><td class="trace"><a href="phase-3-prd.html#dpr-3">DPR-3</a>, <a href="phase-3-prd.html#dpr-6">6</a> · NFR-2</td><td><span class="ms now">Now</span></td></tr>
+          <tr><td class="n"><a href="https://github.com/caioluthi/portfolio/issues/9">E3</a></td><td><strong>Go-live backtest</strong></td><td>The pilot settings proven on real history, ending in a go/no-go report</td><td class="trace"><a href="phase-3-prd.html#dpr-7">DPR-7</a></td><td><span class="ms now">Now · gate</span></td></tr>
+          <tr><td class="n"><a href="https://github.com/caioluthi/portfolio/issues/12">E4</a></td><td><strong>Ops and Finance views</strong></td><td>The contract book, Maria's morning list and David's exposure rollups</td><td class="trace"><a href="phase-3-prd.html#dpr-1">DPR-1</a>, <a href="phase-3-prd.html#dpr-4">4</a>, <a href="phase-3-prd.html#dpr-5">5</a></td><td><span class="ms now">Now</span> → <span class="ms next">Next</span></td></tr>
+          <tr><td class="n"><a href="https://github.com/caioluthi/portfolio/issues/16">E5</a></td><td><strong>Run it as a product</strong></td><td>An owner, commitments people can rely on, and the weekly success scorecard</td><td class="trace"><a href="phase-3-prd.html#dpr-8">DPR-8</a> · NFR-1–5</td><td><span class="ms next">Next</span></td></tr>
+          <tr><td class="n"><a href="https://github.com/caioluthi/portfolio/issues/19">E6</a></td><td><strong>Questions in plain language</strong></td><td>Ops and Finance ask the discovery questions and get governed, tested answers</td><td class="trace"><a href="phase-3-prd.html#dpr-9">DPR-9</a> · NFR-4</td><td><span class="ms">Later</span></td></tr>
         </tbody>
       </table>
     </div>
@@ -166,7 +167,7 @@ table.releases td:last-child { color: var(--muted); font-size: 0.875rem; }
   <section class="section" aria-labelledby="stories">
     <h2 id="stories">3. Stories</h2>
     <p>Two or three functional stories per epic, written as outcomes. Product writes who it's for, why, and what done looks like. Engineering breaks each story into technical tasks in refinement, in <a href="#refinement">section 4</a>.</p>
-    <p class="legend">Persona names are from <a href="phase-1-discovery.html">discovery</a>: Maria in Ops, David in Finance, Priya in Data. Refinement changed E1-S1, E3-S1 and E4-S1 and added E4-S3; the versions shown here are after it.</p>
+    <p class="legend">Each story links to its <a href="https://github.com/caioluthi/portfolio/issues">GitHub issue</a>, with epics as parent issues and releases as milestones. Persona names are from <a href="phase-1-discovery.html">discovery</a>: Maria in Ops, David in Finance, Priya in Data. Refinement changed E1-S1, E3-S1 and E4-S1 and added E4-S3; the versions shown here are after it.</p>
 
     <details class="epic" open>
       <summary><span>E1 · Trusted contract data</span><span class="count">3 stories</span><span class="ms now">Now</span></summary>
@@ -174,7 +175,7 @@ table.releases td:last-child { color: var(--muted); font-size: 0.875rem; }
         <p class="epic-goal">One daily, reconciled, reproducible snapshot of every contract, its assets and sales.</p>
 
         <div class="story">
-          <div class="head"><span class="id">E1-S1</span><h4>One daily snapshot of every contract</h4><span class="who">Priya · DPR-1, NFR-1, NFR-3</span></div>
+          <div class="head"><a class="id" href="https://github.com/caioluthi/portfolio/issues/2">E1-S1 · #2</a><h4>One daily snapshot of every contract</h4><span class="who">Priya · DPR-1, NFR-1, NFR-3</span></div>
           <p class="so">So that a report becomes a query instead of an eight-hour project.</p>
           <p class="ac">Done when</p>
           <ul>
@@ -185,7 +186,7 @@ table.releases td:last-child { color: var(--muted); font-size: 0.875rem; }
         </div>
 
         <div class="story">
-          <div class="head"><span class="id">E1-S2</span><h4>A trustworthy intake appraisal</h4><span class="crit">Critical path</span><span class="who">Priya · NFR-5</span></div>
+          <div class="head"><a class="id" href="https://github.com/caioluthi/portfolio/issues/3">E1-S2 · #3</a><h4>A trustworthy intake appraisal</h4><span class="crit">Critical path</span><span class="who">Priya · NFR-5</span></div>
           <p class="so">So that the flag's key input can't be overwritten or quietly go missing.</p>
           <p class="ac">Done when</p>
           <ul>
@@ -196,7 +197,7 @@ table.releases td:last-child { color: var(--muted); font-size: 0.875rem; }
         </div>
 
         <div class="story">
-          <div class="head"><span class="id">E1-S3</span><h4>Reconciliation across the three systems</h4><span class="who">Priya · DPR-2</span></div>
+          <div class="head"><a class="id" href="https://github.com/caioluthi/portfolio/issues/4">E1-S3 · #4</a><h4>Reconciliation across the three systems</h4><span class="who">Priya · DPR-2</span></div>
           <p class="so">So that nobody acts on a number only one system believes.</p>
           <p class="ac">Done when</p>
           <ul>
@@ -214,7 +215,7 @@ table.releases td:last-child { color: var(--muted); font-size: 0.875rem; }
         <p class="epic-goal">The projection, flag and exposure defined once, with daily flag history. The PRD's worked example is the acceptance test throughout.</p>
 
         <div class="story">
-          <div class="head"><span class="id">E2-S1</span><h4>A daily projection and risk flag per contract</h4><span class="who">Maria · DPR-3</span></div>
+          <div class="head"><a class="id" href="https://github.com/caioluthi/portfolio/issues/6">E2-S1 · #6</a><h4>A daily projection and risk flag per contract</h4><span class="who">Maria · DPR-3</span></div>
           <p class="so">So that falling-behind contracts reach me while there's still time to act.</p>
           <p class="ac">Done when</p>
           <ul>
@@ -225,7 +226,7 @@ table.releases td:last-child { color: var(--muted); font-size: 0.875rem; }
         </div>
 
         <div class="story">
-          <div class="head"><span class="id">E2-S2</span><h4>Exposure and the facts Ops acts on</h4><span class="who">David, Maria · DPR-3</span></div>
+          <div class="head"><a class="id" href="https://github.com/caioluthi/portfolio/issues/7">E2-S2 · #7</a><h4>Exposure and the facts Ops acts on</h4><span class="who">David, Maria · DPR-3</span></div>
           <p class="so">So that both views read the same numbers.</p>
           <p class="ac">Done when</p>
           <ul>
@@ -235,7 +236,7 @@ table.releases td:last-child { color: var(--muted); font-size: 0.875rem; }
         </div>
 
         <div class="story">
-          <div class="head"><span class="id">E2-S3</span><h4>Flag history and evaluation fields</h4><span class="who">David · DPR-6, NFR-2</span></div>
+          <div class="head"><a class="id" href="https://github.com/caioluthi/portfolio/issues/8">E2-S3 · #8</a><h4>Flag history and evaluation fields</h4><span class="who">David · DPR-6, NFR-2</span></div>
           <p class="so">So that lead time and the other success metrics can be measured at all.</p>
           <p class="ac">Done when</p>
           <ul>
@@ -253,7 +254,7 @@ table.releases td:last-child { color: var(--muted); font-size: 0.875rem; }
         <p class="epic-goal">The pilot settings were chosen on a simulated book. Real history is a fresh test of that choice, and its result decides go-live.</p>
 
         <div class="story">
-          <div class="head"><span class="id">E3-S1</span><h4>Replay the pilot flag against today's practice</h4><span class="who">David · DPR-7</span></div>
+          <div class="head"><a class="id" href="https://github.com/caioluthi/portfolio/issues/10">E3-S1 · #10</a><h4>Replay the pilot flag against today's practice</h4><span class="who">David · DPR-7</span></div>
           <p class="so">So that we know how much earlier it would have caught last year's underperformers.</p>
           <p class="ac">Done when</p>
           <ul>
@@ -263,7 +264,7 @@ table.releases td:last-child { color: var(--muted); font-size: 0.875rem; }
         </div>
 
         <div class="story">
-          <div class="head"><span class="id">E3-S2</span><h4>Go-live report</h4><span class="who">David · DPR-7</span></div>
+          <div class="head"><a class="id" href="https://github.com/caioluthi/portfolio/issues/11">E3-S2 · #11</a><h4>Go-live report</h4><span class="who">David · DPR-7</span></div>
           <p class="so">So that the go-live decision is made on evidence, not opinion.</p>
           <p class="ac">Done when</p>
           <ul>
@@ -281,7 +282,7 @@ table.releases td:last-child { color: var(--muted); font-size: 0.875rem; }
         <p class="epic-goal">Put the flag in front of the people who act on it, with the changes from the <a href="phase-4-prototype.html#decisions">feedback sessions</a>.</p>
 
         <div class="story">
-          <div class="head"><span class="id">E4-S1</span><h4>Maria's morning list</h4><span class="who">Maria · DPR-5</span></div>
+          <div class="head"><a class="id" href="https://github.com/caioluthi/portfolio/issues/13">E4-S1 · #13</a><h4>Maria's morning list</h4><span class="who">Maria · DPR-5</span></div>
           <p class="so">So that I open the contracts that matter most first.</p>
           <p class="ac">Done when</p>
           <ul>
@@ -293,7 +294,7 @@ table.releases td:last-child { color: var(--muted); font-size: 0.875rem; }
         </div>
 
         <div class="story">
-          <div class="head"><span class="id">E4-S2</span><h4>David's exposure view</h4><span class="who">David · DPR-4</span></div>
+          <div class="head"><a class="id" href="https://github.com/caioluthi/portfolio/issues/14">E4-S2 · #14</a><h4>David's exposure view</h4><span class="who">David · DPR-4</span></div>
           <p class="so">So that I can see where the book is at risk without waiting for the quarterly report.</p>
           <p class="ac">Done when</p>
           <ul>
@@ -304,7 +305,7 @@ table.releases td:last-child { color: var(--muted); font-size: 0.875rem; }
         </div>
 
         <div class="story">
-          <div class="head"><span class="id">E4-S3</span><h4>The contract book</h4><span class="who">Priya, David, Maria · DPR-1, DPR-4</span></div>
+          <div class="head"><a class="id" href="https://github.com/caioluthi/portfolio/issues/15">E4-S3 · #15</a><h4>The contract book</h4><span class="who">Priya, David, Maria · DPR-1, DPR-4</span></div>
           <p class="so">So that the monthly report stops being built by hand, and the losses already locked in are visible before any prediction is.</p>
           <p class="ac">Done when</p>
           <ul>
@@ -322,7 +323,7 @@ table.releases td:last-child { color: var(--muted); font-size: 0.875rem; }
         <p class="epic-goal">What turns a pipeline into something people can rely on and judge. Both stories are needed by the first week of the pilot.</p>
 
         <div class="story">
-          <div class="head"><span class="id">E5-S1</span><h4>Operating commitments</h4><span class="who">Priya · NFR-1 to NFR-5</span></div>
+          <div class="head"><a class="id" href="https://github.com/caioluthi/portfolio/issues/17">E5-S1 · #17</a><h4>Operating commitments</h4><span class="who">Priya · NFR-1 to NFR-5</span></div>
           <p class="so">So that people can rely on it without checking it themselves.</p>
           <p class="ac">Done when</p>
           <ul>
@@ -333,7 +334,7 @@ table.releases td:last-child { color: var(--muted); font-size: 0.875rem; }
         </div>
 
         <div class="story">
-          <div class="head"><span class="id">E5-S2</span><h4>Weekly success scorecard</h4><span class="who">David · DPR-8</span></div>
+          <div class="head"><a class="id" href="https://github.com/caioluthi/portfolio/issues/18">E5-S2 · #18</a><h4>Weekly success scorecard</h4><span class="who">David · DPR-8</span></div>
           <p class="so">So that we notice if the flag drifts outside its guardrails.</p>
           <p class="ac">Done when</p>
           <ul>
@@ -350,7 +351,7 @@ table.releases td:last-child { color: var(--muted); font-size: 0.875rem; }
         <p class="epic-goal">The four discovery questions answered from the governed metrics, without a new report.</p>
 
         <div class="story">
-          <div class="head"><span class="id">E6-S1</span><h4>Answer the discovery questions</h4><span class="who">Maria · DPR-9</span></div>
+          <div class="head"><a class="id" href="https://github.com/caioluthi/portfolio/issues/20">E6-S1 · #20</a><h4>Answer the discovery questions</h4><span class="who">Maria · DPR-9</span></div>
           <p class="so">So that I don't need an analyst for each question.</p>
           <p class="ac">Done when</p>
           <ul>
@@ -360,7 +361,7 @@ table.releases td:last-child { color: var(--muted); font-size: 0.875rem; }
         </div>
 
         <div class="story">
-          <div class="head"><span class="id">E6-S2</span><h4>Safe and tested before Ops sees it</h4><span class="who">David · DPR-9, NFR-4</span></div>
+          <div class="head"><a class="id" href="https://github.com/caioluthi/portfolio/issues/21">E6-S2 · #21</a><h4>Safe and tested before Ops sees it</h4><span class="who">David · DPR-9, NFR-4</span></div>
           <p class="so">So that I never get an invented number.</p>
           <p class="ac">Done when</p>
           <ul>

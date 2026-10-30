@@ -14,6 +14,7 @@
 
 prd: https://caioluthi.github.io/portfolio/phase-3-prd.html
 page: https://caioluthi.github.io/portfolio/phase-5-backlog-roadmap.html
+issues: https://github.com/caioluthi/portfolio/issues
 
 tech_lead: Tomás, Tech Lead, Data Platform
 
@@ -107,6 +108,8 @@ releases:
 epics:
 
   - key: E1
+
+    issue: 1
     title: Trusted contract data
     outcome: One daily, reconciled, reproducible snapshot of every contract, its assets and sales.
     traces: [DPR-1, DPR-2, NFR-1, NFR-3, NFR-5]
@@ -114,6 +117,8 @@ epics:
     stories:
 
       - key: E1-S1
+
+        issue: 2
         title: One daily snapshot of every contract
         as: priya
         so_that: a report becomes a query instead of an eight-hour project
@@ -127,6 +132,8 @@ epics:
         tasks: []
 
       - key: E1-S2
+
+        issue: 3
         title: A trustworthy intake appraisal
         as: priya
         so_that: the flag's key input can't be overwritten or quietly go missing
@@ -139,7 +146,7 @@ epics:
           - Every refresh reports appraisal coverage, and contracts below 95% are marked.
         tasks:
           - {key: T1, owner: data eng, task: "Spike, 3 days: does ConsignTrack's change history keep every estimate edit for 12 months? Output: a coverage estimate."}
-          - {key: T2, owner: ConsignTrack team (external), task: A write-once intake appraisal field in ConsignTrack, filled at intake. Earliest slot is sprint 3.}
+          - {key: T2, owner: ConsignTrack team (external), task: "A write-once intake appraisal field in ConsignTrack, filled at intake. Earliest slot is sprint 3."}
           - {key: T3, owner: data eng, task: Land the new field and add it to the data contract.}
           - {key: T4, owner: data eng, task: "Recover historical intake values: the earliest estimate in change history for each item, marked as recovered, current or missing."}
           - {key: T5, owner: analytics eng, task: "Apply the lot rule: one item per lot, with lot items marked."}
@@ -147,6 +154,8 @@ epics:
           - {key: T7, owner: analytics eng, task: Coverage report for gate appraisal_recovery.}
 
       - key: E1-S3
+
+        issue: 4
         title: Reconciliation across the three systems
         as: priya
         so_that: nobody acts on a number only one system believes
@@ -159,6 +168,8 @@ epics:
         tasks: []
 
   - key: E2
+
+    issue: 5
     title: Governed risk metrics
     outcome: The projection, flag and exposure defined once, with daily flag history.
     traces: [DPR-3, DPR-6, NFR-2]
@@ -166,6 +177,8 @@ epics:
     stories:
 
       - key: E2-S1
+
+        issue: 6
         title: A daily projection and risk flag per contract
         as: maria
         so_that: falling-behind contracts reach me while there's still time to act
@@ -177,6 +190,8 @@ epics:
         tasks: []
 
       - key: E2-S2
+
+        issue: 7
         title: Exposure and the facts Ops acts on
         as: [david, maria]
         so_that: both views read the same numbers
@@ -187,6 +202,8 @@ epics:
         tasks: []
 
       - key: E2-S3
+
+        issue: 8
         title: Flag history and evaluation fields
         as: david
         so_that: lead time and the other success metrics can be measured at all
@@ -198,6 +215,8 @@ epics:
         tasks: []
 
   - key: E3
+
+    issue: 9
     title: Go-live backtest
     outcome: The pilot settings proven on real history, ending in a go/no-go report.
     traces: [DPR-7]
@@ -206,6 +225,8 @@ epics:
     stories:
 
       - key: E3-S1
+
+        issue: 10
         title: Replay the pilot flag against today's practice
         as: david
         so_that: we know how much earlier it would have caught last year's underperformers
@@ -218,6 +239,8 @@ epics:
         tasks: []
 
       - key: E3-S2
+
+        issue: 11
         title: Go-live report
         as: david
         so_that: the go-live decision is made on evidence, not opinion
@@ -229,6 +252,8 @@ epics:
         tasks: []
 
   - key: E4
+
+    issue: 12
     title: Ops and Finance views
     outcome: The contract book, Maria's morning list and David's exposure rollups.
     traces: [DPR-1, DPR-4, DPR-5]
@@ -236,6 +261,8 @@ epics:
     stories:
 
       - key: E4-S1
+
+        issue: 13
         title: Maria's morning list
         as: maria
         so_that: I open the contracts that matter most first
@@ -250,6 +277,8 @@ epics:
         tasks: []
 
       - key: E4-S2
+
+        issue: 14
         title: David's exposure view
         as: david
         so_that: I can see where the book is at risk without waiting for the quarterly report
@@ -261,6 +290,8 @@ epics:
         tasks: []
 
       - key: E4-S3
+
+        issue: 15
         title: The contract book
         as: [priya, david, maria]
         so_that: the monthly report stops being built by hand, and the losses already locked in are visible before any prediction is
@@ -273,6 +304,8 @@ epics:
         tasks: []
 
   - key: E5
+
+    issue: 16
     title: Run it as a product
     outcome: An owner, commitments people can rely on, and the weekly success scorecard.
     traces: [DPR-8, NFR-1, NFR-2, NFR-3, NFR-4, NFR-5]
@@ -280,6 +313,8 @@ epics:
     stories:
 
       - key: E5-S1
+
+        issue: 17
         title: Operating commitments
         as: priya
         so_that: people can rely on it without checking it themselves
@@ -291,6 +326,8 @@ epics:
         tasks: []
 
       - key: E5-S2
+
+        issue: 18
         title: Weekly success scorecard
         as: david
         so_that: we notice if the flag drifts outside its guardrails
@@ -301,6 +338,8 @@ epics:
         tasks: []
 
   - key: E6
+
+    issue: 19
     title: Questions in plain language
     outcome: Ops and Finance ask the discovery questions and get governed, tested answers.
     traces: [DPR-9, NFR-4]
@@ -308,6 +347,8 @@ epics:
     stories:
 
       - key: E6-S1
+
+        issue: 20
         title: Answer the discovery questions
         as: maria
         so_that: I don't need an analyst for each question
@@ -319,6 +360,8 @@ epics:
         tasks: []
 
       - key: E6-S2
+
+        issue: 21
         title: Safe and tested before Ops sees it
         as: david
         so_that: I never get an invented number
