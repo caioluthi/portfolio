@@ -3,14 +3,18 @@
   python run_eval.py                                 # Sonnet, all 30 questions
   python run_eval.py --model claude-haiku-5-5        # another model
   python run_eval.py --only D1 O1 A2                 # a few questions
+  python run_eval.py --runs 3                        # repeat, to measure consistency
   python run_eval.py --self-test                     # check the scorer, no API key needed
 
 Expected answers are not stored: each question's SQL computes them from the
 governed views at scoring time, so the eval follows the data after a rebuild.
 Scoring is deterministic; no model grades another model.
 
-Writes results/<model>.json (every answer, tool call and check) and
-results/report.md (all models run so far, side by side).
+The same question can get a different answer from one run to the next, so a
+question only counts as passed for a model if it passed in every run.
+
+Writes results/<model>.run<N>.json (every answer, tool call and check) and
+results/report.md (every model and run so far, side by side).
 """
 
 from __future__ import annotations
@@ -64,9 +68,12 @@ def score(q: dict, answer: dict, rows: list[dict], also: list[dict]) -> list[dic
     if answer.get("behavior") == "clarify" and "clarify" in allowed:
         return checks
     spec = q.get("checks", {})
-    ids = {i.upper() for i in answer.get("contract_ids", [])}
-    figures = [f["value"] for f in answer.get("figures", []) if isinstance(f.get("value"), (int, float))]
-    pairs = [(p["key"].lower(), p["value"].lower()) for p in answer.get("pairs", [])]
+    # Anything malformed simply doesn't count as evidence; it never crashes the run.
+    ids = {i.upper() for i in answer.get("contract_ids", []) if isinstance(i, str)}
+    figures = [f["value"] for f in answer.get("figures", [])
+               if isinstance(f, dict) and isinstance(f.get("value"), (int, float))]
+    pairs = [(str(p.get("key", "")).lower(), str(p.get("value", "")).lower())
+             for p in answer.get("pairs", []) if isinstance(p, dict)]
 
     if "ids_exact" in spec:
         expected = {r[spec["ids_exact"]] for r in also}
@@ -85,8 +92,10 @@ def score(q: dict, answer: dict, rows: list[dict], also: list[dict]) -> list[dic
         key_col, value_col = spec["pairs"]
         for r in rows:
             key, value = str(r[key_col]).lower(), str(r[value_col]).lower()
+            # Either direction counts: "watches -> live" and "live -> watches" say the same thing.
             checks.append({"check": f"pair {key}", "expected": value,
-                           "pass": any(key in k and value in v for k, v in pairs)})
+                           "pass": any((key in k and value in v) or (key in v and value in k)
+                                       for k, v in pairs)})
     if "tool" in spec:
         used = [t["tool"] for t in answer.get("tools_used", [])]
         checks.append({"check": "tool", "expected": spec["tool"], "got": used,
@@ -137,7 +146,7 @@ def self_test(questions: list[dict]) -> None:
 
 # --------------------------------------------------------------------- run
 
-def run_eval(model: str, questions: list[dict]) -> dict:
+def run_eval(model: str, questions: list[dict], run_number: int = 1) -> dict:
     from ask import ask, load_env  # imported here so the self-test needs no API key
     import anthropic
 
@@ -155,47 +164,64 @@ def run_eval(model: str, questions: list[dict]) -> dict:
                         "seconds": round(time.time() - started, 1)})
         print(f"{q['id']:4} {'PASS' if passed else 'FAIL'}  {answer.get('behavior', '?'):8} {q['question']}")
     usage = {k: sum(r["answer"]["usage"][k] for r in results) for k in ("input_tokens", "output_tokens")}
-    run = {"model": model, "run_at": time.strftime("%Y-%m-%d %H:%M"), "as_of": tools.today(),
+    run = {"model": model, "run": run_number, "run_at": time.strftime("%Y-%m-%d %H:%M"), "as_of": tools.today(),
            "passed": sum(r["pass"] for r in results), "total": len(results),
            "usage": usage, "cost_usd": cost(model, usage), "results": results}
     RESULTS.mkdir(exist_ok=True)
-    (RESULTS / f"{model}.json").write_text(json.dumps(run, indent=2, default=str))
-    print(f"\n{model}: {run['passed']} of {run['total']} passed")
+    (RESULTS / f"{model}.run{run_number}.json").write_text(json.dumps(run, indent=2, default=str))
+    print(f"\n{model} run {run_number}: {run['passed']} of {run['total']} passed\n")
     return run
 
 
 def write_report() -> None:
-    runs = [json.loads(p.read_text()) for p in sorted(RESULTS.glob("*.json"))]
+    runs = [json.loads(p.read_text()) for p in sorted(RESULTS.glob("*.run*.json"))]
     if not runs:
         return
-    groups = yaml.safe_load(EVAL_SET.read_text())["groups"]
+    meta = yaml.safe_load(EVAL_SET.read_text())
+    models = list(dict.fromkeys(r["model"] for r in runs))
+    by_model = {m: [r for r in runs if r["model"] == m] for m in models}
+
+    def every_run(model: str, qid: str) -> tuple[int, int]:
+        outcomes = [res["pass"] for run in by_model[model] for res in run["results"] if res["id"] == qid]
+        return sum(outcomes), len(outcomes)
+
     lines = ["# Question layer evaluation", "",
-             "Generated by `run_eval.py`. Expected answers are computed from the governed views "
-             "at scoring time; scoring is deterministic.", "",
-             "| Model | Passed | Questions | Tokens in | Tokens out | Cost |",
+             f"Generated by `run_eval.py` on the governed metrics as of {runs[0]['as_of']}. "
+             "Expected answers are computed from the governed views at scoring time; scoring is "
+             "deterministic. A question passes for a model only if it passed in every run.", "",
+             "| Model | Runs | Passed in every run | Each run | Tokens per run | Cost per run |",
              "|---|---|---|---|---|---|"]
-    for run in runs:
-        dollars = f"${run['cost_usd']:.2f}" if run["cost_usd"] is not None else "n/a"
-        lines.append(f"| {run['model']} | {run['passed']} | {run['total']} | "
-                     f"{run['usage']['input_tokens']:,} | {run['usage']['output_tokens']:,} | {dollars} |")
-    lines += ["", "## By group", "", "| Group | " + " | ".join(r["model"] for r in runs) + " |",
-              "|---|" + "---|" * len(runs)]
-    for group in groups:
-        cells = []
-        for run in runs:
-            in_group = [r for r in run["results"] if r["group"] == group]
-            cells.append(f"{sum(r['pass'] for r in in_group)} / {len(in_group)}" if in_group else "")
+    for m in models:
+        rs = by_model[m]
+        steady = sum(every_run(m, q["id"])[0] == len(rs) for q in meta["questions"])
+        tokens = sum(r["usage"]["input_tokens"] + r["usage"]["output_tokens"] for r in rs) // len(rs)
+        dollars = [r["cost_usd"] for r in rs if r["cost_usd"] is not None]
+        cost_cell = f"${sum(dollars) / len(dollars):.2f}" if dollars else "n/a"
+        lines.append(f"| {m} | {len(rs)} | {steady} of {len(meta['questions'])} | "
+                     f"{', '.join(str(r['passed']) for r in rs)} | {tokens:,} | {cost_cell} |")
+
+    lines += ["", "## By group (passed in every run)", "",
+              "| Group | " + " | ".join(models) + " |", "|---|" + "---|" * len(models)]
+    for group, description in meta["groups"].items():
+        ids = [q["id"] for q in meta["questions"] if q["group"] == group]
+        cells = [f"{sum(every_run(m, i)[0] == len(by_model[m]) for i in ids)} / {len(ids)}" for m in models]
         lines.append(f"| {group} | " + " | ".join(cells) + " |")
-    lines += ["", "## Failures", ""]
-    any_failure = False
-    for run in runs:
-        for r in run["results"]:
-            if r["pass"]:
+
+    lines += ["", "## Questions that failed at least once", ""]
+    shown = False
+    for q in meta["questions"]:
+        for m in models:
+            ok, total = every_run(m, q["id"])
+            if ok == total:
                 continue
-            any_failure = True
-            failed = "; ".join(f"{c['check']} expected {c['expected']}" for c in r["checks"] if not c["pass"])
-            lines.append(f"- **{run['model']} · {r['id']}** {r['question']} Got `{r['answer'].get('behavior')}`. Failed: {failed}")
-    if not any_failure:
+            shown = True
+            reasons = sorted({f"{c['check']} expected {c['expected']}"
+                              f"{'' if c['check'] != 'behavior' else ', got ' + str(c['got'])}"
+                              for run in by_model[m] for res in run["results"] if res["id"] == q["id"]
+                              for c in res["checks"] if not c["pass"]})
+            lines.append(f"- **{q['id']} · {m}**, passed {ok} of {total} runs. {q['question']} "
+                         f"Failed: {'; '.join(r[:300] for r in reasons)}")
+    if not shown:
         lines.append("None.")
     (RESULTS / "report.md").write_text("\n".join(lines) + "\n")
 
@@ -204,13 +230,15 @@ def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     parser.add_argument("--model", action="append", help="repeat to run several models")
     parser.add_argument("--only", nargs="+", help="question IDs")
+    parser.add_argument("--runs", type=int, default=1, help="runs per model")
     parser.add_argument("--self-test", action="store_true")
     args = parser.parse_args()
     questions = load_questions(args.only)
     if args.self_test:
         self_test(questions)
     for model in args.model or ["claude-sonnet-5-5"]:
-        run_eval(model, questions)
+        for run_number in range(1, args.runs + 1):
+            run_eval(model, questions, run_number)
     write_report()
 
 

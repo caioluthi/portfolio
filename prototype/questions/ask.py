@@ -21,6 +21,7 @@ import tools
 HERE = Path(__file__).parent
 DEFAULT_MODEL = "claude-sonnet-5-5"
 MAX_TURNS = 8
+MAX_OUTPUT_TOKENS = 8000  # long lists of contracts need room; a cut-off reply loses its structure
 
 
 def load_env() -> None:
@@ -30,6 +31,21 @@ def load_env() -> None:
             if "=" in line and not line.lstrip().startswith("#"):
                 key, value = line.split("=", 1)
                 os.environ.setdefault(key.strip(), value.strip().strip('"'))
+
+
+def normalize(answer: dict) -> dict:
+    """Some models send a list field as JSON text. Unpack it, and record that it happened."""
+    answer = dict(answer)
+    for field in ("contract_ids", "figures", "pairs"):
+        value = answer.get(field, [])
+        if isinstance(value, str):
+            try:
+                value = json.loads(value)
+            except json.JSONDecodeError:
+                value = []
+            answer.setdefault("repaired_fields", []).append(field)
+        answer[field] = value if isinstance(value, list) else []
+    return answer
 
 
 def system_prompt() -> str:
@@ -45,14 +61,18 @@ def ask(question: str, model: str = DEFAULT_MODEL, client: anthropic.Anthropic |
     for _ in range(MAX_TURNS):
         response = client.messages.create(
             model=model,
-            max_tokens=2000,
+            max_tokens=MAX_OUTPUT_TOKENS,
             system=system_prompt(),
             tools=tools.TOOLS + [tools.ANSWER_TOOL],
-            tool_choice={"type": "any"},  # always a tool: a data tool, or the final answer
+            tool_choice={"type": "auto"},  # some models don't accept forcing a tool call
             messages=messages,
         )
         usage["input_tokens"] += response.usage.input_tokens
         usage["output_tokens"] += response.usage.output_tokens
+        if response.stop_reason == "max_tokens":
+            return {"behavior": "error", "text": "The reply was cut off at the output limit.",
+                    "contract_ids": [], "figures": [], "pairs": [], "tools_used": trace,
+                    "usage": usage, "model": model}
         messages.append({"role": "assistant", "content": response.content})
 
         results = []
@@ -60,11 +80,13 @@ def ask(question: str, model: str = DEFAULT_MODEL, client: anthropic.Anthropic |
             if block.type != "tool_use":
                 continue
             if block.name == "answer":
-                return {**block.input, "tools_used": trace, "usage": usage, "model": model}
+                return {**normalize(block.input), "tools_used": trace, "usage": usage, "model": model}
             output = tools.call(block.name, block.input)
             trace.append({"tool": block.name, "input": block.input,
                           "rows": json.loads(output).get("row_count")})
             results.append({"type": "tool_result", "tool_use_id": block.id, "content": output})
+        if not results:  # replied in plain text: ask for the structured answer
+            results = [{"type": "text", "text": "Give your reply by calling the answer tool."}]
         messages.append({"role": "user", "content": results})
 
     return {"behavior": "error", "text": f"No answer after {MAX_TURNS} turns.", "contract_ids": [],

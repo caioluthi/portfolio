@@ -80,7 +80,7 @@ def p(name: str, kind: str, value) -> bigquery.ScalarQueryParameter:
 
 # --------------------------------------------------------------------- tools
 
-def morning_list(tier: str = "act", region: str | None = None, consignor_id: str | None = None,
+def morning_list(tier: str = "all", region: str | None = None, consignor_id: str | None = None,
                  max_days_to_expiry: int | None = None, live_auction_possible: bool | None = None,
                  first_act_within_days: int | None = None, limit: int = MAX_ROWS) -> dict:
     if tier not in TIERS:
@@ -243,7 +243,7 @@ TOOLS = [
         "input_schema": {
             "type": "object",
             "properties": {
-                "tier": {"type": "string", "enum": TIERS, "description": "act, watch or all. Default act."},
+                "tier": {"type": "string", "enum": TIERS, "description": "act, watch or all. Default all: the list is act contracts, then watch contracts as context."},
                 "region": {"type": "string"},
                 "consignor_id": {"type": "string", "description": "CN-nnnnn"},
                 "max_days_to_expiry": {"type": "integer", "description": "Only contracts expiring within this many days."},
@@ -324,7 +324,7 @@ ANSWER_TOOL = {
             "behavior": {"type": "string", "enum": ["answer", "decline", "clarify"]},
             "text": {"type": "string", "description": "The reply the user reads. Markdown allowed."},
             "contract_ids": {"type": "array", "items": {"type": "string"},
-                             "description": "Every contract the reply lists or relies on."},
+                             "description": "The contracts that answer the question. Leave out contracts mentioned only as excluded, borderline or for comparison."},
             "figures": {"type": "array", "items": {
                 "type": "object",
                 "properties": {"label": {"type": "string"}, "value": {"type": "number"}},

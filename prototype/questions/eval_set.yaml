@@ -264,9 +264,12 @@ questions:
     group: in_scope
     question: Which flagged contracts can still go into a live auction?
     behavior: answer
+    note: >-
+      "Flagged" is either tier (risk_flag), so watch contracts belong in the list, kept apart from act.
+      Corrected after the first runs, which expected act only.
     truth: |
       SELECT contract_id FROM `{dataset}.ops_morning_list`
-      WHERE risk_tier = 'act' AND live_auction_possible
+      WHERE live_auction_possible
     checks:
       ids_exact: contract_id
 

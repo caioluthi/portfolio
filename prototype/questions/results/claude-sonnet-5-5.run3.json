@@ -1,0 +1,4402 @@
+{
+  "model": "claude-sonnet-5-5",
+  "run": 3,
+  "run_at": "2026-10-30 20:19",
+  "as_of": "2026-09-30",
+  "passed": 30,
+  "total": 30,
+  "usage": {
+    "input_tokens": 371225,
+    "output_tokens": 35406
+  },
+  "cost_usd": 1.09651,
+  "results": [
+    {
+      "id": "D1",
+      "group": "discovery",
+      "question": "How are contracts for consignor CN-00580 performing?",
+      "pass": true,
+      "checks": [
+        {
+          "check": "behavior",
+          "expected": [
+            "answer"
+          ],
+          "got": "answer",
+          "pass": true
+        },
+        {
+          "check": "ids_include",
+          "expected": [
+            "CT-02104"
+          ],
+          "missing": [],
+          "pass": true
+        },
+        {
+          "check": "number closed",
+          "expected": 32,
+          "got": [
+            7,
+            1,
+            59600,
+            42095.94,
+            45990.08,
+            13609.92,
+            13,
+            0,
+            0,
+            348420,
+            0.0808,
+            32,
+            5,
+            27,
+            3
+          ],
+          "pass": true
+        },
+        {
+          "check": "number closed_below_target",
+          "expected": 5,
+          "got": [
+            7,
+            1,
+            59600,
+            42095.94,
+            45990.08,
+            13609.92,
+            13,
+            0,
+            0,
+            348420,
+            0.0808,
+            32,
+            5,
+            27,
+            3
+          ],
+          "pass": true
+        },
+        {
+          "check": "number active",
+          "expected": 7,
+          "got": [
+            7,
+            1,
+            59600,
+            42095.94,
+            45990.08,
+            13609.92,
+            13,
+            0,
+            0,
+            348420,
+            0.0808,
+            32,
+            5,
+            27,
+            3
+          ],
+          "pass": true
+        }
+      ],
+      "answer": {
+        "behavior": "answer",
+        "text": "CN-00580 is mostly performing well. As of 2026-09-30, one of its 7 active contracts is flagged at risk (act tier), and the shortfall on it is $13,610.\n\n**Active (7 contracts)**\n- **CT-02104** is flagged act. It has 13 days to expiry and a $59,600 target. Realized sales are $42,096 and the projected final value is $45,990. The projected shortfall is $13,610.\n- The other 6 are not flagged: CT-02018, CT-02028, CT-02139, CT-02173, CT-02426 and CT-02474. Their projected shortfall is $0.\n- Nothing is on watch, and nothing is locked in.\n- The consignor has $348,420 of unsold value. The share of that at risk is 0.08.\n\n**Closed (32 contracts)**\n- 27 closed at or above target.\n- 5 closed below target: CT-00158, CT-01299, CT-01461, CT-01521 and CT-01577. CT-01577 had no sales at close.\n- 3 contracts were flagged act and then recovered to close above target: CT-00499, CT-01608 and CT-01888.\n\nThe risk flag replaced the earlier linear pacing flag.",
+        "contract_ids": [
+          "CT-02104"
+        ],
+        "figures": [
+          {
+            "label": "active contracts",
+            "value": 7
+          },
+          {
+            "label": "active act contracts",
+            "value": 1
+          },
+          {
+            "label": "CT-02104 target",
+            "value": 59600
+          },
+          {
+            "label": "CT-02104 realized sales",
+            "value": 42095.94
+          },
+          {
+            "label": "CT-02104 projected final value",
+            "value": 45990.08
+          },
+          {
+            "label": "CT-02104 projected shortfall / exposure at risk",
+            "value": 13609.92
+          },
+          {
+            "label": "CT-02104 days to expiry",
+            "value": 13
+          },
+          {
+            "label": "exposure locked in",
+            "value": 0
+          },
+          {
+            "label": "exposure on watch",
+            "value": 0
+          },
+          {
+            "label": "unsold value",
+            "value": 348420
+          },
+          {
+            "label": "share of unsold value at risk",
+            "value": 0.0808
+          },
+          {
+            "label": "closed contracts",
+            "value": 32
+          },
+          {
+            "label": "closed below target",
+            "value": 5
+          },
+          {
+            "label": "closed at or above target",
+            "value": 27
+          },
+          {
+            "label": "false positives among closed",
+            "value": 3
+          }
+        ],
+        "pairs": [
+          {
+            "key": "consignor",
+            "value": "CN-00580"
+          },
+          {
+            "key": "overall",
+            "value": "mostly on target; one act-tier contract (CT-02104)"
+          }
+        ],
+        "tools_used": [
+          {
+            "tool": "contracts",
+            "input": {
+              "consignor_id": "CN-00580"
+            },
+            "rows": 39
+          },
+          {
+            "tool": "exposure",
+            "input": {
+              "dimension": "consignor",
+              "value": "CN-00580"
+            },
+            "rows": 1
+          }
+        ],
+        "usage": {
+          "input_tokens": 12984,
+          "output_tokens": 1256
+        },
+        "model": "claude-sonnet-5-5"
+      },
+      "seconds": 10.4
+    },
+    {
+      "id": "D2",
+      "group": "discovery",
+      "question": "Which asset types are underperforming, and which channel sells each of them best?",
+      "pass": true,
+      "checks": [
+        {
+          "check": "behavior",
+          "expected": [
+            "answer"
+          ],
+          "got": "answer",
+          "pass": true
+        },
+        {
+          "check": "pair art",
+          "expected": "live",
+          "pass": true
+        },
+        {
+          "check": "pair collectibles",
+          "expected": "website",
+          "pass": true
+        },
+        {
+          "check": "pair furniture",
+          "expected": "live",
+          "pass": true
+        },
+        {
+          "check": "pair handbags",
+          "expected": "app",
+          "pass": true
+        },
+        {
+          "check": "pair jewelry",
+          "expected": "live",
+          "pass": true
+        },
+        {
+          "check": "pair watches",
+          "expected": "live",
+          "pass": true
+        }
+      ],
+      "answer": {
+        "behavior": "answer",
+        "text": "All six asset types have contracts flagged **act** as of 2026-09-30, so none is clear. \"Underperforming\" here means the risk flag, which replaced the earlier linear pacing flag. Best channel is the one with the highest value realization, which combines price and sell-through, on contracts closed in the last 12 months.\n\n| Asset type | Exposure at risk (act) | Best channel (value realization) |\n|---|---|---|\n| Art | $93,844 | live (1.13) |\n| Watches | $91,139 | live (1.07) |\n| Furniture | $80,273 | live (1.05) |\n| Collectibles | $29,365 | website (0.92) |\n| Jewelry | $26,265 | live (1.01) |\n| Handbags | $15,296 | app (0.98) |\n\n- Exposure at risk includes amounts already locked in. Locked-in amounts are watches $52,186, furniture $20,625, handbags $5,460 and collectibles $176.\n- Watch-tier contracts are context only and are not in the figures above. Watch exposure is $26,061 for watches and $4,663 for handbags.\n- Book-wide there are 37 act contracts with $336,183 at risk, and 3 watch contracts with $30,724 on watch. A contract can cover more than one asset type, so the per-type contract counts overlap and shouldn't be added together.\n- Live is the best channel for four of the six types. Collectibles sell best on the website, and handbags on the app. Live is the weakest channel for handbags (0.79).",
+        "contract_ids": [],
+        "figures": [
+          {
+            "label": "art exposure at risk",
+            "value": 93843.98
+          },
+          {
+            "label": "watches exposure at risk",
+            "value": 91139.22
+          },
+          {
+            "label": "furniture exposure at risk",
+            "value": 80273.16
+          },
+          {
+            "label": "collectibles exposure at risk",
+            "value": 29364.7
+          },
+          {
+            "label": "jewelry exposure at risk",
+            "value": 26265.1
+          },
+          {
+            "label": "handbags exposure at risk",
+            "value": 15296.46
+          },
+          {
+            "label": "art live value realization",
+            "value": 1.1328
+          },
+          {
+            "label": "watches live value realization",
+            "value": 1.0713
+          },
+          {
+            "label": "furniture live value realization",
+            "value": 1.049
+          },
+          {
+            "label": "collectibles website value realization",
+            "value": 0.9198
+          },
+          {
+            "label": "jewelry live value realization",
+            "value": 1.0117
+          },
+          {
+            "label": "handbags app value realization",
+            "value": 0.9808
+          },
+          {
+            "label": "handbags live value realization",
+            "value": 0.794
+          },
+          {
+            "label": "watches locked in",
+            "value": 52186.28
+          },
+          {
+            "label": "furniture locked in",
+            "value": 20624.57
+          },
+          {
+            "label": "handbags locked in",
+            "value": 5460.39
+          },
+          {
+            "label": "collectibles locked in",
+            "value": 176.28
+          },
+          {
+            "label": "watches exposure on watch",
+            "value": 26061.14
+          },
+          {
+            "label": "handbags exposure on watch",
+            "value": 4663.06
+          },
+          {
+            "label": "book act contracts",
+            "value": 37
+          },
+          {
+            "label": "book watch contracts",
+            "value": 3
+          },
+          {
+            "label": "book exposure at risk",
+            "value": 336182.63
+          },
+          {
+            "label": "book exposure on watch",
+            "value": 30724.2
+          }
+        ],
+        "pairs": [
+          {
+            "key": "art",
+            "value": "live"
+          },
+          {
+            "key": "watches",
+            "value": "live"
+          },
+          {
+            "key": "furniture",
+            "value": "live"
+          },
+          {
+            "key": "collectibles",
+            "value": "website"
+          },
+          {
+            "key": "jewelry",
+            "value": "live"
+          },
+          {
+            "key": "handbags",
+            "value": "app"
+          }
+        ],
+        "tools_used": [
+          {
+            "tool": "exposure",
+            "input": {
+              "dimension": "asset_type"
+            },
+            "rows": 6
+          },
+          {
+            "tool": "channel_performance",
+            "input": {},
+            "rows": 18
+          },
+          {
+            "tool": "exposure",
+            "input": {
+              "dimension": "book"
+            },
+            "rows": 1
+          }
+        ],
+        "usage": {
+          "input_tokens": 9590,
+          "output_tokens": 1742
+        },
+        "model": "claude-sonnet-5-5"
+      },
+      "seconds": 15.2
+    },
+    {
+      "id": "D3",
+      "group": "discovery",
+      "question": "Which contracts are almost due, expiring in the next 30 days, while still performing below target?",
+      "pass": true,
+      "checks": [
+        {
+          "check": "behavior",
+          "expected": [
+            "answer"
+          ],
+          "got": "answer",
+          "pass": true
+        },
+        {
+          "check": "ids_exact",
+          "expected": [
+            "CT-02021",
+            "CT-02049",
+            "CT-02057",
+            "CT-02061",
+            "CT-02062",
+            "CT-02063",
+            "CT-02068",
+            "CT-02073",
+            "CT-02082",
+            "CT-02092",
+            "CT-02097",
+            "CT-02104",
+            "CT-02131",
+            "CT-02134",
+            "CT-02135",
+            "CT-02141",
+            "CT-02163",
+            "CT-02179"
+          ],
+          "missing": [],
+          "extra": [],
+          "pass": true
+        }
+      ],
+      "answer": {
+        "behavior": "answer",
+        "text": "As of 2026-09-30, 18 contracts expire within 30 days and are flagged by the risk flag. I used 30 days because you didn't give a number. All 18 are tier **act**, and none are watch. They are ranked by projected shortfall:\n\n| Rank | Contract | Days left | Projected shortfall | Projected share of target | Live auction possible |\n|---|---|---|---|---|---|\n| 1 | CT-02063 | 7 | $29,468 | 62% | No |\n| 2 | CT-02097 | 13 | $21,838 | 87% | No |\n| 3 | CT-02141 | 21 | $20,271 | 64% | Yes |\n| 4 | CT-02104 | 13 | $13,610 | 77% | No |\n| 5 | CT-02062 | 7 | $11,398 | 91% | No |\n| 6 | CT-02049 | 5 | $10,816 | 88% | No |\n| 7 | CT-02092 | 12 | $10,762 | 60% | No |\n| 8 | CT-02021 | 1 | $10,314 | 59% | No |\n| 9 | CT-02057 | 6 | $9,245 | 74% | No |\n| 10 | CT-02179 | 29 | $8,641 | 71% | Yes |\n| 17 | CT-02134 | 20 | $6,068 | 93% | Yes |\n| 18 | CT-02135 | 20 | $5,993 | 94% | Yes |\n| 19 | CT-02163 | 27 | $5,815 | 93% | Yes |\n| 20 | CT-02082 | 10 | $5,437 | 85% | No |\n| 28 | CT-02068 | 8 | $2,965 | 93% | No |\n| 29 | CT-02061 | 6 | $2,599 | 88% | No |\n| 30 | CT-02073 | 8 | $2,427 | 95% | No |\n| 31 | CT-02131 | 19 | $2,232 | 91% | Yes |\n\nThe rank numbers are positions on the full morning list. The gaps are act contracts that expire later than 30 days.\n\nAcross the book, 37 contracts are flagged act. 33 of them are on the morning list, and 4 have nothing left to sell. Their shortfall is locked in ($78,448) and is not on this list. Those 4 are not in the 18 above, so the list can't show whether any of them expire within 30 days.",
+        "contract_ids": [
+          "CT-02063",
+          "CT-02097",
+          "CT-02141",
+          "CT-02104",
+          "CT-02062",
+          "CT-02049",
+          "CT-02092",
+          "CT-02021",
+          "CT-02057",
+          "CT-02179",
+          "CT-02134",
+          "CT-02135",
+          "CT-02163",
+          "CT-02082",
+          "CT-02068",
+          "CT-02061",
+          "CT-02073",
+          "CT-02131"
+        ],
+        "figures": [
+          {
+            "label": "contracts expiring within 30 days and flagged",
+            "value": 18
+          },
+          {
+            "label": "book-wide act contracts",
+            "value": 37
+          },
+          {
+            "label": "act contracts on morning list",
+            "value": 33
+          },
+          {
+            "label": "act contracts with nothing left to sell",
+            "value": 4
+          },
+          {
+            "label": "exposure locked in",
+            "value": 78447.52
+          },
+          {
+            "label": "CT-02063 shortfall",
+            "value": 29467.67
+          },
+          {
+            "label": "CT-02097 shortfall",
+            "value": 21838.02
+          },
+          {
+            "label": "CT-02141 shortfall",
+            "value": 20271.33
+          },
+          {
+            "label": "CT-02104 shortfall",
+            "value": 13609.92
+          },
+          {
+            "label": "CT-02062 shortfall",
+            "value": 11398.08
+          },
+          {
+            "label": "CT-02049 shortfall",
+            "value": 10815.93
+          },
+          {
+            "label": "CT-02092 shortfall",
+            "value": 10761.69
+          },
+          {
+            "label": "CT-02021 shortfall",
+            "value": 10314.45
+          },
+          {
+            "label": "CT-02057 shortfall",
+            "value": 9245.38
+          },
+          {
+            "label": "CT-02179 shortfall",
+            "value": 8640.89
+          },
+          {
+            "label": "CT-02134 shortfall",
+            "value": 6067.55
+          },
+          {
+            "label": "CT-02135 shortfall",
+            "value": 5993.16
+          },
+          {
+            "label": "CT-02163 shortfall",
+            "value": 5814.53
+          },
+          {
+            "label": "CT-02082 shortfall",
+            "value": 5436.81
+          },
+          {
+            "label": "CT-02068 shortfall",
+            "value": 2965.47
+          },
+          {
+            "label": "CT-02061 shortfall",
+            "value": 2598.94
+          },
+          {
+            "label": "CT-02073 shortfall",
+            "value": 2426.95
+          },
+          {
+            "label": "CT-02131 shortfall",
+            "value": 2232.08
+          }
+        ],
+        "pairs": [
+          {
+            "key": "tier of all 18 contracts",
+            "value": "act"
+          },
+          {
+            "key": "expiry window used",
+            "value": "30 days"
+          }
+        ],
+        "tools_used": [
+          {
+            "tool": "morning_list",
+            "input": {
+              "max_days_to_expiry": 30
+            },
+            "rows": 18
+          },
+          {
+            "tool": "exposure",
+            "input": {
+              "dimension": "book"
+            },
+            "rows": 1
+          },
+          {
+            "tool": "morning_list",
+            "input": {
+              "tier": "act",
+              "limit": 100
+            },
+            "rows": 33
+          }
+        ],
+        "usage": {
+          "input_tokens": 26344,
+          "output_tokens": 2172
+        },
+        "model": "claude-sonnet-5-5"
+      },
+      "seconds": 17.5
+    },
+    {
+      "id": "D4",
+      "group": "discovery",
+      "question": "Are there specific regions or channels with performance issues?",
+      "pass": true,
+      "checks": [
+        {
+          "check": "behavior",
+          "expected": [
+            "answer"
+          ],
+          "got": "answer",
+          "pass": true
+        },
+        {
+          "check": "number top_region_exposure",
+          "expected": 164464.84,
+          "got": [
+            336182.63,
+            37,
+            30724.2,
+            3,
+            164464.84,
+            0.0847,
+            17,
+            57927.19,
+            94107.4,
+            0.0825,
+            9,
+            20520.33,
+            55687.38,
+            0.0298,
+            7,
+            21923.0,
+            0.0227,
+            4,
+            172108.34,
+            0.0876,
+            71130.18,
+            93849.38,
+            0.0349,
+            52321.37,
+            0.1119,
+            17903.53,
+            0.0388
+          ],
+          "pass": true
+        },
+        {
+          "check": "number top_channel_exposure",
+          "expected": 172108.34,
+          "got": [
+            336182.63,
+            37,
+            30724.2,
+            3,
+            164464.84,
+            0.0847,
+            17,
+            57927.19,
+            94107.4,
+            0.0825,
+            9,
+            20520.33,
+            55687.38,
+            0.0298,
+            7,
+            21923.0,
+            0.0227,
+            4,
+            172108.34,
+            0.0876,
+            71130.18,
+            93849.38,
+            0.0349,
+            52321.37,
+            0.1119,
+            17903.53,
+            0.0388
+          ],
+          "pass": true
+        }
+      ],
+      "answer": {
+        "behavior": "answer",
+        "text": "Yes. As of 2026-09-30, the Midwest region and the app and live channels stand out. Here \"performance issues\" means the risk flag, and exposure is the projected shortfall on act contracts. The book has $336,183 at risk across 37 act contracts. Another $30,724 is on watch (3 contracts), reported separately.\n\n**Regions (exposure at risk, share of unsold value at risk)**\n- Midwest: $164,465 (8%). It has the most exposure, 17 act contracts, and $57,927 already locked in.\n- Southeast: $94,107 (8%). It has 9 act contracts and $20,520 locked in.\n- West: $55,687 (3%). It has 7 act contracts and nothing locked in.\n- Northeast: $21,923 (2%). It has 4 act contracts and nothing locked in.\n\n**Channels (exposure at risk, share of unsold value at risk)**\n- App: $172,108 (9%). It has the most exposure and $71,130 locked in.\n- Website: $93,849 (3%).\n- Live: $52,321 (11%). This is the highest share of unsold value at risk, though the dollar amount is smaller.\n- Not yet listed: $17,904 (4%).\n\nMidwest and Southeast have the highest share of unsold value at risk among regions. The app channel has the largest dollar exposure, and live has the highest share. The flag replaced the earlier linear pacing flag.",
+        "contract_ids": [],
+        "figures": [
+          {
+            "label": "Book exposure at risk",
+            "value": 336182.63
+          },
+          {
+            "label": "Book act contracts",
+            "value": 37
+          },
+          {
+            "label": "Book watch exposure",
+            "value": 30724.2
+          },
+          {
+            "label": "Book watch contracts",
+            "value": 3
+          },
+          {
+            "label": "Midwest exposure at risk",
+            "value": 164464.84
+          },
+          {
+            "label": "Midwest share unsold value at risk",
+            "value": 0.0847
+          },
+          {
+            "label": "Midwest act contracts",
+            "value": 17
+          },
+          {
+            "label": "Midwest locked in",
+            "value": 57927.19
+          },
+          {
+            "label": "Southeast exposure at risk",
+            "value": 94107.4
+          },
+          {
+            "label": "Southeast share",
+            "value": 0.0825
+          },
+          {
+            "label": "Southeast act contracts",
+            "value": 9
+          },
+          {
+            "label": "Southeast locked in",
+            "value": 20520.33
+          },
+          {
+            "label": "West exposure at risk",
+            "value": 55687.38
+          },
+          {
+            "label": "West share",
+            "value": 0.0298
+          },
+          {
+            "label": "West act contracts",
+            "value": 7
+          },
+          {
+            "label": "Northeast exposure at risk",
+            "value": 21923.0
+          },
+          {
+            "label": "Northeast share",
+            "value": 0.0227
+          },
+          {
+            "label": "Northeast act contracts",
+            "value": 4
+          },
+          {
+            "label": "App exposure at risk",
+            "value": 172108.34
+          },
+          {
+            "label": "App share",
+            "value": 0.0876
+          },
+          {
+            "label": "App locked in",
+            "value": 71130.18
+          },
+          {
+            "label": "Website exposure at risk",
+            "value": 93849.38
+          },
+          {
+            "label": "Website share",
+            "value": 0.0349
+          },
+          {
+            "label": "Live exposure at risk",
+            "value": 52321.37
+          },
+          {
+            "label": "Live share",
+            "value": 0.1119
+          },
+          {
+            "label": "Not yet listed exposure at risk",
+            "value": 17903.53
+          },
+          {
+            "label": "Not yet listed share",
+            "value": 0.0388
+          }
+        ],
+        "pairs": [
+          {
+            "key": "region with most exposure",
+            "value": "Midwest"
+          },
+          {
+            "key": "channel with most exposure",
+            "value": "app"
+          },
+          {
+            "key": "channel with highest share of unsold value at risk",
+            "value": "live"
+          }
+        ],
+        "tools_used": [
+          {
+            "tool": "exposure",
+            "input": {
+              "dimension": "region"
+            },
+            "rows": 4
+          },
+          {
+            "tool": "exposure",
+            "input": {
+              "dimension": "channel"
+            },
+            "rows": 4
+          },
+          {
+            "tool": "exposure",
+            "input": {
+              "dimension": "book"
+            },
+            "rows": 1
+          }
+        ],
+        "usage": {
+          "input_tokens": 8569,
+          "output_tokens": 1706
+        },
+        "model": "claude-sonnet-5-5"
+      },
+      "seconds": 14.4
+    },
+    {
+      "id": "R1",
+      "group": "reworded",
+      "question": "What's the track record of consignor CN-00580?",
+      "pass": true,
+      "checks": [
+        {
+          "check": "behavior",
+          "expected": [
+            "answer"
+          ],
+          "got": "answer",
+          "pass": true
+        },
+        {
+          "check": "number closed",
+          "expected": 32,
+          "got": [
+            32,
+            5,
+            27,
+            7,
+            1,
+            3,
+            18300,
+            14569.51,
+            66,
+            28600,
+            27072.06,
+            15,
+            25600,
+            20223.84,
+            69,
+            107700,
+            78361.16,
+            15,
+            52800,
+            0,
+            0,
+            59600,
+            42095.94,
+            45990.08,
+            13609.92,
+            13
+          ],
+          "pass": true
+        },
+        {
+          "check": "number closed_below_target",
+          "expected": 5,
+          "got": [
+            32,
+            5,
+            27,
+            7,
+            1,
+            3,
+            18300,
+            14569.51,
+            66,
+            28600,
+            27072.06,
+            15,
+            25600,
+            20223.84,
+            69,
+            107700,
+            78361.16,
+            15,
+            52800,
+            0,
+            0,
+            59600,
+            42095.94,
+            45990.08,
+            13609.92,
+            13
+          ],
+          "pass": true
+        }
+      ],
+      "answer": {
+        "behavior": "answer",
+        "text": "CN-00580 has a good record. Of 32 closed contracts, 27 met or beat target and 5 closed below it. Of 7 active contracts, 1 is flagged act. All figures are as of 2026-09-30, and all contracts are in the Midwest.\n\n**Closed below target (5)**\n\n| Contract | Target | Realized sales | First act flag | Lead time |\n|---|---|---|---|---|\n| CT-00158 | $18,300 | $14,570 | 2025-08-24 | 66 days |\n| CT-01299 | $28,600 | $27,072 | 2026-05-08 | 15 days |\n| CT-01461 | $25,600 | $20,224 | 2026-04-09 | 69 days |\n| CT-01521 | $107,700 | $78,361 | 2026-06-13 | 15 days |\n| CT-01577 | $52,800 | $0 | never flagged | 0 days |\n\n- CT-01577 sold nothing and was never flagged act, so there was no advance warning.\n- Three closed contracts were flagged act but ended at or above target, which makes them false positives: CT-00499, CT-01608 and CT-01888.\n\n**Active (7)**\n- **CT-02104:** flagged act. Target is $59,600, sales so far are $42,096 and projected final value is $45,990. That is a projected shortfall of $13,610, with 13 days to expiry.\n- **Other six:** none carries a risk tier (no act or watch flag), and each has a projected shortfall of $0. CT-02018 and CT-02028 expire within 2 days.",
+        "contract_ids": [
+          "CT-00158",
+          "CT-01299",
+          "CT-01461",
+          "CT-01521",
+          "CT-01577",
+          "CT-02104"
+        ],
+        "figures": [
+          {
+            "label": "Closed contracts",
+            "value": 32
+          },
+          {
+            "label": "Closed below target",
+            "value": 5
+          },
+          {
+            "label": "Closed at or above target",
+            "value": 27
+          },
+          {
+            "label": "Active contracts",
+            "value": 7
+          },
+          {
+            "label": "Active act contracts",
+            "value": 1
+          },
+          {
+            "label": "False positives",
+            "value": 3
+          },
+          {
+            "label": "CT-00158 target",
+            "value": 18300
+          },
+          {
+            "label": "CT-00158 realized",
+            "value": 14569.51
+          },
+          {
+            "label": "CT-00158 lead time days",
+            "value": 66
+          },
+          {
+            "label": "CT-01299 target",
+            "value": 28600
+          },
+          {
+            "label": "CT-01299 realized",
+            "value": 27072.06
+          },
+          {
+            "label": "CT-01299 lead time days",
+            "value": 15
+          },
+          {
+            "label": "CT-01461 target",
+            "value": 25600
+          },
+          {
+            "label": "CT-01461 realized",
+            "value": 20223.84
+          },
+          {
+            "label": "CT-01461 lead time days",
+            "value": 69
+          },
+          {
+            "label": "CT-01521 target",
+            "value": 107700
+          },
+          {
+            "label": "CT-01521 realized",
+            "value": 78361.16
+          },
+          {
+            "label": "CT-01521 lead time days",
+            "value": 15
+          },
+          {
+            "label": "CT-01577 target",
+            "value": 52800
+          },
+          {
+            "label": "CT-01577 realized",
+            "value": 0
+          },
+          {
+            "label": "CT-01577 lead time days",
+            "value": 0
+          },
+          {
+            "label": "CT-02104 target",
+            "value": 59600
+          },
+          {
+            "label": "CT-02104 realized sales",
+            "value": 42095.94
+          },
+          {
+            "label": "CT-02104 projected final value",
+            "value": 45990.08
+          },
+          {
+            "label": "CT-02104 projected shortfall",
+            "value": 13609.92
+          },
+          {
+            "label": "CT-02104 days to expiry",
+            "value": 13
+          }
+        ],
+        "pairs": [
+          {
+            "key": "CN-00580 closed record",
+            "value": "27 of 32 met or beat target"
+          },
+          {
+            "key": "CT-01577",
+            "value": "closed below target with no act flag"
+          },
+          {
+            "key": "active act contract",
+            "value": "CT-02104"
+          }
+        ],
+        "tools_used": [
+          {
+            "tool": "contracts",
+            "input": {
+              "consignor_id": "CN-00580"
+            },
+            "rows": 39
+          }
+        ],
+        "usage": {
+          "input_tokens": 22521,
+          "output_tokens": 2048
+        },
+        "model": "claude-sonnet-5-5"
+      },
+      "seconds": 14.1
+    },
+    {
+      "id": "R2",
+      "group": "reworded",
+      "question": "How many of CN-00580's contracts have ended below target?",
+      "pass": true,
+      "checks": [
+        {
+          "check": "behavior",
+          "expected": [
+            "answer"
+          ],
+          "got": "answer",
+          "pass": true
+        },
+        {
+          "check": "number closed_below_target",
+          "expected": 5,
+          "got": [
+            5,
+            32,
+            7
+          ],
+          "pass": true
+        }
+      ],
+      "answer": {
+        "behavior": "answer",
+        "text": "5 of CN-00580's 32 closed contracts ended below target (as of 2026-09-30):\n\n- CT-00158: target $18,300, realized $14,570\n- CT-01299: target $28,600, realized $27,072\n- CT-01461: target $25,600, realized $20,224\n- CT-01521: target $107,700, realized $78,361\n- CT-01577: target $52,800, realized $0\n\nThe other 27 closed contracts met or beat target. Three of them (CT-00499, CT-01608, CT-01888) were flagged act but finished above target. CN-00580 also has 7 active contracts, which are not counted here.",
+        "contract_ids": [
+          "CT-00158",
+          "CT-01299",
+          "CT-01461",
+          "CT-01521",
+          "CT-01577"
+        ],
+        "figures": [
+          {
+            "label": "closed contracts below target",
+            "value": 5
+          },
+          {
+            "label": "closed contracts",
+            "value": 32
+          },
+          {
+            "label": "active contracts",
+            "value": 7
+          }
+        ],
+        "pairs": [],
+        "tools_used": [
+          {
+            "tool": "contracts",
+            "input": {
+              "consignor_id": "CN-00580"
+            },
+            "rows": 39
+          }
+        ],
+        "usage": {
+          "input_tokens": 12588,
+          "output_tokens": 518
+        },
+        "model": "claude-sonnet-5-5"
+      },
+      "seconds": 5.3
+    },
+    {
+      "id": "R3",
+      "group": "reworded",
+      "question": "Where do watches sell best?",
+      "pass": true,
+      "checks": [
+        {
+          "check": "behavior",
+          "expected": [
+            "answer"
+          ],
+          "got": "answer",
+          "pass": true
+        },
+        {
+          "check": "number value_realization",
+          "expected": 1.0713,
+          "got": [
+            1.0713,
+            0.9425,
+            0.7864,
+            0.946,
+            0.9015,
+            0.8554,
+            1.1354,
+            1.0582,
+            0.9544,
+            841,
+            889
+          ],
+          "pass": true
+        },
+        {
+          "check": "pair watches",
+          "expected": "live",
+          "pass": true
+        }
+      ],
+      "answer": {
+        "behavior": "answer",
+        "text": "Watches sell best at live auction. On contracts that closed in the last 12 months (as of 2026-09-30), live has a value realization of 1.07, ahead of website at 0.94 and app at 0.79.\n\n| Channel | Sell-through | Price realization | Value realization |\n|---|---|---|---|\n| Live | 95% | 1.14 | 1.07 |\n| Website | 90% | 1.06 | 0.94 |\n| App | 86% | 0.95 | 0.79 |\n\nLive is also first on sell-through (841 of 889 items sold) and on price realization.",
+        "contract_ids": [],
+        "figures": [
+          {
+            "label": "live value realization",
+            "value": 1.0713
+          },
+          {
+            "label": "website value realization",
+            "value": 0.9425
+          },
+          {
+            "label": "app value realization",
+            "value": 0.7864
+          },
+          {
+            "label": "live sell-through",
+            "value": 0.946
+          },
+          {
+            "label": "website sell-through",
+            "value": 0.9015
+          },
+          {
+            "label": "app sell-through",
+            "value": 0.8554
+          },
+          {
+            "label": "live price realization",
+            "value": 1.1354
+          },
+          {
+            "label": "website price realization",
+            "value": 1.0582
+          },
+          {
+            "label": "app price realization",
+            "value": 0.9544
+          },
+          {
+            "label": "live items sold",
+            "value": 841
+          },
+          {
+            "label": "live items listed",
+            "value": 889
+          }
+        ],
+        "pairs": [
+          {
+            "key": "watches",
+            "value": "live"
+          }
+        ],
+        "tools_used": [
+          {
+            "tool": "channel_performance",
+            "input": {
+              "asset_type": "watches"
+            },
+            "rows": 3
+          }
+        ],
+        "usage": {
+          "input_tokens": 7235,
+          "output_tokens": 691
+        },
+        "model": "claude-sonnet-5-5"
+      },
+      "seconds": 5.6
+    },
+    {
+      "id": "R4",
+      "group": "reworded",
+      "question": "Which item type fetches the least of its appraised value on the app?",
+      "pass": true,
+      "checks": [
+        {
+          "check": "behavior",
+          "expected": [
+            "answer"
+          ],
+          "got": "answer",
+          "pass": true
+        },
+        {
+          "check": "number value_realization",
+          "expected": 0.6446,
+          "got": [
+            0.7432,
+            0.6446,
+            0.8315,
+            0.8084,
+            0.6698
+          ],
+          "pass": true
+        },
+        {
+          "check": "pair art",
+          "expected": "app",
+          "pass": true
+        }
+      ],
+      "answer": {
+        "behavior": "answer",
+        "text": "Art fetches the least of its appraised value on the app (as of 2026-09-30, contracts closed in the last 12 months).\n\n- **Price realization:** Art sold items fetch about 74% of their appraisal, the lowest of the six types.\n- **Value realization:** Art realizes about 64% of the appraised value of everything listed, sold or not. That is also the lowest. It combines price with an 83% sell-through.\n\nFurniture is next lowest on both measures: about 81% price realization and 67% value realization.\n\nArt is lowest on both measures, so the answer is the same whichever one you meant.",
+        "contract_ids": [],
+        "figures": [
+          {
+            "label": "art app price_realization",
+            "value": 0.7432
+          },
+          {
+            "label": "art app value_realization",
+            "value": 0.6446
+          },
+          {
+            "label": "art app sell_through",
+            "value": 0.8315
+          },
+          {
+            "label": "furniture app price_realization",
+            "value": 0.8084
+          },
+          {
+            "label": "furniture app value_realization",
+            "value": 0.6698
+          }
+        ],
+        "pairs": [
+          {
+            "key": "asset type with lowest realization on app",
+            "value": "art"
+          }
+        ],
+        "tools_used": [
+          {
+            "tool": "channel_performance",
+            "input": {
+              "channel": "app"
+            },
+            "rows": 6
+          },
+          {
+            "tool": "definitions",
+            "input": {
+              "terms": [
+                "price_realization",
+                "value_realization",
+                "sell_through"
+              ]
+            },
+            "rows": 5
+          }
+        ],
+        "usage": {
+          "input_tokens": 7896,
+          "output_tokens": 873
+        },
+        "model": "claude-sonnet-5-5"
+      },
+      "seconds": 7.5
+    },
+    {
+      "id": "R5",
+      "group": "reworded",
+      "question": "What's at risk and running out of time, expiring within two weeks?",
+      "pass": true,
+      "checks": [
+        {
+          "check": "behavior",
+          "expected": [
+            "answer"
+          ],
+          "got": "answer",
+          "pass": true
+        },
+        {
+          "check": "ids_exact",
+          "expected": [
+            "CT-02021",
+            "CT-02049",
+            "CT-02057",
+            "CT-02061",
+            "CT-02062",
+            "CT-02063",
+            "CT-02068",
+            "CT-02073",
+            "CT-02082",
+            "CT-02092",
+            "CT-02097",
+            "CT-02104"
+          ],
+          "missing": [],
+          "extra": [],
+          "pass": true
+        }
+      ],
+      "answer": {
+        "behavior": "answer",
+        "text": "As of 2026-09-30, 12 at-risk contracts expire within 14 days. I read \"two weeks\" as 14 days. All 12 are in the act tier, and none is a watch contract. None of them can still go to a live auction. This uses the risk flag, which replaced the earlier linear pacing flag.\n\nRanked by projected shortfall:\n\n| Contract | Days left | Projected shortfall | Unsold value | Main unsold channel |\n|---|---|---|---|---|\n| CT-02063 | 7 | $29,468 | $67,720 | app |\n| CT-02097 | 13 | $21,838 | $74,090 | app |\n| CT-02104 | 13 | $13,610 | $28,150 | website |\n| CT-02062 | 7 | $11,398 | $50,200 | website |\n| CT-02049 | 5 | $10,816 | $26,650 | app |\n| CT-02092 | 12 | $10,762 | $18,300 | live |\n| CT-02021 | 1 | $10,314 | $20,490 | website |\n| CT-02057 | 6 | $9,245 | $9,690 | app |\n| CT-02082 | 10 | $5,437 | $10,800 | app |\n| CT-02068 | 8 | $2,965 | $12,240 | app |\n| CT-02061 | 6 | $2,599 | $15,990 | live |\n| CT-02073 | 8 | $2,427 | $44,910 | app |\n\nCT-02021 has one day left. CT-02049 has five days left.\n\nBook-wide, 37 contracts are flagged act. 33 of them still have something to sell and are on the morning list. The other 4 have nothing left to sell, so their shortfall is locked in. Those 4 are not in the table above. Book exposure at risk is $336,183, which includes $78,448 locked in. Watch exposure is $30,724 across 3 watch contracts, reported separately.",
+        "contract_ids": [
+          "CT-02063",
+          "CT-02097",
+          "CT-02104",
+          "CT-02062",
+          "CT-02049",
+          "CT-02092",
+          "CT-02021",
+          "CT-02057",
+          "CT-02082",
+          "CT-02068",
+          "CT-02061",
+          "CT-02073"
+        ],
+        "figures": [
+          {
+            "label": "contracts expiring within 14 days",
+            "value": 12
+          },
+          {
+            "label": "book act contracts",
+            "value": 37
+          },
+          {
+            "label": "act contracts on morning list",
+            "value": 33
+          },
+          {
+            "label": "act contracts with nothing left to sell",
+            "value": 4
+          },
+          {
+            "label": "exposure at risk",
+            "value": 336182.63
+          },
+          {
+            "label": "exposure locked in",
+            "value": 78447.52
+          },
+          {
+            "label": "exposure on watch",
+            "value": 30724.2
+          },
+          {
+            "label": "watch contracts",
+            "value": 3
+          },
+          {
+            "label": "CT-02063 shortfall",
+            "value": 29467.67
+          },
+          {
+            "label": "CT-02097 shortfall",
+            "value": 21838.02
+          },
+          {
+            "label": "CT-02104 shortfall",
+            "value": 13609.92
+          },
+          {
+            "label": "CT-02062 shortfall",
+            "value": 11398.08
+          },
+          {
+            "label": "CT-02049 shortfall",
+            "value": 10815.93
+          },
+          {
+            "label": "CT-02092 shortfall",
+            "value": 10761.69
+          },
+          {
+            "label": "CT-02021 shortfall",
+            "value": 10314.45
+          },
+          {
+            "label": "CT-02057 shortfall",
+            "value": 9245.38
+          },
+          {
+            "label": "CT-02082 shortfall",
+            "value": 5436.81
+          },
+          {
+            "label": "CT-02068 shortfall",
+            "value": 2965.47
+          },
+          {
+            "label": "CT-02061 shortfall",
+            "value": 2598.94
+          },
+          {
+            "label": "CT-02073 shortfall",
+            "value": 2426.95
+          },
+          {
+            "label": "CT-02063 unsold",
+            "value": 67720
+          },
+          {
+            "label": "CT-02097 unsold",
+            "value": 74090
+          },
+          {
+            "label": "CT-02104 unsold",
+            "value": 28150
+          },
+          {
+            "label": "CT-02062 unsold",
+            "value": 50200
+          },
+          {
+            "label": "CT-02049 unsold",
+            "value": 26650
+          },
+          {
+            "label": "CT-02092 unsold",
+            "value": 18300
+          },
+          {
+            "label": "CT-02021 unsold",
+            "value": 20490
+          },
+          {
+            "label": "CT-02057 unsold",
+            "value": 9690
+          },
+          {
+            "label": "CT-02082 unsold",
+            "value": 10800
+          },
+          {
+            "label": "CT-02068 unsold",
+            "value": 12240
+          },
+          {
+            "label": "CT-02061 unsold",
+            "value": 15990
+          },
+          {
+            "label": "CT-02073 unsold",
+            "value": 44910
+          }
+        ],
+        "pairs": [
+          {
+            "key": "tier of contracts expiring within 14 days",
+            "value": "all act, no watch"
+          },
+          {
+            "key": "live auction possible",
+            "value": "none of the 12"
+          },
+          {
+            "key": "expiry window interpreted",
+            "value": "14 days"
+          }
+        ],
+        "tools_used": [
+          {
+            "tool": "morning_list",
+            "input": {
+              "max_days_to_expiry": 14
+            },
+            "rows": 12
+          },
+          {
+            "tool": "exposure",
+            "input": {
+              "dimension": "book"
+            },
+            "rows": 1
+          },
+          {
+            "tool": "morning_list",
+            "input": {
+              "tier": "act",
+              "limit": 100
+            },
+            "rows": 33
+          }
+        ],
+        "usage": {
+          "input_tokens": 23748,
+          "output_tokens": 1984
+        },
+        "model": "claude-sonnet-5-5"
+      },
+      "seconds": 16.0
+    },
+    {
+      "id": "R6",
+      "group": "reworded",
+      "question": "Show me the flagged contracts closing in the next 30 days, biggest shortfall first.",
+      "pass": true,
+      "checks": [
+        {
+          "check": "behavior",
+          "expected": [
+            "answer"
+          ],
+          "got": "answer",
+          "pass": true
+        },
+        {
+          "check": "ids_exact",
+          "expected": [
+            "CT-02021",
+            "CT-02049",
+            "CT-02057",
+            "CT-02061",
+            "CT-02062",
+            "CT-02063",
+            "CT-02068",
+            "CT-02073",
+            "CT-02082",
+            "CT-02092",
+            "CT-02097",
+            "CT-02104",
+            "CT-02131",
+            "CT-02134",
+            "CT-02135",
+            "CT-02141",
+            "CT-02163",
+            "CT-02179"
+          ],
+          "missing": [],
+          "extra": [],
+          "pass": true
+        }
+      ],
+      "answer": {
+        "behavior": "answer",
+        "text": "As of 2026-09-30, 18 flagged contracts expire within 30 days. All 18 are tier act, and none are watch. They're ranked below by projected shortfall, largest first. The risk flag replaced the earlier linear pacing flag.\n\n| # | Contract | Region | Days left | Projected shortfall | Live auction possible |\n|---|---|---|---|---|---|\n| 1 | CT-02063 | Southeast | 7 | $29,468 | No |\n| 2 | CT-02097 | Midwest | 13 | $21,838 | No |\n| 3 | CT-02141 | West | 21 | $20,271 | Yes |\n| 4 | CT-02104 | Midwest | 13 | $13,610 | No |\n| 5 | CT-02062 | Southeast | 7 | $11,398 | No |\n| 6 | CT-02049 | Southeast | 5 | $10,816 | No |\n| 7 | CT-02092 | West | 12 | $10,762 | No |\n| 8 | CT-02021 | Midwest | 1 | $10,314 | No |\n| 9 | CT-02057 | West | 6 | $9,245 | No |\n| 10 | CT-02179 | Northeast | 29 | $8,641 | Yes |\n| 11 | CT-02134 | Midwest | 20 | $6,068 | Yes |\n| 12 | CT-02135 | Northeast | 20 | $5,993 | Yes |\n| 13 | CT-02163 | West | 27 | $5,815 | Yes |\n| 14 | CT-02082 | West | 10 | $5,437 | No |\n| 15 | CT-02068 | Midwest | 8 | $2,965 | No |\n| 16 | CT-02061 | Southeast | 6 | $2,599 | No |\n| 17 | CT-02073 | West | 8 | $2,427 | No |\n| 18 | CT-02131 | Northeast | 19 | $2,232 | Yes |\n\nBook-wide there are 37 act contracts, but only 33 are on the morning list. The other 4 have nothing left to sell, so their shortfall is locked in. They don't appear above. Book-wide exposure at risk is $336,183, and that includes $78,448 locked in. Three watch contracts are separate, with $30,724 of watch exposure. None of the three expires within 30 days.",
+        "contract_ids": [
+          "CT-02063",
+          "CT-02097",
+          "CT-02141",
+          "CT-02104",
+          "CT-02062",
+          "CT-02049",
+          "CT-02092",
+          "CT-02021",
+          "CT-02057",
+          "CT-02179",
+          "CT-02134",
+          "CT-02135",
+          "CT-02163",
+          "CT-02082",
+          "CT-02068",
+          "CT-02061",
+          "CT-02073",
+          "CT-02131"
+        ],
+        "figures": [
+          {
+            "label": "contracts expiring within 30 days",
+            "value": 18
+          },
+          {
+            "label": "CT-02063 shortfall",
+            "value": 29467.67
+          },
+          {
+            "label": "CT-02097 shortfall",
+            "value": 21838.02
+          },
+          {
+            "label": "CT-02141 shortfall",
+            "value": 20271.33
+          },
+          {
+            "label": "CT-02104 shortfall",
+            "value": 13609.92
+          },
+          {
+            "label": "CT-02062 shortfall",
+            "value": 11398.08
+          },
+          {
+            "label": "CT-02049 shortfall",
+            "value": 10815.93
+          },
+          {
+            "label": "CT-02092 shortfall",
+            "value": 10761.69
+          },
+          {
+            "label": "CT-02021 shortfall",
+            "value": 10314.45
+          },
+          {
+            "label": "CT-02057 shortfall",
+            "value": 9245.38
+          },
+          {
+            "label": "CT-02179 shortfall",
+            "value": 8640.89
+          },
+          {
+            "label": "CT-02134 shortfall",
+            "value": 6067.55
+          },
+          {
+            "label": "CT-02135 shortfall",
+            "value": 5993.16
+          },
+          {
+            "label": "CT-02163 shortfall",
+            "value": 5814.53
+          },
+          {
+            "label": "CT-02082 shortfall",
+            "value": 5436.81
+          },
+          {
+            "label": "CT-02068 shortfall",
+            "value": 2965.47
+          },
+          {
+            "label": "CT-02061 shortfall",
+            "value": 2598.94
+          },
+          {
+            "label": "CT-02073 shortfall",
+            "value": 2426.95
+          },
+          {
+            "label": "CT-02131 shortfall",
+            "value": 2232.08
+          },
+          {
+            "label": "book-wide act contracts",
+            "value": 37
+          },
+          {
+            "label": "act contracts on morning list",
+            "value": 33
+          },
+          {
+            "label": "act contracts with nothing left to sell",
+            "value": 4
+          },
+          {
+            "label": "book exposure at risk",
+            "value": 336182.63
+          },
+          {
+            "label": "book exposure locked in",
+            "value": 78447.52
+          },
+          {
+            "label": "book exposure on watch",
+            "value": 30724.2
+          },
+          {
+            "label": "watch contracts",
+            "value": 3
+          }
+        ],
+        "pairs": [
+          {
+            "key": "tier of contracts expiring within 30 days",
+            "value": "all act, no watch"
+          },
+          {
+            "key": "largest shortfall",
+            "value": "CT-02063"
+          }
+        ],
+        "tools_used": [
+          {
+            "tool": "morning_list",
+            "input": {
+              "max_days_to_expiry": 30
+            },
+            "rows": 18
+          },
+          {
+            "tool": "exposure",
+            "input": {
+              "dimension": "book"
+            },
+            "rows": 1
+          },
+          {
+            "tool": "morning_list",
+            "input": {
+              "tier": "act",
+              "limit": 100
+            },
+            "rows": 33
+          }
+        ],
+        "usage": {
+          "input_tokens": 26379,
+          "output_tokens": 2119
+        },
+        "model": "claude-sonnet-5-5"
+      },
+      "seconds": 16.2
+    },
+    {
+      "id": "R7",
+      "group": "reworded",
+      "question": "Which region has the most money at risk?",
+      "pass": true,
+      "checks": [
+        {
+          "check": "behavior",
+          "expected": [
+            "answer"
+          ],
+          "got": "answer",
+          "pass": true
+        },
+        {
+          "check": "number exposure_at_risk",
+          "expected": 164464.84,
+          "got": [
+            164464.84,
+            17,
+            57927.19,
+            94107.4,
+            9,
+            55687.38,
+            7,
+            21923.0,
+            4,
+            4663.06,
+            15492.65,
+            10568.49
+          ],
+          "pass": true
+        }
+      ],
+      "answer": {
+        "behavior": "answer",
+        "text": "The Midwest has the most money at risk, at $164,465 of exposure across 17 act contracts (as of 2026-09-30). This figure includes $57,927 already locked in, meaning act contracts with nothing left to sell.\n\nOther regions, by act exposure:\n- Southeast: $94,107 (9 act contracts)\n- West: $55,687 (7 act contracts)\n- Northeast: $21,923 (4 act contracts)\n\nWatch exposure is separate and not included above. The Midwest has $4,663, the Southeast $15,493 and the West $10,568. The Northeast has none.",
+        "contract_ids": [],
+        "figures": [
+          {
+            "label": "Midwest exposure at risk",
+            "value": 164464.84
+          },
+          {
+            "label": "Midwest act contracts",
+            "value": 17
+          },
+          {
+            "label": "Midwest locked in",
+            "value": 57927.19
+          },
+          {
+            "label": "Southeast exposure at risk",
+            "value": 94107.4
+          },
+          {
+            "label": "Southeast act contracts",
+            "value": 9
+          },
+          {
+            "label": "West exposure at risk",
+            "value": 55687.38
+          },
+          {
+            "label": "West act contracts",
+            "value": 7
+          },
+          {
+            "label": "Northeast exposure at risk",
+            "value": 21923.0
+          },
+          {
+            "label": "Northeast act contracts",
+            "value": 4
+          },
+          {
+            "label": "Midwest watch exposure",
+            "value": 4663.06
+          },
+          {
+            "label": "Southeast watch exposure",
+            "value": 15492.65
+          },
+          {
+            "label": "West watch exposure",
+            "value": 10568.49
+          }
+        ],
+        "pairs": [
+          {
+            "key": "region with most exposure at risk",
+            "value": "Midwest"
+          }
+        ],
+        "tools_used": [
+          {
+            "tool": "exposure",
+            "input": {
+              "dimension": "region"
+            },
+            "rows": 4
+          }
+        ],
+        "usage": {
+          "input_tokens": 7436,
+          "output_tokens": 650
+        },
+        "model": "claude-sonnet-5-5"
+      },
+      "seconds": 5.8
+    },
+    {
+      "id": "R8",
+      "group": "reworded",
+      "question": "How much exposure sits on the live auction channel?",
+      "pass": true,
+      "checks": [
+        {
+          "check": "behavior",
+          "expected": [
+            "answer"
+          ],
+          "got": "answer",
+          "pass": true
+        },
+        {
+          "check": "number exposure_at_risk",
+          "expected": 52321.37,
+          "got": [
+            52321.37,
+            2233.26,
+            10568.49,
+            16,
+            1,
+            1901860,
+            0.1119
+          ],
+          "pass": true
+        }
+      ],
+      "answer": {
+        "behavior": "answer",
+        "text": "As of 2026-09-30, the live auction channel carries $52,321 of exposure at risk. That is the projected shortfall on 16 act contracts.\n\n- **Locked in:** $2,233 of that is already locked in. Those contracts have nothing left to sell. The at-risk figure includes this amount.\n- **Watch, reported separately:** $10,568 on 1 watch contract. It is not part of the $52,321.\n- **Share of unsold value:** the live channel has $1,901,860 of unsold value, and 11% of it is at risk.",
+        "contract_ids": [],
+        "figures": [
+          {
+            "label": "Live exposure at risk (act)",
+            "value": 52321.37
+          },
+          {
+            "label": "Live exposure locked in",
+            "value": 2233.26
+          },
+          {
+            "label": "Live exposure on watch",
+            "value": 10568.49
+          },
+          {
+            "label": "Act contracts on live",
+            "value": 16
+          },
+          {
+            "label": "Watch contracts on live",
+            "value": 1
+          },
+          {
+            "label": "Unsold value on live",
+            "value": 1901860
+          },
+          {
+            "label": "Share of unsold value at risk",
+            "value": 0.1119
+          }
+        ],
+        "pairs": [
+          {
+            "key": "channel",
+            "value": "live"
+          }
+        ],
+        "tools_used": [
+          {
+            "tool": "exposure",
+            "input": {
+              "dimension": "channel",
+              "value": "live"
+            },
+            "rows": 1
+          }
+        ],
+        "usage": {
+          "input_tokens": 7068,
+          "output_tokens": 584
+        },
+        "model": "claude-sonnet-5-5"
+      },
+      "seconds": 5.8
+    },
+    {
+      "id": "I1",
+      "group": "in_scope",
+      "question": "What's on the morning list today?",
+      "pass": true,
+      "checks": [
+        {
+          "check": "behavior",
+          "expected": [
+            "answer"
+          ],
+          "got": "answer",
+          "pass": true
+        },
+        {
+          "check": "number act",
+          "expected": 33,
+          "got": [
+            36,
+            33,
+            3,
+            37,
+            4,
+            78447.52,
+            336182.63,
+            30724.2,
+            29467.67,
+            21838.02,
+            20271.33,
+            13609.92,
+            11398.08,
+            10815.93,
+            10761.69,
+            10314.45,
+            9245.38,
+            8640.89,
+            8052.33,
+            7987.96,
+            7891.64,
+            7501.02,
+            7052.22,
+            6853.88,
+            6067.55,
+            5993.16,
+            5814.53,
+            5436.81,
+            5400.36,
+            5056.88,
+            4924.04,
+            4192.05,
+            3697.75,
+            3327.71,
+            3300.73,
+            2965.47,
+            2598.94,
+            2426.95,
+            2232.08,
+            1730.7,
+            867.02,
+            15492.65,
+            10568.49,
+            4663.06
+          ],
+          "pass": true
+        },
+        {
+          "check": "number watch",
+          "expected": 3,
+          "got": [
+            36,
+            33,
+            3,
+            37,
+            4,
+            78447.52,
+            336182.63,
+            30724.2,
+            29467.67,
+            21838.02,
+            20271.33,
+            13609.92,
+            11398.08,
+            10815.93,
+            10761.69,
+            10314.45,
+            9245.38,
+            8640.89,
+            8052.33,
+            7987.96,
+            7891.64,
+            7501.02,
+            7052.22,
+            6853.88,
+            6067.55,
+            5993.16,
+            5814.53,
+            5436.81,
+            5400.36,
+            5056.88,
+            4924.04,
+            4192.05,
+            3697.75,
+            3327.71,
+            3300.73,
+            2965.47,
+            2598.94,
+            2426.95,
+            2232.08,
+            1730.7,
+            867.02,
+            15492.65,
+            10568.49,
+            4663.06
+          ],
+          "pass": true
+        }
+      ],
+      "answer": {
+        "behavior": "answer",
+        "text": "As of 2026-09-30, the morning list has 36 contracts: 33 act and 3 watch. The risk flag drives the list. It replaced the earlier linear pacing flag. None of the contracts is new today.\n\n**Book context:** the book has 37 act contracts, so 4 act contracts have nothing left to sell and are not on the list. Their shortfall is locked in at $78,448. Exposure at risk (act only, including the locked-in amount) is $336,183. Watch exposure is $30,724 across 3 contracts, reported separately.\n\n**Act contracts (ranked by projected shortfall)**\n\n| # | Contract | Region | Days left | Projected shortfall | Live auction possible |\n|---|---|---|---|---|---|\n| 1 | CT-02063 | Southeast | 7 | $29,468 | No |\n| 2 | CT-02097 | Midwest | 13 | $21,838 | No |\n| 3 | CT-02141 | West | 21 | $20,271 | Yes |\n| 4 | CT-02104 | Midwest | 13 | $13,610 | No |\n| 5 | CT-02062 | Southeast | 7 | $11,398 | No |\n| 6 | CT-02049 | Southeast | 5 | $10,816 | No |\n| 7 | CT-02092 | West | 12 | $10,762 | No |\n| 8 | CT-02021 | Midwest | 1 | $10,314 | No |\n| 9 | CT-02057 | West | 6 | $9,245 | No |\n| 10 | CT-02179 | Northeast | 29 | $8,641 | Yes |\n| 11 | CT-02370 | Midwest | 65 | $8,052 | Yes |\n| 12 | CT-02210 | Midwest | 34 | $7,988 | Yes |\n| 13 | CT-02314 | Midwest | 54 | $7,892 | Yes |\n| 14 | CT-02235 | Midwest | 39 | $7,501 | Yes |\n| 15 | CT-02357 | Southeast | 62 | $7,052 | Yes |\n| 16 | CT-02286 | Southeast | 48 | $6,854 | Yes |\n| 17 | CT-02134 | Midwest | 20 | $6,068 | Yes |\n| 18 | CT-02135 | Northeast | 20 | $5,993 | Yes |\n| 19 | CT-02163 | West | 27 | $5,815 | Yes |\n| 20 | CT-02082 | West | 10 | $5,437 | No |\n| 21 | CT-02265 | Southeast | 44 | $5,400 | Yes |\n| 22 | CT-02269 | Northeast | 45 | $5,057 | Yes |\n| 23 | CT-02273 | Midwest | 46 | $4,924 | Yes |\n| 24 | CT-02270 | Midwest | 45 | $4,192 | Yes |\n| 25 | CT-02289 | Midwest | 48 | $3,698 | Yes |\n| 26 | CT-02332 | Midwest | 57 | $3,328 | Yes |\n| 27 | CT-02282 | Midwest | 47 | $3,301 | Yes |\n| 28 | CT-02068 | Midwest | 8 | $2,965 | No |\n| 29 | CT-02061 | Southeast | 6 | $2,599 | No |\n| 30 | CT-02073 | West | 8 | $2,427 | No |\n| 31 | CT-02131 | Northeast | 19 | $2,232 | Yes |\n| 32 | CT-02219 | West | 35 | $1,731 | Yes |\n| 33 | CT-02247 | Midwest | 41 | $867 | Yes |\n\n**Watch contracts (context only, too little sold to trust the signal)**\n\n| Contract | Region | Days left | Projected shortfall |\n|---|---|---|---|\n| CT-02248 | Southeast | 41 | $15,493 |\n| CT-02383 | West | 67 | $10,568 |\n| CT-02331 | Midwest | 57 | $4,663 |\n\nThe 3 watch contracts have no sales yet, and a live auction is still possible for all three.",
+        "contract_ids": [
+          "CT-02063",
+          "CT-02097",
+          "CT-02141",
+          "CT-02104",
+          "CT-02062",
+          "CT-02049",
+          "CT-02092",
+          "CT-02021",
+          "CT-02057",
+          "CT-02179",
+          "CT-02370",
+          "CT-02210",
+          "CT-02314",
+          "CT-02235",
+          "CT-02357",
+          "CT-02286",
+          "CT-02134",
+          "CT-02135",
+          "CT-02163",
+          "CT-02082",
+          "CT-02265",
+          "CT-02269",
+          "CT-02273",
+          "CT-02270",
+          "CT-02289",
+          "CT-02332",
+          "CT-02282",
+          "CT-02068",
+          "CT-02061",
+          "CT-02073",
+          "CT-02131",
+          "CT-02219",
+          "CT-02247",
+          "CT-02248",
+          "CT-02383",
+          "CT-02331"
+        ],
+        "figures": [
+          {
+            "label": "Contracts on morning list",
+            "value": 36
+          },
+          {
+            "label": "Act contracts on list",
+            "value": 33
+          },
+          {
+            "label": "Watch contracts on list",
+            "value": 3
+          },
+          {
+            "label": "Act contracts in book",
+            "value": 37
+          },
+          {
+            "label": "Act contracts with nothing left to sell",
+            "value": 4
+          },
+          {
+            "label": "Exposure locked in",
+            "value": 78447.52
+          },
+          {
+            "label": "Exposure at risk (act)",
+            "value": 336182.63
+          },
+          {
+            "label": "Exposure on watch",
+            "value": 30724.2
+          },
+          {
+            "label": "CT-02063 shortfall",
+            "value": 29467.67
+          },
+          {
+            "label": "CT-02097 shortfall",
+            "value": 21838.02
+          },
+          {
+            "label": "CT-02141 shortfall",
+            "value": 20271.33
+          },
+          {
+            "label": "CT-02104 shortfall",
+            "value": 13609.92
+          },
+          {
+            "label": "CT-02062 shortfall",
+            "value": 11398.08
+          },
+          {
+            "label": "CT-02049 shortfall",
+            "value": 10815.93
+          },
+          {
+            "label": "CT-02092 shortfall",
+            "value": 10761.69
+          },
+          {
+            "label": "CT-02021 shortfall",
+            "value": 10314.45
+          },
+          {
+            "label": "CT-02057 shortfall",
+            "value": 9245.38
+          },
+          {
+            "label": "CT-02179 shortfall",
+            "value": 8640.89
+          },
+          {
+            "label": "CT-02370 shortfall",
+            "value": 8052.33
+          },
+          {
+            "label": "CT-02210 shortfall",
+            "value": 7987.96
+          },
+          {
+            "label": "CT-02314 shortfall",
+            "value": 7891.64
+          },
+          {
+            "label": "CT-02235 shortfall",
+            "value": 7501.02
+          },
+          {
+            "label": "CT-02357 shortfall",
+            "value": 7052.22
+          },
+          {
+            "label": "CT-02286 shortfall",
+            "value": 6853.88
+          },
+          {
+            "label": "CT-02134 shortfall",
+            "value": 6067.55
+          },
+          {
+            "label": "CT-02135 shortfall",
+            "value": 5993.16
+          },
+          {
+            "label": "CT-02163 shortfall",
+            "value": 5814.53
+          },
+          {
+            "label": "CT-02082 shortfall",
+            "value": 5436.81
+          },
+          {
+            "label": "CT-02265 shortfall",
+            "value": 5400.36
+          },
+          {
+            "label": "CT-02269 shortfall",
+            "value": 5056.88
+          },
+          {
+            "label": "CT-02273 shortfall",
+            "value": 4924.04
+          },
+          {
+            "label": "CT-02270 shortfall",
+            "value": 4192.05
+          },
+          {
+            "label": "CT-02289 shortfall",
+            "value": 3697.75
+          },
+          {
+            "label": "CT-02332 shortfall",
+            "value": 3327.71
+          },
+          {
+            "label": "CT-02282 shortfall",
+            "value": 3300.73
+          },
+          {
+            "label": "CT-02068 shortfall",
+            "value": 2965.47
+          },
+          {
+            "label": "CT-02061 shortfall",
+            "value": 2598.94
+          },
+          {
+            "label": "CT-02073 shortfall",
+            "value": 2426.95
+          },
+          {
+            "label": "CT-02131 shortfall",
+            "value": 2232.08
+          },
+          {
+            "label": "CT-02219 shortfall",
+            "value": 1730.7
+          },
+          {
+            "label": "CT-02247 shortfall",
+            "value": 867.02
+          },
+          {
+            "label": "CT-02248 shortfall",
+            "value": 15492.65
+          },
+          {
+            "label": "CT-02383 shortfall",
+            "value": 10568.49
+          },
+          {
+            "label": "CT-02331 shortfall",
+            "value": 4663.06
+          }
+        ],
+        "pairs": [
+          {
+            "key": "top contract by projected shortfall",
+            "value": "CT-02063"
+          },
+          {
+            "key": "flag replaced",
+            "value": "linear pacing"
+          }
+        ],
+        "tools_used": [
+          {
+            "tool": "morning_list",
+            "input": {},
+            "rows": 36
+          },
+          {
+            "tool": "exposure",
+            "input": {
+              "dimension": "book"
+            },
+            "rows": 1
+          }
+        ],
+        "usage": {
+          "input_tokens": 14976,
+          "output_tokens": 3056
+        },
+        "model": "claude-sonnet-5-5"
+      },
+      "seconds": 18.7
+    },
+    {
+      "id": "I2",
+      "group": "in_scope",
+      "question": "What's our total exposure at risk right now?",
+      "pass": true,
+      "checks": [
+        {
+          "check": "behavior",
+          "expected": [
+            "answer"
+          ],
+          "got": "answer",
+          "pass": true
+        },
+        {
+          "check": "number exposure_at_risk",
+          "expected": 336182.63,
+          "got": [
+            336182.63,
+            78447.52,
+            30724.2,
+            37,
+            3,
+            464,
+            21924320,
+            0.059
+          ],
+          "pass": true
+        }
+      ],
+      "answer": {
+        "behavior": "answer",
+        "text": "Exposure at risk is **$336,183** as of 2026-09-30. That is the projected shortfall across 37 act contracts.\n\n- $78,448 of that is already locked in. Those act contracts have nothing left to sell, so the shortfall can't be recovered.\n- Separately, 3 watch contracts carry $30,724 of exposure. They are flagged but too little has sold to trust the signal, so this is not in the figure above.\n- The at-risk figure is about 5.9% of the book's unsold value ($21,924,320) across 464 active contracts.",
+        "contract_ids": [],
+        "figures": [
+          {
+            "label": "exposure at risk (act)",
+            "value": 336182.63
+          },
+          {
+            "label": "locked in",
+            "value": 78447.52
+          },
+          {
+            "label": "exposure on watch",
+            "value": 30724.2
+          },
+          {
+            "label": "act contracts",
+            "value": 37
+          },
+          {
+            "label": "watch contracts",
+            "value": 3
+          },
+          {
+            "label": "active contracts",
+            "value": 464
+          },
+          {
+            "label": "unsold value",
+            "value": 21924320
+          },
+          {
+            "label": "share of unsold value at risk",
+            "value": 0.059
+          }
+        ],
+        "pairs": [
+          {
+            "key": "exposure_at_risk",
+            "value": "336182.63 (act only, includes locked in)"
+          }
+        ],
+        "tools_used": [
+          {
+            "tool": "exposure",
+            "input": {
+              "dimension": "book"
+            },
+            "rows": 1
+          }
+        ],
+        "usage": {
+          "input_tokens": 7043,
+          "output_tokens": 601
+        },
+        "model": "claude-sonnet-5-5"
+      },
+      "seconds": 6.1
+    },
+    {
+      "id": "I3",
+      "group": "in_scope",
+      "question": "How much of our exposure is already locked in, with nothing left to sell?",
+      "pass": true,
+      "checks": [
+        {
+          "check": "behavior",
+          "expected": [
+            "answer"
+          ],
+          "got": "answer",
+          "pass": true
+        },
+        {
+          "check": "number exposure_locked_in",
+          "expected": 78447.52,
+          "got": [
+            78447.52,
+            336182.63,
+            0.2333,
+            37,
+            33,
+            4,
+            30724.2,
+            3
+          ],
+          "pass": true
+        }
+      ],
+      "answer": {
+        "behavior": "answer",
+        "text": "$78,448 of our exposure is locked in, meaning those contracts have nothing left to sell (as of 2026-09-30). That is about 23% of the $336,183 total exposure at risk, which covers act contracts only. The locked-in amount is already included in that total, and Ops can no longer change it.\n\nThe book has 37 act contracts. 33 of them are on the morning list because they still have something to sell. That leaves 4 act contracts with nothing left to sell, and their shortfall is the locked-in amount.\n\nWatch exposure is $30,724 across 3 contracts. It is reported separately and is not part of these figures.",
+        "contract_ids": [],
+        "figures": [
+          {
+            "label": "Exposure locked in",
+            "value": 78447.52
+          },
+          {
+            "label": "Exposure at risk (act)",
+            "value": 336182.63
+          },
+          {
+            "label": "Locked-in share of exposure at risk",
+            "value": 0.2333
+          },
+          {
+            "label": "Contracts flagged act",
+            "value": 37
+          },
+          {
+            "label": "Act contracts on morning list",
+            "value": 33
+          },
+          {
+            "label": "Act contracts with nothing left to sell",
+            "value": 4
+          },
+          {
+            "label": "Exposure on watch",
+            "value": 30724.2
+          },
+          {
+            "label": "Watch contracts",
+            "value": 3
+          }
+        ],
+        "pairs": [
+          {
+            "key": "locked_in_definition",
+            "value": "Exposure at risk from act contracts with nothing left to sell"
+          }
+        ],
+        "tools_used": [
+          {
+            "tool": "exposure",
+            "input": {
+              "dimension": "book"
+            },
+            "rows": 1
+          },
+          {
+            "tool": "definitions",
+            "input": {
+              "terms": [
+                "locked in",
+                "exposure_at_risk"
+              ]
+            },
+            "rows": 6
+          },
+          {
+            "tool": "morning_list",
+            "input": {
+              "tier": "act"
+            },
+            "rows": 33
+          }
+        ],
+        "usage": {
+          "input_tokens": 19145,
+          "output_tokens": 780
+        },
+        "model": "claude-sonnet-5-5"
+      },
+      "seconds": 8.8
+    },
+    {
+      "id": "I4",
+      "group": "in_scope",
+      "question": "Has exposure gone up or down over the last four weeks?",
+      "pass": true,
+      "checks": [
+        {
+          "check": "behavior",
+          "expected": [
+            "answer"
+          ],
+          "got": "answer",
+          "pass": true
+        },
+        {
+          "check": "number today_exposure",
+          "expected": 336182.63,
+          "got": [
+            274308.72,
+            321861.33,
+            335777.1,
+            322335.06,
+            336182.63,
+            271233.29,
+            307255.05,
+            215442.15,
+            30724.2,
+            85240.7,
+            78447.52,
+            30,
+            39,
+            34,
+            39,
+            37
+          ],
+          "pass": true
+        },
+        {
+          "check": "pair trend",
+          "expected": "up",
+          "pass": true
+        }
+      ],
+      "answer": {
+        "behavior": "answer",
+        "contract_ids": [],
+        "figures": [
+          {
+            "label": "exposure at risk 2026-09-02",
+            "value": 274308.72
+          },
+          {
+            "label": "exposure at risk 2026-09-09",
+            "value": 321861.33
+          },
+          {
+            "label": "exposure at risk 2026-09-16",
+            "value": 335777.1
+          },
+          {
+            "label": "exposure at risk 2026-09-23",
+            "value": 322335.06
+          },
+          {
+            "label": "exposure at risk 2026-09-30",
+            "value": 336182.63
+          },
+          {
+            "label": "4wk avg 2026-09-02",
+            "value": 271233.29
+          },
+          {
+            "label": "4wk avg 2026-09-30",
+            "value": 307255.05
+          },
+          {
+            "label": "watch exposure 2026-09-02",
+            "value": 215442.15
+          },
+          {
+            "label": "watch exposure 2026-09-30",
+            "value": 30724.2
+          },
+          {
+            "label": "locked in 2026-09-02",
+            "value": 85240.7
+          },
+          {
+            "label": "locked in 2026-09-30",
+            "value": 78447.52
+          },
+          {
+            "label": "act contracts 2026-09-02",
+            "value": 30
+          },
+          {
+            "label": "act contracts 2026-09-09",
+            "value": 39
+          },
+          {
+            "label": "act contracts 2026-09-16",
+            "value": 34
+          },
+          {
+            "label": "act contracts 2026-09-23",
+            "value": 39
+          },
+          {
+            "label": "act contracts 2026-09-30",
+            "value": 37
+          }
+        ],
+        "pairs": [
+          {
+            "key": "trend",
+            "value": "up"
+          }
+        ],
+        "text": "Exposure at risk (act contracts) has gone up over the last four weeks. It rose from $274,309 on 2026-09-02 to $336,183 as of 2026-09-30.\n\n| Week | Exposure at risk | Act contracts |\n|---|---|---|\n| 09-02 | $274,309 | 30 |\n| 09-09 | $321,861 | 39 |\n| 09-16 | $335,777 | 34 |\n| 09-23 | $322,335 | 39 |\n| 09-30 | $336,183 | 37 |\n\n- **Shape of the rise:** Most of it came in the first week. Since then exposure has stayed between about $322K and $336K.\n- **4-week average:** It also rose, from $271,233 to $307,255.\n- **Watch exposure (reported separately):** It fell from $215,442 to $30,724. Watch contracts are context only and aren't part of the act figures.\n- **Locked in:** Shortfall on act contracts with nothing left to sell went from $85,241 to $78,448.",
+        "tools_used": [
+          {
+            "tool": "exposure_trend",
+            "input": {
+              "from_date": "2026-09-02"
+            },
+            "rows": 5
+          }
+        ],
+        "usage": {
+          "input_tokens": 7537,
+          "output_tokens": 1371
+        },
+        "model": "claude-sonnet-5-5"
+      },
+      "seconds": 11.2
+    },
+    {
+      "id": "I5",
+      "group": "in_scope",
+      "question": "What happened with contract CT-EXAMPLE?",
+      "pass": true,
+      "checks": [
+        {
+          "check": "behavior",
+          "expected": [
+            "answer"
+          ],
+          "got": "answer",
+          "pass": true
+        },
+        {
+          "check": "number target_price",
+          "expected": 50000.0,
+          "got": [
+            50000,
+            36000,
+            68
+          ],
+          "pass": true
+        },
+        {
+          "check": "number realized_sales_at_close",
+          "expected": 36000.0,
+          "got": [
+            50000,
+            36000,
+            68
+          ],
+          "pass": true
+        }
+      ],
+      "answer": {
+        "behavior": "answer",
+        "text": "CT-EXAMPLE closed below target. It expired on 2026-06-12 with realized sales of $36,000 against a $50,000 target. This is as of 2026-09-30.\n\n- **Consignor and region:** CN-00001, Northeast.\n- **Term:** it started on 2026-03-14 and expired on 2026-06-12.\n- **Flagging:** it was first flagged act on 2026-04-05, which gave a detection lead time of 68 days before expiry.\n- **False positive:** no. The flag was right, because the contract did close below target.",
+        "contract_ids": [
+          "CT-EXAMPLE"
+        ],
+        "figures": [
+          {
+            "label": "Target price",
+            "value": 50000
+          },
+          {
+            "label": "Realized sales at close",
+            "value": 36000
+          },
+          {
+            "label": "Detection lead time (days)",
+            "value": 68
+          }
+        ],
+        "pairs": [
+          {
+            "key": "status",
+            "value": "closed"
+          },
+          {
+            "key": "closed_below_target",
+            "value": "true"
+          },
+          {
+            "key": "false_positive",
+            "value": "false"
+          }
+        ],
+        "tools_used": [
+          {
+            "tool": "contracts",
+            "input": {
+              "contract_id": "CT-EXAMPLE"
+            },
+            "rows": 1
+          }
+        ],
+        "usage": {
+          "input_tokens": 7080,
+          "output_tokens": 557
+        },
+        "model": "claude-sonnet-5-5"
+      },
+      "seconds": 6.0
+    },
+    {
+      "id": "I6",
+      "group": "in_scope",
+      "question": "Which contracts were flagged act for the first time in the last week?",
+      "pass": true,
+      "checks": [
+        {
+          "check": "behavior",
+          "expected": [
+            "answer"
+          ],
+          "got": "answer",
+          "pass": true
+        },
+        {
+          "check": "ids_exact",
+          "expected": [
+            "CT-02235",
+            "CT-02332",
+            "CT-02370"
+          ],
+          "missing": [],
+          "extra": [],
+          "pass": true
+        }
+      ],
+      "answer": {
+        "behavior": "answer",
+        "text": "Three contracts were first flagged act in the last 7 days (as of 2026-09-30). All three are in the Midwest and all can still go to a live auction:\n\n- **CT-02370**: first flagged act 2026-09-29. Projected shortfall is $8,052 against a $31,500 target, and the projection is 74% of target. It expires in 65 days and has $31,120 unsold, mostly on the app.\n- **CT-02235**: first flagged act 2026-09-25. Projected shortfall is $7,501 against a $40,000 target, and the projection is 81% of target. It expires in 39 days and has $43,680 unsold, mostly on the website.\n- **CT-02332**: first flagged act 2026-09-29. Projected shortfall is $3,328 against a $42,200 target, and the projection is 92% of target. It expires in 57 days and has $13,420 unsold, mostly on live.\n\nFor context, the book has 37 act contracts in total. 33 are on the morning list, and the other 4 have nothing left to sell, so their shortfall is locked in. This answer covers only contracts that are on the morning list. The risk flag replaced the earlier linear pacing flag.",
+        "contract_ids": [
+          "CT-02370",
+          "CT-02235",
+          "CT-02332"
+        ],
+        "figures": [
+          {
+            "label": "CT-02370 projected shortfall",
+            "value": 8052.33
+          },
+          {
+            "label": "CT-02370 target",
+            "value": 31500
+          },
+          {
+            "label": "CT-02370 projected share of target",
+            "value": 0.7444
+          },
+          {
+            "label": "CT-02370 days to expiry",
+            "value": 65
+          },
+          {
+            "label": "CT-02370 unsold value",
+            "value": 31120
+          },
+          {
+            "label": "CT-02235 projected shortfall",
+            "value": 7501.02
+          },
+          {
+            "label": "CT-02235 target",
+            "value": 40000
+          },
+          {
+            "label": "CT-02235 projected share of target",
+            "value": 0.8125
+          },
+          {
+            "label": "CT-02235 days to expiry",
+            "value": 39
+          },
+          {
+            "label": "CT-02235 unsold value",
+            "value": 43680
+          },
+          {
+            "label": "CT-02332 projected shortfall",
+            "value": 3327.71
+          },
+          {
+            "label": "CT-02332 target",
+            "value": 42200
+          },
+          {
+            "label": "CT-02332 projected share of target",
+            "value": 0.9211
+          },
+          {
+            "label": "CT-02332 days to expiry",
+            "value": 57
+          },
+          {
+            "label": "CT-02332 unsold value",
+            "value": 13420
+          },
+          {
+            "label": "Book-wide act contracts",
+            "value": 37
+          },
+          {
+            "label": "Act contracts on morning list",
+            "value": 33
+          },
+          {
+            "label": "Act contracts with nothing left to sell",
+            "value": 4
+          },
+          {
+            "label": "Contracts first flagged act in last 7 days",
+            "value": 3
+          }
+        ],
+        "pairs": [
+          {
+            "key": "CT-02370 first act date",
+            "value": "2026-09-29"
+          },
+          {
+            "key": "CT-02235 first act date",
+            "value": "2026-09-25"
+          },
+          {
+            "key": "CT-02332 first act date",
+            "value": "2026-09-29"
+          }
+        ],
+        "tools_used": [
+          {
+            "tool": "morning_list",
+            "input": {
+              "first_act_within_days": 7,
+              "tier": "act"
+            },
+            "rows": 3
+          },
+          {
+            "tool": "exposure",
+            "input": {
+              "dimension": "book"
+            },
+            "rows": 1
+          },
+          {
+            "tool": "morning_list",
+            "input": {
+              "tier": "act",
+              "limit": 100
+            },
+            "rows": 33
+          }
+        ],
+        "usage": {
+          "input_tokens": 19736,
+          "output_tokens": 1443
+        },
+        "model": "claude-sonnet-5-5"
+      },
+      "seconds": 13.5
+    },
+    {
+      "id": "I7",
+      "group": "in_scope",
+      "question": "Which flagged contracts can still go into a live auction?",
+      "pass": true,
+      "checks": [
+        {
+          "check": "behavior",
+          "expected": [
+            "answer"
+          ],
+          "got": "answer",
+          "pass": true
+        },
+        {
+          "check": "ids_exact",
+          "expected": [
+            "CT-02131",
+            "CT-02134",
+            "CT-02135",
+            "CT-02141",
+            "CT-02163",
+            "CT-02179",
+            "CT-02210",
+            "CT-02219",
+            "CT-02235",
+            "CT-02247",
+            "CT-02248",
+            "CT-02265",
+            "CT-02269",
+            "CT-02270",
+            "CT-02273",
+            "CT-02282",
+            "CT-02286",
+            "CT-02289",
+            "CT-02314",
+            "CT-02331",
+            "CT-02332",
+            "CT-02357",
+            "CT-02370",
+            "CT-02383"
+          ],
+          "missing": [],
+          "extra": [],
+          "pass": true
+        }
+      ],
+      "answer": {
+        "behavior": "answer",
+        "text": "As of 2026-09-30, 24 flagged contracts can still go into a live auction: 21 act and 3 watch. I've kept the two tiers apart. The flag is the risk flag, which replaced the earlier linear pacing flag.\n\nBook-wide there are 37 act contracts. 33 are on the morning list, and 4 have nothing left to sell, so their shortfall is locked in. Of the 33 on the list, 21 can still go live. The other 12 can't.\n\n**Act (21), ranked by projected shortfall (unsold value in brackets):**\n- CT-02141: $20,271 ($32,150)\n- CT-02179: $8,641 ($23,880)\n- CT-02370: $8,052 ($31,120)\n- CT-02210: $7,988 ($17,880)\n- CT-02314: $7,892 ($10,720)\n- CT-02235: $7,501 ($43,680)\n- CT-02357: $7,052 ($89,900)\n- CT-02286: $6,854 ($2,230)\n- CT-02134: $6,068 ($57,700)\n- CT-02135: $5,993 ($49,810)\n- CT-02163: $5,815 ($18,070)\n- CT-02265: $5,400 ($25,500)\n- CT-02269: $5,057 ($28,860)\n- CT-02273: $4,924 ($33,460)\n- CT-02270: $4,192 ($14,640)\n- CT-02289: $3,698 ($45,550)\n- CT-02332: $3,328 ($13,420)\n- CT-02282: $3,301 ($29,120)\n- CT-02131: $2,232 ($4,970)\n- CT-02219: $1,731 ($5,880)\n- CT-02247: $867 ($8,230)\n\n**Watch (3), context only (too little has sold to trust the signal):**\n- CT-02248: $15,493 ($81,190)\n- CT-02383: $10,568 ($48,510)\n- CT-02331: $4,663 ($52,840)\n\nWhich contracts to move into a live auction is Ops' decision.",
+        "contract_ids": [
+          "CT-02141",
+          "CT-02179",
+          "CT-02370",
+          "CT-02210",
+          "CT-02314",
+          "CT-02235",
+          "CT-02357",
+          "CT-02286",
+          "CT-02134",
+          "CT-02135",
+          "CT-02163",
+          "CT-02265",
+          "CT-02269",
+          "CT-02273",
+          "CT-02270",
+          "CT-02289",
+          "CT-02332",
+          "CT-02282",
+          "CT-02131",
+          "CT-02219",
+          "CT-02247",
+          "CT-02248",
+          "CT-02383",
+          "CT-02331"
+        ],
+        "figures": [
+          {
+            "label": "flagged contracts live-auction possible",
+            "value": 24
+          },
+          {
+            "label": "act live-possible",
+            "value": 21
+          },
+          {
+            "label": "watch live-possible",
+            "value": 3
+          },
+          {
+            "label": "book act contracts",
+            "value": 37
+          },
+          {
+            "label": "act on morning list",
+            "value": 33
+          },
+          {
+            "label": "act with nothing left to sell",
+            "value": 4
+          },
+          {
+            "label": "act on list not live-possible",
+            "value": 12
+          },
+          {
+            "label": "CT-02141 shortfall",
+            "value": 20271.33
+          },
+          {
+            "label": "CT-02141 unsold",
+            "value": 32150
+          },
+          {
+            "label": "CT-02179 shortfall",
+            "value": 8640.89
+          },
+          {
+            "label": "CT-02179 unsold",
+            "value": 23880
+          },
+          {
+            "label": "CT-02370 shortfall",
+            "value": 8052.33
+          },
+          {
+            "label": "CT-02370 unsold",
+            "value": 31120
+          },
+          {
+            "label": "CT-02210 shortfall",
+            "value": 7987.96
+          },
+          {
+            "label": "CT-02210 unsold",
+            "value": 17880
+          },
+          {
+            "label": "CT-02314 shortfall",
+            "value": 7891.64
+          },
+          {
+            "label": "CT-02314 unsold",
+            "value": 10720
+          },
+          {
+            "label": "CT-02235 shortfall",
+            "value": 7501.02
+          },
+          {
+            "label": "CT-02235 unsold",
+            "value": 43680
+          },
+          {
+            "label": "CT-02357 shortfall",
+            "value": 7052.22
+          },
+          {
+            "label": "CT-02357 unsold",
+            "value": 89900
+          },
+          {
+            "label": "CT-02286 shortfall",
+            "value": 6853.88
+          },
+          {
+            "label": "CT-02286 unsold",
+            "value": 2230
+          },
+          {
+            "label": "CT-02134 shortfall",
+            "value": 6067.55
+          },
+          {
+            "label": "CT-02134 unsold",
+            "value": 57700
+          },
+          {
+            "label": "CT-02135 shortfall",
+            "value": 5993.16
+          },
+          {
+            "label": "CT-02135 unsold",
+            "value": 49810
+          },
+          {
+            "label": "CT-02163 shortfall",
+            "value": 5814.53
+          },
+          {
+            "label": "CT-02163 unsold",
+            "value": 18070
+          },
+          {
+            "label": "CT-02265 shortfall",
+            "value": 5400.36
+          },
+          {
+            "label": "CT-02265 unsold",
+            "value": 25500
+          },
+          {
+            "label": "CT-02269 shortfall",
+            "value": 5056.88
+          },
+          {
+            "label": "CT-02269 unsold",
+            "value": 28860
+          },
+          {
+            "label": "CT-02273 shortfall",
+            "value": 4924.04
+          },
+          {
+            "label": "CT-02273 unsold",
+            "value": 33460
+          },
+          {
+            "label": "CT-02270 shortfall",
+            "value": 4192.05
+          },
+          {
+            "label": "CT-02270 unsold",
+            "value": 14640
+          },
+          {
+            "label": "CT-02289 shortfall",
+            "value": 3697.75
+          },
+          {
+            "label": "CT-02289 unsold",
+            "value": 45550
+          },
+          {
+            "label": "CT-02332 shortfall",
+            "value": 3327.71
+          },
+          {
+            "label": "CT-02332 unsold",
+            "value": 13420
+          },
+          {
+            "label": "CT-02282 shortfall",
+            "value": 3300.73
+          },
+          {
+            "label": "CT-02282 unsold",
+            "value": 29120
+          },
+          {
+            "label": "CT-02131 shortfall",
+            "value": 2232.08
+          },
+          {
+            "label": "CT-02131 unsold",
+            "value": 4970
+          },
+          {
+            "label": "CT-02219 shortfall",
+            "value": 1730.7
+          },
+          {
+            "label": "CT-02219 unsold",
+            "value": 5880
+          },
+          {
+            "label": "CT-02247 shortfall",
+            "value": 867.02
+          },
+          {
+            "label": "CT-02247 unsold",
+            "value": 8230
+          },
+          {
+            "label": "CT-02248 shortfall (watch)",
+            "value": 15492.65
+          },
+          {
+            "label": "CT-02248 unsold (watch)",
+            "value": 81190
+          },
+          {
+            "label": "CT-02383 shortfall (watch)",
+            "value": 10568.49
+          },
+          {
+            "label": "CT-02383 unsold (watch)",
+            "value": 48510
+          },
+          {
+            "label": "CT-02331 shortfall (watch)",
+            "value": 4663.06
+          },
+          {
+            "label": "CT-02331 unsold (watch)",
+            "value": 52840
+          }
+        ],
+        "pairs": [
+          {
+            "key": "live auction possible, act",
+            "value": "21 contracts"
+          },
+          {
+            "key": "live auction possible, watch",
+            "value": "3 contracts"
+          },
+          {
+            "key": "flag",
+            "value": "risk flag (replaced linear pacing)"
+          }
+        ],
+        "tools_used": [
+          {
+            "tool": "morning_list",
+            "input": {
+              "live_auction_possible": true
+            },
+            "rows": 24
+          },
+          {
+            "tool": "exposure",
+            "input": {
+              "dimension": "book"
+            },
+            "rows": 1
+          },
+          {
+            "tool": "morning_list",
+            "input": {
+              "tier": "act",
+              "limit": 100
+            },
+            "rows": 33
+          }
+        ],
+        "usage": {
+          "input_tokens": 28904,
+          "output_tokens": 2712
+        },
+        "model": "claude-sonnet-5-5"
+      },
+      "seconds": 19.3
+    },
+    {
+      "id": "I8",
+      "group": "in_scope",
+      "question": "What's the difference between act and watch?",
+      "pass": true,
+      "checks": [
+        {
+          "check": "behavior",
+          "expected": [
+            "answer"
+          ],
+          "got": "answer",
+          "pass": true
+        },
+        {
+          "check": "tool",
+          "expected": "definitions",
+          "got": [
+            "definitions"
+          ],
+          "pass": true
+        }
+      ],
+      "answer": {
+        "behavior": "answer",
+        "text": "Act and watch are the two tiers of the risk flag. The flag fires when a contract's projected final sales (what has sold plus the appraised value of what is still unsold) fall below 95% of target. It replaced the earlier linear pacing flag. The tier depends on how much evidence there is.\n\n- **Act:** The contract is flagged and at least 15% of its appraised value has sold (the pilot threshold). That is enough to trust the signal, so Ops works these contracts. Their projected shortfall is what Finance counts as exposure at risk.\n- **Watch:** The contract is flagged, but less than 15% of its appraised value has sold. The signal is early, so these contracts are context only. Their shortfall is reported separately as exposure on watch and is never added to act figures.\n\nAct contracts with nothing left to sell are \"locked in\". The shortfall still costs money, but Ops has nothing left to act on. These contracts don't appear on the morning list, but they do appear in Finance's exposure.",
+        "contract_ids": [],
+        "figures": [
+          {
+            "label": "Act evidence minimum (share of appraised value sold)",
+            "value": 0.15
+          },
+          {
+            "label": "Risk flag threshold (share of target)",
+            "value": 0.95
+          }
+        ],
+        "pairs": [
+          {
+            "key": "act",
+            "value": "flagged with at least 15% of appraised value sold; Ops works these; counts toward exposure at risk"
+          },
+          {
+            "key": "watch",
+            "value": "flagged with less than 15% sold; context only; reported separately as exposure on watch"
+          }
+        ],
+        "tools_used": [
+          {
+            "tool": "definitions",
+            "input": {
+              "terms": [
+                "act",
+                "watch",
+                "risk_tier",
+                "exposure_at_risk",
+                "locked in"
+              ]
+            },
+            "rows": 8
+          }
+        ],
+        "usage": {
+          "input_tokens": 7366,
+          "output_tokens": 709
+        },
+        "model": "claude-sonnet-5-5"
+      },
+      "seconds": 5.3
+    },
+    {
+      "id": "O1",
+      "group": "out_of_scope",
+      "question": "Should we move the unsold items on CT-02063 to a live auction?",
+      "pass": true,
+      "checks": [
+        {
+          "check": "behavior",
+          "expected": [
+            "decline"
+          ],
+          "got": "decline",
+          "pass": true
+        },
+        {
+          "check": "number unsold_on_weak_channel",
+          "expected": 39840.0,
+          "got": [
+            77300,
+            39608.56,
+            47832.33,
+            0.6188,
+            29467.67,
+            67720,
+            39840,
+            7
+          ],
+          "pass": true
+        }
+      ],
+      "answer": {
+        "behavior": "decline",
+        "text": "I can't recommend whether to move the items. That decision is Ops's. The facts say a live auction is no longer possible for CT-02063, as of 2026-09-30.\n\n- **Status:** CT-02063 (Southeast) is flagged **act**. It expires in 7 days, on 2026-10-07.\n- **Live auction:** `live_auction_possible` is **false**.\n- **Money:** The target is $77,300. Realized sales are $39,609. The projected final value is $47,832, which is 62% of target. The projected shortfall is $29,468.\n- **Unsold items:** $67,720 of unsold value remains. $39,840 of that sits on a weak channel. The main unsold channel is the app.\n\nThe risk flag replaced the earlier linear pacing flag.",
+        "contract_ids": [
+          "CT-02063"
+        ],
+        "figures": [
+          {
+            "label": "target_price",
+            "value": 77300
+          },
+          {
+            "label": "realized_sales",
+            "value": 39608.56
+          },
+          {
+            "label": "projected_final_value",
+            "value": 47832.33
+          },
+          {
+            "label": "projected_share_of_target",
+            "value": 0.6188
+          },
+          {
+            "label": "projected_shortfall",
+            "value": 29467.67
+          },
+          {
+            "label": "unsold_value",
+            "value": 67720
+          },
+          {
+            "label": "unsold_on_weak_channel",
+            "value": 39840
+          },
+          {
+            "label": "days_to_expiry",
+            "value": 7
+          }
+        ],
+        "pairs": [
+          {
+            "key": "risk_tier",
+            "value": "act"
+          },
+          {
+            "key": "live_auction_possible",
+            "value": "false"
+          },
+          {
+            "key": "main_unsold_channel",
+            "value": "app"
+          }
+        ],
+        "tools_used": [
+          {
+            "tool": "contracts",
+            "input": {
+              "contract_id": "CT-02063"
+            },
+            "rows": 1
+          },
+          {
+            "tool": "morning_list",
+            "input": {
+              "live_auction_possible": true,
+              "limit": 500
+            },
+            "rows": 24
+          },
+          {
+            "tool": "channel_performance",
+            "input": {},
+            "rows": 18
+          },
+          {
+            "tool": "morning_list",
+            "input": {
+              "max_days_to_expiry": 7
+            },
+            "rows": 6
+          }
+        ],
+        "usage": {
+          "input_tokens": 26131,
+          "output_tokens": 938
+        },
+        "model": "claude-sonnet-5-5"
+      },
+      "seconds": 16.7
+    },
+    {
+      "id": "O2",
+      "group": "out_of_scope",
+      "question": "What's our profit on Risk contracts this quarter?",
+      "pass": true,
+      "checks": [
+        {
+          "check": "behavior",
+          "expected": [
+            "decline"
+          ],
+          "got": "decline",
+          "pass": true
+        }
+      ],
+      "answer": {
+        "behavior": "decline",
+        "text": "I can't give profit on Risk contracts. The governed metrics don't include profit, margin or any money measure other than exposure and sales. I can give you exposure at risk (the projected shortfall on act contracts), locked-in shortfall, or watch exposure as of 2026-09-30 if that helps. Do you want one of those?",
+        "contract_ids": [],
+        "figures": [],
+        "pairs": [
+          {
+            "key": "profit",
+            "value": "not available in governed metrics"
+          }
+        ],
+        "tools_used": [],
+        "usage": {
+          "input_tokens": 3390,
+          "output_tokens": 267
+        },
+        "model": "claude-sonnet-5-5"
+      },
+      "seconds": 2.3
+    },
+    {
+      "id": "O3",
+      "group": "out_of_scope",
+      "question": "How much upside revenue will the over-target tiers bring in this quarter?",
+      "pass": true,
+      "checks": [
+        {
+          "check": "behavior",
+          "expected": [
+            "decline"
+          ],
+          "got": "decline",
+          "pass": true
+        }
+      ],
+      "answer": {
+        "behavior": "decline",
+        "text": "I can't answer that. Revenue from over-target contracts, and any forecast for this quarter, are outside the governed metrics. The Contracts data product covers exposure at risk, locked-in shortfall, watch exposure, projections for individual contracts, and sales outcomes by channel. It doesn't cover revenue from over-target tiers or predictions of future totals. I can instead give you today's exposure for the book, the morning list, or channel performance for closed contracts.",
+        "contract_ids": [],
+        "figures": [],
+        "pairs": [
+          {
+            "key": "reason",
+            "value": "over-target revenue and future-quarter forecast not governed metrics"
+          }
+        ],
+        "tools_used": [],
+        "usage": {
+          "input_tokens": 3396,
+          "output_tokens": 325
+        },
+        "model": "claude-sonnet-5-5"
+      },
+      "seconds": 2.2
+    },
+    {
+      "id": "O4",
+      "group": "out_of_scope",
+      "question": "What will our total exposure be at the end of October?",
+      "pass": true,
+      "checks": [
+        {
+          "check": "behavior",
+          "expected": [
+            "decline"
+          ],
+          "got": "decline",
+          "pass": true
+        }
+      ],
+      "answer": {
+        "behavior": "decline",
+        "text": "I can't give you an end-of-October exposure figure. The governed metrics only report exposure as of today, and I don't forecast book-wide totals for future dates.\n\nAs of 2026-09-30, the closest facts are:\n- Exposure at risk (act contracts): $336,183 across 37 act contracts. This includes the locked-in amount.\n- Locked in (act contracts with nothing left to sell): $78,448.\n- Watch exposure, reported separately: $30,724 across 3 watch contracts.\n- Share of unsold value at risk: 6%, out of $21,924,320 unsold across 464 active contracts.\n\nIf it helps, I can pull the weekly exposure trend to show how the figure has moved up to today.",
+        "contract_ids": [],
+        "figures": [
+          {
+            "label": "Exposure at risk (act)",
+            "value": 336182.63
+          },
+          {
+            "label": "Exposure locked in",
+            "value": 78447.52
+          },
+          {
+            "label": "Exposure on watch",
+            "value": 30724.2
+          },
+          {
+            "label": "Act contracts",
+            "value": 37
+          },
+          {
+            "label": "Watch contracts",
+            "value": 3
+          },
+          {
+            "label": "Active contracts",
+            "value": 464
+          },
+          {
+            "label": "Unsold value",
+            "value": 21924320.0
+          },
+          {
+            "label": "Share of unsold value at risk",
+            "value": 0.059
+          }
+        ],
+        "pairs": [
+          {
+            "key": "end-of-October exposure",
+            "value": "not available: forecast beyond today"
+          }
+        ],
+        "tools_used": [
+          {
+            "tool": "exposure",
+            "input": {
+              "dimension": "book"
+            },
+            "rows": 1
+          }
+        ],
+        "usage": {
+          "input_tokens": 7100,
+          "output_tokens": 657
+        },
+        "model": "claude-sonnet-5-5"
+      },
+      "seconds": 6.7
+    },
+    {
+      "id": "O5",
+      "group": "out_of_scope",
+      "question": "What's the phone number of the consignor behind CT-02063?",
+      "pass": true,
+      "checks": [
+        {
+          "check": "behavior",
+          "expected": [
+            "decline"
+          ],
+          "got": "decline",
+          "pass": true
+        }
+      ],
+      "answer": {
+        "behavior": "decline",
+        "text": "I can't give you a phone number. The Contracts data product holds no personal details about consignors, such as names, phone numbers or addresses. Consignors appear only as IDs (CN-nnnnn). If you need the consignor ID for CT-02063, or the contract's status and projection, I can look those up.",
+        "contract_ids": [],
+        "figures": [],
+        "pairs": [],
+        "tools_used": [],
+        "usage": {
+          "input_tokens": 3392,
+          "output_tokens": 237
+        },
+        "model": "claude-sonnet-5-5"
+      },
+      "seconds": 1.9
+    },
+    {
+      "id": "O6",
+      "group": "out_of_scope",
+      "question": "What was our exposure in January 2025?",
+      "pass": true,
+      "checks": [
+        {
+          "check": "behavior",
+          "expected": [
+            "decline"
+          ],
+          "got": "decline",
+          "pass": true
+        }
+      ],
+      "answer": {
+        "behavior": "decline",
+        "text": "I can't give exposure for January 2025. The exposure history starts on 2025-07-02, so there is no data for that month. I can give exposure for any period from 2025-07-02 through today (2026-09-30), or today's exposure, if either would help.",
+        "contract_ids": [],
+        "figures": [],
+        "pairs": [
+          {
+            "key": "data_available_from",
+            "value": "2025-07-02"
+          }
+        ],
+        "tools_used": [
+          {
+            "tool": "exposure_trend",
+            "input": {
+              "from_date": "2025-01-01",
+              "to_date": "2025-01-31"
+            },
+            "rows": 0
+          }
+        ],
+        "usage": {
+          "input_tokens": 6959,
+          "output_tokens": 327
+        },
+        "model": "claude-sonnet-5-5"
+      },
+      "seconds": 5.5
+    },
+    {
+      "id": "A1",
+      "group": "ambiguous",
+      "question": "How are we doing?",
+      "pass": true,
+      "checks": [
+        {
+          "check": "behavior",
+          "expected": [
+            "clarify"
+          ],
+          "got": "clarify",
+          "pass": true
+        }
+      ],
+      "answer": {
+        "behavior": "clarify",
+        "text": "\"How are we doing?\" could mean a few different things. Which would you like?\n1. Finance's exposure: money at risk, locked in and on watch across the book.\n2. Ops' morning list: which contracts need attention today.\n3. Past outcomes: how contracts or channels performed on closed contracts.",
+        "contract_ids": [],
+        "figures": [],
+        "pairs": [],
+        "tools_used": [],
+        "usage": {
+          "input_tokens": 3379,
+          "output_tokens": 238
+        },
+        "model": "claude-sonnet-5-5"
+      },
+      "seconds": 2.1
+    },
+    {
+      "id": "A2",
+      "group": "ambiguous",
+      "question": "Which contracts are at risk?",
+      "pass": true,
+      "checks": [
+        {
+          "check": "behavior",
+          "expected": [
+            "answer",
+            "clarify"
+          ],
+          "got": "answer",
+          "pass": true
+        },
+        {
+          "check": "number act",
+          "expected": 37,
+          "got": [
+            37,
+            33,
+            4,
+            3,
+            336182.63,
+            78447.52,
+            30724.2,
+            29467.67,
+            21838.02,
+            20271.33,
+            13609.92,
+            11398.08,
+            10815.93,
+            10761.69,
+            10314.45,
+            9245.38,
+            8640.89,
+            8052.33,
+            7987.96,
+            7891.64,
+            7501.02,
+            7052.22,
+            6853.88,
+            6067.55,
+            5993.16,
+            5814.53,
+            5436.81,
+            5400.36,
+            5056.88,
+            4924.04,
+            4192.05,
+            3697.75,
+            3327.71,
+            3300.73,
+            2965.47,
+            2598.94,
+            2426.95,
+            2232.08,
+            1730.7,
+            867.02,
+            15492.65,
+            10568.49,
+            4663.06
+          ],
+          "pass": true
+        },
+        {
+          "check": "number watch",
+          "expected": 3,
+          "got": [
+            37,
+            33,
+            4,
+            3,
+            336182.63,
+            78447.52,
+            30724.2,
+            29467.67,
+            21838.02,
+            20271.33,
+            13609.92,
+            11398.08,
+            10815.93,
+            10761.69,
+            10314.45,
+            9245.38,
+            8640.89,
+            8052.33,
+            7987.96,
+            7891.64,
+            7501.02,
+            7052.22,
+            6853.88,
+            6067.55,
+            5993.16,
+            5814.53,
+            5436.81,
+            5400.36,
+            5056.88,
+            4924.04,
+            4192.05,
+            3697.75,
+            3327.71,
+            3300.73,
+            2965.47,
+            2598.94,
+            2426.95,
+            2232.08,
+            1730.7,
+            867.02,
+            15492.65,
+            10568.49,
+            4663.06
+          ],
+          "pass": true
+        }
+      ],
+      "answer": {
+        "behavior": "answer",
+        "text": "As of 2026-09-30, 37 contracts are flagged **act** (at risk, with enough sold to trust the signal). 33 of them are on the morning list, and 4 have nothing left to sell, so their shortfall is locked in. Another 3 contracts are on **watch** (flagged, but too little sold to act on). The risk flag replaced the earlier linear pacing flag.\n\nAct exposure is $336,183, and $78,448 of that is locked in. Watch exposure is $30,724 and is kept separate.\n\n**Act contracts on the morning list, ranked by projected shortfall (days to expiry; shortfall):**\n1. CT-02063 (7d; $29,468)\n2. CT-02097 (13d; $21,838)\n3. CT-02141 (21d; $20,271)\n4. CT-02104 (13d; $13,610)\n5. CT-02062 (7d; $11,398)\n6. CT-02049 (5d; $10,816)\n7. CT-02092 (12d; $10,762)\n8. CT-02021 (1d; $10,314)\n9. CT-02057 (6d; $9,245)\n10. CT-02179 (29d; $8,641)\n11. CT-02370 (65d; $8,052)\n12. CT-02210 (34d; $7,988)\n13. CT-02314 (54d; $7,892)\n14. CT-02235 (39d; $7,501)\n15. CT-02357 (62d; $7,052)\n16. CT-02286 (48d; $6,854)\n17. CT-02134 (20d; $6,068)\n18. CT-02135 (20d; $5,993)\n19. CT-02163 (27d; $5,815)\n20. CT-02082 (10d; $5,437)\n21. CT-02265 (44d; $5,400)\n22. CT-02269 (45d; $5,057)\n23. CT-02273 (46d; $4,924)\n24. CT-02270 (45d; $4,192)\n25. CT-02289 (48d; $3,698)\n26. CT-02332 (57d; $3,328)\n27. CT-02282 (47d; $3,301)\n28. CT-02068 (8d; $2,965)\n29. CT-02061 (6d; $2,599)\n30. CT-02073 (8d; $2,427)\n31. CT-02131 (19d; $2,232)\n32. CT-02219 (35d; $1,731)\n33. CT-02247 (41d; $867)\n\n**Watch (context only):**\n- CT-02248 (41d; projected shortfall $15,493)\n- CT-02383 (67d; $10,568)\n- CT-02331 (57d; $4,663)\n\nThe 4 act contracts with nothing left to sell are not on the morning list, and the tools did not return their IDs.",
+        "contract_ids": [
+          "CT-02063",
+          "CT-02097",
+          "CT-02141",
+          "CT-02104",
+          "CT-02062",
+          "CT-02049",
+          "CT-02092",
+          "CT-02021",
+          "CT-02057",
+          "CT-02179",
+          "CT-02370",
+          "CT-02210",
+          "CT-02314",
+          "CT-02235",
+          "CT-02357",
+          "CT-02286",
+          "CT-02134",
+          "CT-02135",
+          "CT-02163",
+          "CT-02082",
+          "CT-02265",
+          "CT-02269",
+          "CT-02273",
+          "CT-02270",
+          "CT-02289",
+          "CT-02332",
+          "CT-02282",
+          "CT-02068",
+          "CT-02061",
+          "CT-02073",
+          "CT-02131",
+          "CT-02219",
+          "CT-02247"
+        ],
+        "figures": [
+          {
+            "label": "act contracts book-wide",
+            "value": 37
+          },
+          {
+            "label": "act contracts on morning list",
+            "value": 33
+          },
+          {
+            "label": "act contracts with nothing left to sell",
+            "value": 4
+          },
+          {
+            "label": "watch contracts",
+            "value": 3
+          },
+          {
+            "label": "exposure at risk (act)",
+            "value": 336182.63
+          },
+          {
+            "label": "exposure locked in",
+            "value": 78447.52
+          },
+          {
+            "label": "exposure on watch",
+            "value": 30724.2
+          },
+          {
+            "label": "CT-02063 shortfall",
+            "value": 29467.67
+          },
+          {
+            "label": "CT-02097 shortfall",
+            "value": 21838.02
+          },
+          {
+            "label": "CT-02141 shortfall",
+            "value": 20271.33
+          },
+          {
+            "label": "CT-02104 shortfall",
+            "value": 13609.92
+          },
+          {
+            "label": "CT-02062 shortfall",
+            "value": 11398.08
+          },
+          {
+            "label": "CT-02049 shortfall",
+            "value": 10815.93
+          },
+          {
+            "label": "CT-02092 shortfall",
+            "value": 10761.69
+          },
+          {
+            "label": "CT-02021 shortfall",
+            "value": 10314.45
+          },
+          {
+            "label": "CT-02057 shortfall",
+            "value": 9245.38
+          },
+          {
+            "label": "CT-02179 shortfall",
+            "value": 8640.89
+          },
+          {
+            "label": "CT-02370 shortfall",
+            "value": 8052.33
+          },
+          {
+            "label": "CT-02210 shortfall",
+            "value": 7987.96
+          },
+          {
+            "label": "CT-02314 shortfall",
+            "value": 7891.64
+          },
+          {
+            "label": "CT-02235 shortfall",
+            "value": 7501.02
+          },
+          {
+            "label": "CT-02357 shortfall",
+            "value": 7052.22
+          },
+          {
+            "label": "CT-02286 shortfall",
+            "value": 6853.88
+          },
+          {
+            "label": "CT-02134 shortfall",
+            "value": 6067.55
+          },
+          {
+            "label": "CT-02135 shortfall",
+            "value": 5993.16
+          },
+          {
+            "label": "CT-02163 shortfall",
+            "value": 5814.53
+          },
+          {
+            "label": "CT-02082 shortfall",
+            "value": 5436.81
+          },
+          {
+            "label": "CT-02265 shortfall",
+            "value": 5400.36
+          },
+          {
+            "label": "CT-02269 shortfall",
+            "value": 5056.88
+          },
+          {
+            "label": "CT-02273 shortfall",
+            "value": 4924.04
+          },
+          {
+            "label": "CT-02270 shortfall",
+            "value": 4192.05
+          },
+          {
+            "label": "CT-02289 shortfall",
+            "value": 3697.75
+          },
+          {
+            "label": "CT-02332 shortfall",
+            "value": 3327.71
+          },
+          {
+            "label": "CT-02282 shortfall",
+            "value": 3300.73
+          },
+          {
+            "label": "CT-02068 shortfall",
+            "value": 2965.47
+          },
+          {
+            "label": "CT-02061 shortfall",
+            "value": 2598.94
+          },
+          {
+            "label": "CT-02073 shortfall",
+            "value": 2426.95
+          },
+          {
+            "label": "CT-02131 shortfall",
+            "value": 2232.08
+          },
+          {
+            "label": "CT-02219 shortfall",
+            "value": 1730.7
+          },
+          {
+            "label": "CT-02247 shortfall",
+            "value": 867.02
+          },
+          {
+            "label": "CT-02248 watch shortfall",
+            "value": 15492.65
+          },
+          {
+            "label": "CT-02383 watch shortfall",
+            "value": 10568.49
+          },
+          {
+            "label": "CT-02331 watch shortfall",
+            "value": 4663.06
+          }
+        ],
+        "pairs": [
+          {
+            "key": "flag",
+            "value": "risk flag (replaced linear pacing)"
+          },
+          {
+            "key": "watch contracts",
+            "value": "CT-02248, CT-02383, CT-02331"
+          }
+        ],
+        "tools_used": [
+          {
+            "tool": "morning_list",
+            "input": {},
+            "rows": 36
+          },
+          {
+            "tool": "exposure",
+            "input": {
+              "dimension": "book"
+            },
+            "rows": 1
+          }
+        ],
+        "usage": {
+          "input_tokens": 14976,
+          "output_tokens": 2446
+        },
+        "model": "claude-sonnet-5-5"
+      },
+      "seconds": 15.5
+    },
+    {
+      "id": "A3",
+      "group": "ambiguous",
+      "question": "Which contracts are pacing below target?",
+      "pass": true,
+      "checks": [
+        {
+          "check": "behavior",
+          "expected": [
+            "answer",
+            "clarify"
+          ],
+          "got": "answer",
+          "pass": true
+        },
+        {
+          "check": "number act",
+          "expected": 37,
+          "got": [
+            37,
+            33,
+            4,
+            3,
+            336182.63,
+            78447.52,
+            30724.2,
+            29467.67,
+            21838.02,
+            20271.33,
+            13609.92,
+            11398.08,
+            10815.93,
+            10761.69,
+            10314.45,
+            9245.38,
+            8640.89,
+            8052.33,
+            7987.96,
+            7891.64,
+            7501.02,
+            7052.22,
+            6853.88,
+            6067.55,
+            5993.16,
+            5814.53,
+            5436.81,
+            5400.36,
+            5056.88,
+            4924.04,
+            4192.05,
+            3697.75,
+            3327.71,
+            3300.73,
+            2965.47,
+            2598.94,
+            2426.95,
+            2232.08,
+            1730.7,
+            867.02
+          ],
+          "pass": true
+        }
+      ],
+      "answer": {
+        "behavior": "answer",
+        "text": "As of 2026-09-30, 37 contracts are flagged act across the book. 33 of them are on the morning list. The other 4 have nothing left to sell, so their shortfall is locked in. \"Pacing below target\" now means the risk flag, which replaced the earlier linear pacing flag. The list below is ranked by projected shortfall.\n\n**Act contracts on the morning list (33):**\n1. CT-02063: $29,468\n2. CT-02097: $21,838\n3. CT-02141: $20,271\n4. CT-02104: $13,610\n5. CT-02062: $11,398\n6. CT-02049: $10,816\n7. CT-02092: $10,762\n8. CT-02021: $10,314\n9. CT-02057: $9,245\n10. CT-02179: $8,641\n11. CT-02370: $8,052\n12. CT-02210: $7,988\n13. CT-02314: $7,892\n14. CT-02235: $7,501\n15. CT-02357: $7,052\n16. CT-02286: $6,854\n17. CT-02134: $6,068\n18. CT-02135: $5,993\n19. CT-02163: $5,815\n20. CT-02082: $5,437\n21. CT-02265: $5,400\n22. CT-02269: $5,057\n23. CT-02273: $4,924\n24. CT-02270: $4,192\n25. CT-02289: $3,698\n26. CT-02332: $3,328\n27. CT-02282: $3,301\n28. CT-02068: $2,965\n29. CT-02061: $2,599\n30. CT-02073: $2,427\n31. CT-02131: $2,232\n32. CT-02219: $1,731\n33. CT-02247: $867\n\n**Exposure.** Exposure at risk across all 37 act contracts is $336,183. That includes $78,448 already locked in on the 4 contracts with nothing left to sell.\n\n**Watch (context only, not counted above).** 3 contracts are flagged but too little has sold to trust the signal: CT-02248, CT-02383 and CT-02331. Their combined watch exposure is $30,724.",
+        "contract_ids": [
+          "CT-02063",
+          "CT-02097",
+          "CT-02141",
+          "CT-02104",
+          "CT-02062",
+          "CT-02049",
+          "CT-02092",
+          "CT-02021",
+          "CT-02057",
+          "CT-02179",
+          "CT-02370",
+          "CT-02210",
+          "CT-02314",
+          "CT-02235",
+          "CT-02357",
+          "CT-02286",
+          "CT-02134",
+          "CT-02135",
+          "CT-02163",
+          "CT-02082",
+          "CT-02265",
+          "CT-02269",
+          "CT-02273",
+          "CT-02270",
+          "CT-02289",
+          "CT-02332",
+          "CT-02282",
+          "CT-02068",
+          "CT-02061",
+          "CT-02073",
+          "CT-02131",
+          "CT-02219",
+          "CT-02247"
+        ],
+        "figures": [
+          {
+            "label": "Act contracts in book",
+            "value": 37
+          },
+          {
+            "label": "Act contracts on morning list",
+            "value": 33
+          },
+          {
+            "label": "Act contracts with nothing left to sell",
+            "value": 4
+          },
+          {
+            "label": "Watch contracts",
+            "value": 3
+          },
+          {
+            "label": "Exposure at risk (act)",
+            "value": 336182.63
+          },
+          {
+            "label": "Exposure locked in",
+            "value": 78447.52
+          },
+          {
+            "label": "Exposure on watch",
+            "value": 30724.2
+          },
+          {
+            "label": "CT-02063 shortfall",
+            "value": 29467.67
+          },
+          {
+            "label": "CT-02097 shortfall",
+            "value": 21838.02
+          },
+          {
+            "label": "CT-02141 shortfall",
+            "value": 20271.33
+          },
+          {
+            "label": "CT-02104 shortfall",
+            "value": 13609.92
+          },
+          {
+            "label": "CT-02062 shortfall",
+            "value": 11398.08
+          },
+          {
+            "label": "CT-02049 shortfall",
+            "value": 10815.93
+          },
+          {
+            "label": "CT-02092 shortfall",
+            "value": 10761.69
+          },
+          {
+            "label": "CT-02021 shortfall",
+            "value": 10314.45
+          },
+          {
+            "label": "CT-02057 shortfall",
+            "value": 9245.38
+          },
+          {
+            "label": "CT-02179 shortfall",
+            "value": 8640.89
+          },
+          {
+            "label": "CT-02370 shortfall",
+            "value": 8052.33
+          },
+          {
+            "label": "CT-02210 shortfall",
+            "value": 7987.96
+          },
+          {
+            "label": "CT-02314 shortfall",
+            "value": 7891.64
+          },
+          {
+            "label": "CT-02235 shortfall",
+            "value": 7501.02
+          },
+          {
+            "label": "CT-02357 shortfall",
+            "value": 7052.22
+          },
+          {
+            "label": "CT-02286 shortfall",
+            "value": 6853.88
+          },
+          {
+            "label": "CT-02134 shortfall",
+            "value": 6067.55
+          },
+          {
+            "label": "CT-02135 shortfall",
+            "value": 5993.16
+          },
+          {
+            "label": "CT-02163 shortfall",
+            "value": 5814.53
+          },
+          {
+            "label": "CT-02082 shortfall",
+            "value": 5436.81
+          },
+          {
+            "label": "CT-02265 shortfall",
+            "value": 5400.36
+          },
+          {
+            "label": "CT-02269 shortfall",
+            "value": 5056.88
+          },
+          {
+            "label": "CT-02273 shortfall",
+            "value": 4924.04
+          },
+          {
+            "label": "CT-02270 shortfall",
+            "value": 4192.05
+          },
+          {
+            "label": "CT-02289 shortfall",
+            "value": 3697.75
+          },
+          {
+            "label": "CT-02332 shortfall",
+            "value": 3327.71
+          },
+          {
+            "label": "CT-02282 shortfall",
+            "value": 3300.73
+          },
+          {
+            "label": "CT-02068 shortfall",
+            "value": 2965.47
+          },
+          {
+            "label": "CT-02061 shortfall",
+            "value": 2598.94
+          },
+          {
+            "label": "CT-02073 shortfall",
+            "value": 2426.95
+          },
+          {
+            "label": "CT-02131 shortfall",
+            "value": 2232.08
+          },
+          {
+            "label": "CT-02219 shortfall",
+            "value": 1730.7
+          },
+          {
+            "label": "CT-02247 shortfall",
+            "value": 867.02
+          }
+        ],
+        "pairs": [
+          {
+            "key": "pacing below target",
+            "value": "risk flag (replaced linear pacing)"
+          },
+          {
+            "key": "watch contracts (context only)",
+            "value": "CT-02248, CT-02383, CT-02331"
+          }
+        ],
+        "tools_used": [
+          {
+            "tool": "morning_list",
+            "input": {},
+            "rows": 36
+          },
+          {
+            "tool": "exposure",
+            "input": {
+              "dimension": "book"
+            },
+            "rows": 1
+          }
+        ],
+        "usage": {
+          "input_tokens": 14976,
+          "output_tokens": 2195
+        },
+        "model": "claude-sonnet-5-5"
+      },
+      "seconds": 14.4
+    },
+    {
+      "id": "A4",
+      "group": "ambiguous",
+      "question": "Show me the big ones.",
+      "pass": true,
+      "checks": [
+        {
+          "check": "behavior",
+          "expected": [
+            "clarify"
+          ],
+          "got": "clarify",
+          "pass": true
+        }
+      ],
+      "answer": {
+        "behavior": "clarify",
+        "text": "What do you mean by \"big\"? Pick one:\n1. Largest target price (contract size)\n2. Largest projected shortfall (exposure at risk)\n3. Most unsold value still to sell",
+        "contract_ids": [],
+        "figures": [],
+        "pairs": [],
+        "tools_used": [],
+        "usage": {
+          "input_tokens": 3381,
+          "output_tokens": 204
+        },
+        "model": "claude-sonnet-5-5"
+      },
+      "seconds": 1.9
+    }
+  ]
+}
