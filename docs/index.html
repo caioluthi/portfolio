@@ -3,22 +3,155 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Second Avenue | Data product case study</title>
+<title>Second Avenue Case Study</title>
 <meta name="description" content="A data product case study, from discovery to a working prototype: flagging consignment contracts that pace below target before they expire.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&family=Newsreader:opsz,wght@6..72,500;6..72,600&display=swap">
-<link rel="stylesheet" href="assets/site.css">
 <style>
-.phases { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 0; border-top: 1px solid var(--rule); }
-.phases li { display: grid; grid-template-columns: 2.5rem minmax(0, 1fr) auto; gap: 0.25rem 1rem; padding: 1rem 0; border-bottom: 1px solid var(--rule); align-items: baseline; }
-.phases .n { font-family: var(--font-mono); font-size: 0.875rem; color: var(--muted); }
-.phases .t { font-weight: 600; }
-.phases .t a { color: var(--fg); text-decoration: none; }
-.phases .t a:hover { color: var(--accent); }
-.phases .d { display: block; font-size: 0.875rem; color: var(--muted); line-height: 1.5; margin-top: 0.125rem; font-weight: 400; }
-.phases .s { font-family: var(--font-mono); font-size: 0.6875rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); white-space: nowrap; }
-.phases .s.done { color: var(--accent); }
+/* Tokens match assets/site.css so the landing page and phase pages read as one site. */
+:root {
+  --bg: #F4F6F8; --surface: #FFFFFF; --fg: #151A22; --muted: #566170; --rule: #D6DCE4;
+  --accent: #0E6F73; --accent-soft: #DDF0F0; --risk: #B8412B; --risk-soft: #F8E4DF;
+  --font-display: "Newsreader", Georgia, "Times New Roman", serif;
+  --font-body: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0E1319; --surface: #161D26; --fg: #E7ECF2; --muted: #9AA6B5; --rule: #273241;
+    --accent: #52C4C4; --accent-soft: #12302F; --risk: #F0876F; --risk-soft: #3A1E18;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0E1319; --surface: #161D26; --fg: #E7ECF2; --muted: #9AA6B5; --rule: #273241;
+  --accent: #52C4C4; --accent-soft: #12302F; --risk: #F0876F; --risk-soft: #3A1E18;
+  color-scheme: dark;
+}
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body { margin: 0; background: var(--bg); color: var(--fg); font-family: var(--font-body); font-size: 16px; line-height: 1.6; }
+p { margin: 0; }
+a { color: var(--accent); text-underline-offset: 0.15em; }
+a:focus-visible, button:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+h1, h2, h3 { font-family: var(--font-display); font-weight: 600; text-wrap: balance; margin: 0; line-height: 1.2; }
+.mono { font-family: var(--font-mono); }
+.label { font-family: var(--font-mono); font-size: 0.75rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+
+.page { width: 100%; max-width: 66rem; margin: 0 auto; padding: 1.5rem 16px 4rem; }
+.sitenav { display: flex; flex-wrap: wrap; gap: 0.25rem 1rem; align-items: baseline; padding-bottom: 1rem; margin-bottom: 2.5rem; border-bottom: 1px solid var(--rule); font-size: 0.875rem; }
+.sitenav .home { font-family: var(--font-display); font-weight: 600; font-size: 1.0625rem; color: var(--fg); text-decoration: none; margin-right: auto; }
+.sitenav a { color: var(--muted); text-decoration: none; }
+.sitenav a:hover { color: var(--accent); }
+
+/* Header + story */
+.eyebrow { font-family: var(--font-mono); font-size: 0.75rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent); margin-bottom: 0.75rem; }
+h1 { font-size: clamp(1.75rem, 4.6vw, 2.625rem); letter-spacing: -0.01em; max-width: 44rem; }
+.story { margin-top: 1.25rem; max-width: 44rem; font-family: var(--font-display); font-size: 1.25rem; line-height: 1.5; color: var(--fg); }
+.story b { font-weight: 600; color: var(--accent); }
+.fine { margin-top: 0.875rem; color: var(--muted); font-size: 0.875rem; max-width: 44rem; }
+
+/* Headline numbers */
+.kpis { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 0.75rem; margin-top: 2rem; }
+.kpi { background: var(--surface); border: 1px solid var(--rule); border-radius: 6px; padding: 0.875rem 1rem; min-width: 0; }
+.kpi .v { font-family: var(--font-mono); font-size: 1.375rem; font-weight: 500; font-variant-numeric: tabular-nums; }
+.kpi .v .was { color: var(--muted); font-size: 0.9375rem; text-decoration: line-through; margin-right: 0.375rem; }
+.kpi .k { font-size: 0.8125rem; color: var(--muted); line-height: 1.4; margin-top: 0.125rem; }
+@media (max-width: 52rem) { .kpis { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+
+/* Path picker */
+.paths { margin-top: 2.75rem; display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem; }
+.paths .label { margin-right: 0.5rem; }
+.chip { font: inherit; font-size: 0.875rem; padding: 0.375rem 0.875rem; border-radius: 999px; border: 1px solid var(--rule); background: var(--surface); color: var(--fg); cursor: pointer; }
+.chip:hover { border-color: var(--accent); }
+.chip[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: var(--bg); }
+.path-note { margin-top: 0.625rem; font-size: 0.875rem; color: var(--muted); min-height: 1.4em; }
+
+/* Journey track */
+.track { list-style: none; margin: 1.25rem 0 0; padding: 0; display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 0.625rem; position: relative; }
+.track::before { content: ""; position: absolute; left: 1rem; right: 1rem; top: 1.375rem; height: 2px; background: var(--rule); z-index: 0; }
+.node { position: relative; z-index: 1; min-width: 0; transition: opacity 0.2s; }
+.node button { all: unset; box-sizing: border-box; cursor: pointer; display: flex; flex-direction: column; gap: 0.5rem; width: 100%; height: 100%; }
+.node .dot { width: 2.75rem; height: 2.75rem; border-radius: 50%; display: grid; place-items: center; background: var(--bg); border: 2px solid var(--accent); color: var(--accent); font-family: var(--font-mono); font-size: 0.875rem; font-weight: 500; }
+.node[data-status="active"] .dot { border-style: dashed; }
+.node .body { background: var(--surface); border: 1px solid var(--rule); border-radius: 6px; padding: 0.75rem 0.875rem; display: flex; flex-direction: column; gap: 0.375rem; flex: 1; }
+.node .name { font-family: var(--font-display); font-weight: 600; font-size: 1.0625rem; line-height: 1.25; }
+.node .out { font-size: 0.8125rem; color: var(--muted); line-height: 1.45; }
+.node .num { font-family: var(--font-mono); font-size: 0.8125rem; color: var(--accent); font-variant-numeric: tabular-nums; margin-top: auto; padding-top: 0.25rem; }
+.node .st { font-family: var(--font-mono); font-size: 0.625rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+.node[data-status="done"] .st { color: var(--accent); }
+.node button:hover .body { border-color: var(--accent); }
+.node button[aria-expanded="true"] .body { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent); }
+.node button[aria-expanded="true"] .dot { background: var(--accent); color: var(--bg); }
+.node.dim { opacity: 0.35; }
+.hint { margin-top: 0.75rem; font-size: 0.8125rem; color: var(--muted); }
+
+/* Expanded panel */
+.panel { position: relative; z-index: 2; margin-top: 1rem; background: var(--surface); border: 1px solid var(--accent); border-radius: 8px; padding: 1.5rem; display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: 1.5rem 2rem; }
+.panel[hidden] { display: none; }
+.panel .head { grid-column: 1 / -1; display: flex; align-items: baseline; justify-content: space-between; gap: 1rem; }
+.panel h2 { font-size: 1.5rem; }
+.panel .close { font: inherit; font-size: 0.8125rem; background: none; border: 1px solid var(--rule); color: var(--muted); border-radius: 4px; padding: 0.25rem 0.625rem; cursor: pointer; flex-shrink: 0; }
+.panel .close:hover { color: var(--fg); border-color: var(--fg); }
+.panel h3 { font-family: var(--font-mono); font-size: 0.75rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); font-weight: 500; margin-bottom: 0.5rem; }
+.panel ul { margin: 0; padding-left: 1.125rem; display: flex; flex-direction: column; gap: 0.375rem; font-size: 0.9375rem; }
+.panel .col { display: flex; flex-direction: column; gap: 1.25rem; min-width: 0; }
+.pivot { border-left: 3px solid var(--risk); background: var(--risk-soft); border-radius: 0 6px 6px 0; padding: 0.875rem 1rem; font-size: 0.9375rem; }
+.pivot .label { color: var(--risk); display: block; margin-bottom: 0.25rem; }
+.links { display: flex; flex-direction: column; gap: 0.375rem; font-size: 0.9375rem; }
+.links a { display: flex; justify-content: space-between; gap: 0.75rem; padding: 0.5rem 0.75rem; border: 1px solid var(--rule); border-radius: 4px; text-decoration: none; color: var(--fg); }
+.links a:hover { border-color: var(--accent); color: var(--accent); }
+.links a .kind { font-family: var(--font-mono); font-size: 0.6875rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); align-self: center; white-space: nowrap; }
+.links .todo { padding: 0.5rem 0.75rem; border: 1px dashed var(--rule); border-radius: 4px; color: var(--muted); }
+.panel .nav { grid-column: 1 / -1; display: flex; justify-content: space-between; gap: 1rem; border-top: 1px solid var(--rule); padding-top: 1rem; }
+.panel .nav button { font: inherit; font-size: 0.875rem; background: none; border: none; color: var(--accent); cursor: pointer; padding: 0; }
+.panel .nav button[disabled] { visibility: hidden; }
+
+/* Mini visuals inside panels */
+.mini { display: flex; flex-direction: column; gap: 0.5rem; }
+.bars { display: flex; flex-direction: column; gap: 0.375rem; }
+.bar { display: grid; grid-template-columns: 7.5rem minmax(0, 1fr) 3.25rem; gap: 0.5rem; align-items: center; font-size: 0.8125rem; }
+.bar .track-b { height: 0.625rem; background: var(--bg); border-radius: 3px; overflow: hidden; }
+.bar .fill { height: 100%; background: var(--accent); border-radius: 3px; }
+.bar .fill.bad { background: var(--risk); }
+.bar .val { font-family: var(--font-mono); text-align: right; font-variant-numeric: tabular-nums; }
+.funnel { display: flex; align-items: stretch; gap: 0.25rem; font-size: 0.75rem; }
+.funnel div { flex: 1; background: var(--accent-soft); border-radius: 4px; padding: 0.5rem; text-align: center; display: flex; flex-direction: column; justify-content: center; min-width: 0; }
+.funnel b { font-family: var(--font-mono); font-size: 0.9375rem; font-weight: 500; color: var(--accent); }
+.releases { display: grid; grid-template-columns: repeat(10, minmax(0, 1fr)); gap: 2px; font-size: 0.6875rem; }
+.releases .wk { height: 0.75rem; background: var(--bg); border-radius: 2px; }
+.releases .wk.on { background: var(--accent-soft); }
+.releases .wk.ship { background: var(--accent); }
+.rel-key { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0.5rem; font-size: 0.75rem; color: var(--muted); }
+.rel-key b { display: block; font-family: var(--font-mono); color: var(--fg); font-weight: 500; }
+
+/* Decisions thread */
+.decisions { margin-top: 3.5rem; }
+.decisions h2 { font-size: 1.625rem; }
+.decisions .sub { color: var(--muted); font-size: 0.9375rem; margin-top: 0.5rem; max-width: 44rem; }
+.dlist { list-style: none; margin: 1.25rem 0 0; padding: 0; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 0.625rem; }
+.dlist button { all: unset; box-sizing: border-box; cursor: pointer; display: flex; flex-direction: column; gap: 0.375rem; height: 100%; width: 100%; padding: 0.875rem 1rem; background: var(--surface); border: 1px solid var(--rule); border-top: 3px solid var(--risk); border-radius: 6px; }
+.dlist button:hover { border-color: var(--risk); }
+.dlist .ph { font-family: var(--font-mono); font-size: 0.6875rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--risk); }
+.dlist .t { font-weight: 600; font-size: 0.9375rem; line-height: 1.35; }
+.dlist .w { font-size: 0.8125rem; color: var(--muted); line-height: 1.45; }
+@media (max-width: 60rem) { .dlist { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+
+.foot { margin-top: 3rem; padding-top: 1.5rem; border-top: 1px solid var(--rule); color: var(--muted); font-size: 0.875rem; display: flex; flex-wrap: wrap; gap: 0.5rem 1.5rem; justify-content: space-between; }
+
+/* Narrow screens: the track becomes a vertical timeline and the panel opens under the tapped phase */
+@media (max-width: 52rem) {
+  .track { grid-template-columns: minmax(0, 1fr); gap: 0.5rem; }
+  .track::before { left: 1.375rem; right: auto; top: 1rem; bottom: 1rem; width: 2px; height: auto; }
+  .node button { flex-direction: row; align-items: stretch; gap: 0.75rem; }
+  .node .dot { flex-shrink: 0; }
+  .panel { grid-template-columns: minmax(0, 1fr); padding: 1.25rem; margin: 0.25rem 0 0.5rem; }
+  .bar { grid-template-columns: 6rem minmax(0, 1fr) 3rem; }
+}
+@media (max-width: 30rem) { .dlist { grid-template-columns: minmax(0, 1fr); } }
+@media (prefers-reduced-motion: reduce) { .node { transition: none; } }
 </style>
 </head>
 <body>
@@ -35,36 +168,284 @@
   <header>
     <p class="eyebrow">Data product case study</p>
     <h1>Flagging consignment contracts that pace below target, before they expire.</h1>
-    <p class="note">An end-to-end data product case study, from discovery to a working prototype, for Second Avenue, a fictional consignment retailer. The use case comes from a problem I worked on professionally; the company, people and data here are simulated.</p>
+    <p class="story">Second Avenue only found out a contract was losing money <b>after it expired</b>. I sized the problem, specified a data product, <b>tested the bet with a prototype</b>, let the results change the plan, and planned the build with Engineering.</p>
+    <p class="fine">Second Avenue is a fictional consignment retailer; the use case comes from a problem I worked on professionally. People and figures are simulated.</p>
   </header>
 
-  <aside class="tldr" aria-labelledby="tldr-h">
-    <p class="label" id="tldr-h">The short version</p>
-    <dl>
-      <dt>Problem</dt>
-      <dd>Second Avenue guarantees consignors a target price and pays the shortfall when a contract misses. About 15% of contracts miss, costing roughly $3.6M a year, and nobody sees it coming until the contract expires.</dd>
-      <dt>Product</dt>
-      <dd>A governed pacing metric and daily risk flag across contracts, listings and sales, with natural-language questions on top.</dd>
-      <dt>Success</dt>
-      <dd>Flag underperformers a median of 30+ days before expiry, without more than 40% false alarms.</dd>
-      <dt>Approach</dt>
-      <dd>Test the bet with a prototype before planning the build. What the prototype learns changes the requirements, and the backlog is planned from the revised version.</dd>
-    </dl>
-  </aside>
-
-  <section class="section" aria-labelledby="phases-h">
-    <h2 id="phases-h">The work, phase by phase</h2>
-    <ol class="phases">
-      <li><span class="n">01</span><span class="t"><a href="phase-1-discovery.html">Discovery</a><span class="d">Company profile, three personas, simulated interviews, jobs to be done, user journey.</span></span><span class="s done">Done</span></li>
-      <li><span class="n">02</span><span class="t"><a href="phase-2-opportunity.html">Opportunity &amp; success metrics</a><span class="d">Problem statement around pacing, sizing of the recoverable exposure, lead time as the primary metric with false-positive guardrails.</span></span><span class="s done">Done</span></li>
-      <li><span class="n">03</span><span class="t"><a href="phase-3-prd.html">Product requirements</a><span class="d">Scope, numbered data product requirements (DPRs), and the required and calculated fields behind every metric.</span></span><span class="s done">Done</span></li>
-      <li><span class="n">04</span><span class="t"><a href="phase-4-prototype.html">Prototype &amp; validation</a><span class="d">A throwaway prototype that tests the pilot bet: the metrics, a backtest against the go-live criteria, plain-language questions on top, and what it changed in the requirements. The plain-language question layer is deferred to the end.</span></span><span class="s done">Done</span></li>
-      <li><span class="n">05</span><span class="t"><a href="phase-5-backlog-roadmap.html">Backlog &amp; roadmap</a><span class="d">Six epics and their functional stories traced to each requirement, refinement with the Tech Lead, Engineering's sprint plan, and a Now / Next / Later roadmap with its go/no-go gates.</span></span><span class="s done">Done</span></li>
-      <li><span class="n">06</span><span class="t">Package &amp; deliver<span class="d">Case study, the AI skills behind each phase, and a short recorded walkthrough.</span></span><span class="s">Planned</span></li>
-    </ol>
+  <section class="kpis" aria-label="Headline numbers">
+    <div class="kpi"><div class="v">~$3.6M</div><div class="k">a year paid out on the ~15% of contracts that miss target</div></div>
+    <div class="kpi"><div class="v">~$320K</div><div class="k">a year recoverable in the base case, measured, not assumed</div></div>
+    <div class="kpi"><div class="v"><span class="was">80%</span>36%</div><div class="k">false alarms, after the prototype replaced the first flag design</div></div>
+    <div class="kpi"><div class="v">30+ days</div><div class="k">warning before expiry, the primary target, against under a week today</div></div>
   </section>
 
-  <p class="foot">Built with AI as a working partner throughout, including the prototype. The skills and prompts used along the way will be published in this repository.</p>
+  <section aria-labelledby="journey-h">
+    <h2 id="journey-h" class="label" style="margin-top:2.75rem;font-family:var(--font-mono);font-weight:500;color:var(--muted)">The journey · six phases</h2>
+
+    <div class="paths" role="group" aria-label="Pick a path">
+      <span class="label">Pick your path</span>
+      <button class="chip" type="button" data-path="all" aria-pressed="true">Everything</button>
+      <button class="chip" type="button" data-path="product" aria-pressed="false">Product thinking</button>
+      <button class="chip" type="button" data-path="tech" aria-pressed="false">Technical build</button>
+      <button class="chip" type="button" data-path="ai" aria-pressed="false">AI workflow</button>
+    </div>
+    <p class="path-note" id="path-note" aria-live="polite">All six phases, discovery to delivery. Select a phase to open it.</p>
+
+    <ol class="track" id="track"></ol>
+    <div class="panel" id="panel" role="region" aria-labelledby="panel-h" hidden></div>
+    <p class="hint">Each phase opens a summary here. The full write-up is one click further.</p>
+  </section>
+
+  <section class="decisions" aria-labelledby="dec-h">
+    <h2 id="dec-h">Five decisions that shaped the product</h2>
+    <p class="sub">The plan changed when the evidence did. Each of these opens the phase where it happened.</p>
+    <ol class="dlist" id="dlist"></ol>
+  </section>
+
+  <footer class="foot">
+    <span>Built with AI as a working partner throughout, from interview synthesis to the prototype.</span>
+    <span><a href="https://github.com/caioluthi/portfolio">Repository on GitHub</a></span>
+  </footer>
 </main>
+
+<script>
+const REPO = "https://github.com/caioluthi/portfolio";
+const PHASES = [
+  {
+    n: "01", id: "discovery", name: "Discovery", status: "done", paths: ["product"],
+    out: "Three personas, three vantage points, one missing signal.",
+    num: "15% miss · ~$3.6M/yr",
+    did: [
+      "Profiled the company and its Risk contracts: a guaranteed target price, with the shortfall paid by Second Avenue.",
+      "Ran simulated interviews with Ops, Finance and a Data Analyst, then mapped jobs to be done and the user journey.",
+      "Found that nobody, in any role, could see a contract falling behind until it expired."
+    ],
+    pivot: "Framed risk as pacing against target over the contract's life, a leading indicator, instead of a snapshot near expiry.",
+    visual: "phase1",
+    links: [
+      ["Full discovery write-up", "phase-1-discovery.html", "Page"],
+      ["Jobs to be done", "phase-1-discovery.html#s4", "Section"],
+      ["User journey", "phase-1-discovery.html#s5", "Section"]
+    ]
+  },
+  {
+    n: "02", id: "opportunity", name: "Opportunity", status: "done", paths: ["product"],
+    out: "Sized what flagging early is worth, and what success means.",
+    num: "~$320K/yr base case",
+    did: [
+      "Wrote the problem statement and sized the recoverable exposure as a funnel with low, base and high cases.",
+      "Set the primary metric (lead time before expiry) and guardrails on false alarms and Ops workload.",
+      "Defined the pilot bet and its go-live criteria, so the prototype had something concrete to pass or fail."
+    ],
+    pivot: "After the prototype, the funnel's first step became a measured 44%, not an assumed 70%. The base case dropped from ~$500K to ~$320K, and the page says so.",
+    visual: "phase2",
+    links: [
+      ["Full opportunity page", "phase-2-opportunity.html", "Page"],
+      ["Opportunity sizing", "phase-2-opportunity.html#opportunity", "Section"],
+      ["Go-live criteria", "phase-2-opportunity.html#go-live", "Section"]
+    ]
+  },
+  {
+    n: "03", id: "prd", name: "Product requirements", status: "done", paths: ["product", "tech"],
+    out: "What the product must do, written once for Engineering.",
+    num: "9 requirements",
+    did: [
+      "Turned the opportunity into nine data product requirements (DPR-1 to DPR-9), each with a one-line reason.",
+      "Listed the required and calculated fields behind every governed metric, so the metrics live in the data product.",
+      "Kept the why on the opportunity page and the how and when with Engineering."
+    ],
+    pivot: "Revised after the prototype: the flag projects each contract's final value from unsold inventory, with watch and act tiers.",
+    visual: "phase3",
+    links: [
+      ["Full PRD", "phase-3-prd.html", "Page"],
+      ["Data product requirements", "phase-3-prd.html#dpr", "Section"],
+      ["Open questions for Engineering", "phase-3-prd.html#questions", "Section"]
+    ]
+  },
+  {
+    n: "04", id: "prototype", name: "Prototype & validation", status: "active", paths: ["tech", "ai"],
+    out: "Tested the flag before asking anyone to build it.",
+    num: "80% → 36% false alarms",
+    did: [
+      "Built a throwaway prototype in BigQuery: governed metrics on a simulated contract book and a replay of last year.",
+      "Backtested the flag against the go-live criteria, then built the Ops morning list and Finance rollups.",
+      "Added plain-language questions on top: Claude answers only through fixed, governed queries, or declines."
+    ],
+    pivot: "The simple pacing flag failed with 80% false alarms. Counting unsold inventory brought that to 36% on contracts it wasn't tuned on.",
+    visual: "phase4",
+    links: [
+      ["Full prototype write-up", "phase-4-prototype.html", "Page"],
+      ["Results", "phase-4-prototype.html#results", "Section"],
+      ["What the prototype changed", "phase-4-prototype.html#changed", "Section"],
+      ["Prototype code", REPO + "/tree/main/prototype", "GitHub"]
+    ],
+    todo: "Walkthrough video · link to come"
+  },
+  {
+    n: "05", id: "backlog", name: "Backlog & roadmap", status: "done", paths: ["product", "ai"],
+    out: "Planned the production build with Engineering.",
+    num: "3 releases · wk 4 / 7 / 10",
+    did: [
+      "Broke the revised PRD into six outcome epics and fifteen functional stories, each traced to a requirement.",
+      "Refined with the Tech Lead. Engineering owns estimates and the sprint plan; I built the roadmap on top.",
+      "Sequenced by risk, with go/no-go gates and the dependencies that can move the date."
+    ],
+    pivot: "Three releases instead of one at week 10: the contract book ships in week 4 and ends the manual report, without waiting on the flag.",
+    visual: "phase5",
+    links: [
+      ["Full backlog & roadmap", "phase-5-backlog-roadmap.html", "Page"],
+      ["Roadmap", "phase-5-backlog-roadmap.html#roadmap", "Section"],
+      ["Backlog as GitHub Issues", REPO + "/issues", "GitHub"]
+    ]
+  },
+  {
+    n: "06", id: "package", name: "Package & deliver", status: "active", paths: ["ai"],
+    out: "The case study, the AI skills behind it, and a walkthrough.",
+    num: "In progress",
+    did: [
+      "This page: one place to follow the work at whatever depth you want.",
+      "The Claude skills written along the way, each packaging one step of the workflow so it runs the same way every time.",
+      "A recorded walkthrough of the prototype answering questions in plain language."
+    ],
+    pivot: null,
+    visual: null,
+    links: [
+      ["Skills used in this case study", REPO + "/tree/main/skills", "GitHub"],
+      ["prd-to-backlog skill", REPO + "/tree/main/skills/prd-to-backlog", "GitHub"]
+    ],
+    todo: "Walkthrough video · link to come"
+  }
+];
+
+const DECISIONS = [
+  { phase: 0, t: "Measure pacing, not misses", w: "Risk is tracked across the contract's life, so it shows up while there is still time to act." },
+  { phase: 1, t: "Resize the opportunity down", w: "A measured 44% recall at halfway replaced the assumed 70%. Base case: ~$500K → ~$320K." },
+  { phase: 3, t: "Prototype before the backlog", w: "Test the one bet the product rests on before Engineering plans a build around it." },
+  { phase: 3, t: "Replace the first flag design", w: "Linear pacing raised 80% false alarms. A projection with unsold inventory cut that to 36%." },
+  { phase: 4, t: "Ship value at week 4", w: "The contract book ships first and ends the manual report, independent of the flag." }
+];
+
+const PATH_NOTES = {
+  all: "All six phases, discovery to delivery. Select a phase to open it.",
+  product: "How the problem was found, sized, specified and planned. Start with Discovery.",
+  tech: "The requirements and the prototype: governed metrics, the backtest, and the question layer.",
+  ai: "Where AI did the work alongside me: the prototype, the backlog skill, and the published skills."
+};
+
+const VISUALS = {
+  phase1: `<div class="mini"><h3>Who feels it</h3><div class="bars">
+      <div class="bar"><span>Ops</span><span class="track-b"><span class="fill bad" style="width:100%;display:block"></span></span><span class="val">late</span></div>
+      <div class="bar"><span>Finance</span><span class="track-b"><span class="fill bad" style="width:100%;display:block"></span></span><span class="val">qtrly</span></div>
+      <div class="bar"><span>Data analyst</span><span class="track-b"><span class="fill bad" style="width:100%;display:block"></span></span><span class="val">8 h</span></div>
+    </div><p class="label" style="text-transform:none;letter-spacing:0;font-family:var(--font-body);font-size:.8125rem">Ops sees risk near expiry, Finance sees it in a quarterly report, and each report costs the analyst about 8 hours by hand.</p></div>`,
+  phase2: `<div class="mini"><h3>Base-case funnel</h3><div class="funnel">
+      <div><b>~$3.6M</b>paid out</div><div><b>44%</b>flagged by halfway</div><div><b>~$320K</b>recoverable</div>
+    </div><p class="label" style="text-transform:none;letter-spacing:0;font-family:var(--font-body);font-size:.8125rem">Range $95K to $665K a year, against about $4K a year of Ops review time.</p></div>`,
+  phase3: `<div class="mini"><h3>Requirements</h3><div class="bars">
+      <div class="bar"><span>Must-have</span><span class="track-b"><span class="fill" style="width:78%;display:block"></span></span><span class="val">7</span></div>
+      <div class="bar"><span>Should-have</span><span class="track-b"><span class="fill" style="width:22%;display:block;opacity:.55"></span></span><span class="val">2</span></div>
+    </div><p class="label" style="text-transform:none;letter-spacing:0;font-family:var(--font-body);font-size:.8125rem">Every backlog story traces back to one of them.</p></div>`,
+  phase4: `<div class="mini"><h3>False alarms on unseen contracts</h3><div class="bars">
+      <div class="bar"><span>Linear pacing</span><span class="track-b"><span class="fill bad" style="width:80%;display:block"></span></span><span class="val">80%</span></div>
+      <div class="bar"><span>Projection</span><span class="track-b"><span class="fill" style="width:36%;display:block"></span></span><span class="val">36%</span></div>
+      <div class="bar"><span>Guardrail</span><span class="track-b"><span class="fill" style="width:40%;display:block;opacity:.35"></span></span><span class="val">≤40%</span></div>
+    </div></div>`,
+  phase5: `<div class="mini"><h3>Releases by week</h3><div class="releases">
+      ${Array.from({length:10},(_,i)=>`<div class="wk ${[3,6,9].includes(i)?'ship':'on'}"></div>`).join("")}
+    </div><div class="rel-key"><span><b>Week 4</b>Contract book</span><span><b>Week 7</b>Midwest pilot</span><span><b>Week 10</b>Full pilot</span></div>
+    <p class="label" style="text-transform:none;letter-spacing:0;font-family:var(--font-body);font-size:.8125rem">If last year's appraisals can't be recovered, the pilot moves to about week 20; the contract book doesn't.</p></div>`
+};
+
+const track = document.getElementById("track");
+const panel = document.getElementById("panel");
+const narrow = window.matchMedia("(max-width: 52rem)");
+let openIdx = -1;
+
+const esc = s => s.replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+
+PHASES.forEach((p, i) => {
+  const li = document.createElement("li");
+  li.className = "node";
+  li.dataset.status = p.status;
+  li.dataset.paths = p.paths.join(" ");
+  li.innerHTML = `<button type="button" aria-expanded="false" aria-controls="panel" id="node-${p.id}">
+      <span class="dot">${p.n}</span>
+      <span class="body">
+        <span class="st">${p.status === "done" ? "Done" : "In progress"}</span>
+        <span class="name">${esc(p.name)}</span>
+        <span class="out">${esc(p.out)}</span>
+        <span class="num">${esc(p.num)}</span>
+      </span></button>`;
+  li.querySelector("button").addEventListener("click", () => toggle(i));
+  track.appendChild(li);
+});
+
+function render(i) {
+  const p = PHASES[i];
+  const links = p.links.map(([t, h, k]) =>
+    `<a href="${h}"${h.startsWith("http") ? ' target="_blank" rel="noopener"' : ""}><span>${esc(t)}</span><span class="kind">${k}${h.startsWith("http") ? " ↗" : " →"}</span></a>`).join("");
+  panel.innerHTML = `
+    <div class="head"><h2 id="panel-h"><span class="mono" style="color:var(--accent);font-size:1rem;margin-right:.5rem">${p.n}</span>${esc(p.name)}</h2>
+      <button class="close" type="button">Close</button></div>
+    <div class="col">
+      <div><h3>What I did</h3><ul>${p.did.map(d => `<li>${esc(d)}</li>`).join("")}</ul></div>
+      ${p.pivot ? `<div class="pivot"><span class="label">Key decision</span>${esc(p.pivot)}</div>` : ""}
+    </div>
+    <div class="col">
+      ${p.visual ? VISUALS[p.visual] : ""}
+      <div><h3>Go deeper</h3><div class="links">${links}${p.todo ? `<span class="todo">${esc(p.todo)}</span>` : ""}</div></div>
+    </div>
+    <div class="nav">
+      <button type="button" data-go="${i - 1}" ${i === 0 ? "disabled" : ""}>← ${i > 0 ? esc(PHASES[i - 1].name) : ""}</button>
+      <button type="button" data-go="${i + 1}" ${i === PHASES.length - 1 ? "disabled" : ""}>${i < PHASES.length - 1 ? esc(PHASES[i + 1].name) : ""} →</button>
+    </div>`;
+  panel.querySelector(".close").addEventListener("click", () => toggle(i));
+  panel.querySelectorAll("[data-go]").forEach(b => b.addEventListener("click", () => open(+b.dataset.go, true)));
+}
+
+function place(i) {
+  if (narrow.matches) track.children[i].after(panel);
+  else track.after(panel);
+}
+
+function open(i, focus) {
+  openIdx = i;
+  render(i);
+  place(i);
+  panel.hidden = false;
+  [...track.children].forEach((li, j) => li.querySelector("button").setAttribute("aria-expanded", j === i ? "true" : "false"));
+  if (focus) {
+    panel.scrollIntoView({ behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth", block: "nearest" });
+    panel.querySelector("h2").setAttribute("tabindex", "-1");
+    panel.querySelector("h2").focus({ preventScroll: true });
+  }
+}
+
+function toggle(i) {
+  if (openIdx === i) {
+    panel.hidden = true;
+    track.children[i].querySelector("button").setAttribute("aria-expanded", "false");
+    track.children[i].querySelector("button").focus();
+    openIdx = -1;
+  } else open(i, true);
+}
+
+narrow.addEventListener("change", () => { if (openIdx >= 0) place(openIdx); });
+
+document.querySelectorAll(".chip").forEach(chip => chip.addEventListener("click", () => {
+  const path = chip.dataset.path;
+  document.querySelectorAll(".chip").forEach(c => c.setAttribute("aria-pressed", c === chip ? "true" : "false"));
+  document.getElementById("path-note").textContent = PATH_NOTES[path];
+  [...track.children].forEach(li => li.classList.toggle("dim", path !== "all" && !li.dataset.paths.split(" ").includes(path)));
+}));
+
+const dlist = document.getElementById("dlist");
+DECISIONS.forEach(d => {
+  const li = document.createElement("li");
+  li.innerHTML = `<button type="button"><span class="ph">Phase ${PHASES[d.phase].n} · ${esc(PHASES[d.phase].name)}</span><span class="t">${esc(d.t)}</span><span class="w">${esc(d.w)}</span></button>`;
+  li.querySelector("button").addEventListener("click", () => { open(d.phase, true); });
+  dlist.appendChild(li);
+});
+</script>
 </body>
 </html>
