@@ -1,0 +1,22 @@
+# Simulated interview: Ops manager, Second Avenue (fictional company)
+# Topic: visibility into underperforming consignment contracts.
+
+Interviewer: Walk me through how you currently find out a contract is underperforming.
+
+Ops manager: Honestly, I only really dig into a contract when it's close to the 90-day deadline. I'm managing dozens of contracts at once in ConsignTrack, and there's no flag that tells me "this one's falling behind pace." I'd have to open each one and compare the current price trajectory to the target myself.
+
+Interviewer: When you do catch one underperforming, what are your options at that point?
+
+Ops manager: Pretty limited, honestly. If I catch it with two weeks left, maybe I can push it into a live auction event or reprice it. But if I catch it with three days left, there's nothing left to do. We're just going to eat the shortfall.
+
+Interviewer: Is there anything that currently helps you catch these early?
+
+Ops manager: Not really. It's mostly instinct and whichever contracts happen to be top of mind. I don't have a way to see, across my whole portfolio, which ones are quietly falling behind right now.
+
+Interviewer: What would an ideal solution look like for you?
+
+Ops manager: I'd want something that tells me at the start of my day which contracts are behind pace, ranked, so I know where to look first. I don't need it to fix anything. I just need to know where to spend my time.
+
+Interviewer: What's essential versus nice to have?
+
+Ops manager: Essential is a flag when a contract falls behind pace, early enough that I can still reprice or move it to an auction. A suggestion for what to do about it would be nice to have, but honestly I know my options. I just can't see the problem in time.

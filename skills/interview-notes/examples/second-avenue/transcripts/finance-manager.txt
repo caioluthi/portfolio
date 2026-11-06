@@ -1,0 +1,42 @@
+# Simulated interview: Finance manager, Second Avenue (fictional company)
+# Topic: visibility into underperforming consignment contracts.
+
+Interviewer: How do you currently track financial exposure from underperforming contracts?
+
+Finance manager: I pull the Risk Book Summary in Tableau, but that's really a month-end or quarter-end view. It tells me how much we paid out last period, not which contracts are heading toward a payout right now.
+
+Interviewer: Has that lag ever caused a problem?
+
+Finance manager: Yeah. More than once we've closed a quarter and been surprised by how much we paid out in shortfalls. By the time I see the number, the contracts are already closed. There's no way for me to flag it to Ops while there's still time to do something.
+
+Interviewer: What percentage of contracts underperformed in the last 3, 6, 9 and 12 months?
+
+Finance manager: Honestly? I don't have an exact number day to day. I could dig through the Risk Book Summary and tally it by hand, but nothing gives me that trend automatically. It's somewhere in my head as "feels like it's gotten worse," not a number I could put in a slide. We did eventually pull it manually for this review: roughly 15% of contracts underperformed over the trailing 12 months, and 18% over the trailing 6. So the direction matches my gut, but it took real effort to confirm.
+
+Interviewer: How much money did we lose specifically on underperforming contracts?
+
+Finance manager: We know the total payout number each quarter, but breaking out how much came from contracts that could have been caught earlier versus ones that were always going to miss? That's not something I can pull today. The same manual pull estimated around $3.6M in aggregate shortfall payouts over the past year, but again, that was a one-time reconstruction, not something I can monitor as it happens.
+
+Interviewer: Which channel, app, website or live auction, has the worst pacing-to-target rate?
+
+Finance manager: My gut says live auction events underperform more, but that's an impression from a few conversations with the Ops team, not something I've actually measured.
+
+Interviewer: Of the contracts that ended up underperforming, how many showed warning signs by the halfway point?
+
+Finance manager: I'd assume most of them did, if we'd been looking. But nobody's looking at the halfway point. We only look at the end.
+
+Interviewer: And how many of those had actions available that could have helped if you'd caught them earlier?
+
+Finance manager: Probably a lot of them. But that's a guess, not something backed by data.
+
+Interviewer: Has anyone tried to close that gap?
+
+Finance manager: Last quarter I asked Tom on the Ops side whether he could flag at-risk contracts early, and he told me he'd have to open each one by hand.
+
+Interviewer: What would an ideal solution look like for you?
+
+Finance manager: I'd want to see, while the quarter is still running, which regions and asset types are trending toward shortfall payouts. And I'd want a number I trust. I don't want to walk into a meeting defending a figure nobody can reproduce.
+
+Interviewer: What's essential versus nice to have?
+
+Finance manager: Essential is a forward-looking view of expected payouts that refreshes at least weekly. Daily would be nicer, but weekly I could work with. Per-contract detail is nice to have for me, that's more of an Ops need, though I'd want to be able to drill in when something looks off.

@@ -1,0 +1,26 @@
+# Simulated interview: Data analyst, Second Avenue (fictional company)
+# Topic: visibility into underperforming consignment contracts.
+
+Interviewer: I heard you tried to build a report to give visibility into contract risk. What happened?
+
+Data analyst: I did. Contracts, Listings and Sales data all live in different source systems and databases, so there was no single place to pull a unified view from. I ended up exporting CSVs from each system and stitching them together myself.
+
+Interviewer: How long did that take?
+
+Data analyst: About 8 hours per report, start to finish: pulling each export, cleaning it, joining everything, checking it made sense.
+
+Interviewer: How often were you able to produce it?
+
+Data analyst: Monthly, realistically. That's all I could manage given my other priorities. But the stakeholders wanted something close to real time so they could actually act on it. By the time I delivered a monthly report, it was already too stale to drive a decision.
+
+Interviewer: Beyond the time cost, did you run into any other issues?
+
+Data analyst: Yes, data sync. By the time I'd finished pulling from System B, System A had already moved on: contracts had been updated, new sales had come in. So the report wasn't just slow, it was often already out of sync with itself by the time I finished building it.
+
+Interviewer: What would the ideal setup look like?
+
+Data analyst: One place where contracts, listings and sales are already joined and refreshed automatically, so I'm not the integration layer. If that existed, the report would be a query, not an eight-hour project.
+
+Interviewer: What's essential versus nice to have?
+
+Data analyst: Essential is that the numbers reconcile across systems: same contract, same status, same moment. Refresh speed matters, but consistency matters more. I'd take hourly and consistent over real-time and drifting. A self-serve view for Ops and Finance would be nice to have, because then they'd stop asking me.
