@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Phase 6 · Package &amp; deliver | Second Avenue</title>
+<meta name="description" content="How AI was used to build the Second Avenue case study, what was decided by hand, how AI's work was checked, the skills written along the way, and a recorded walkthrough of the prototype.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&family=Newsreader:opsz,wght@6..72,500;6..72,600&display=swap">
+<link rel="stylesheet" href="assets/site.css">
+<style>
+td.ph { font-family: var(--font-mono); font-size: 0.8125rem; color: var(--muted); white-space: nowrap; }
+table.split td:nth-child(2), table.split td:nth-child(3) { width: 42%; }
+.overrides { list-style: none; padding: 0; display: flex; flex-direction: column; gap: 0.75rem; max-width: 38rem; }
+.overrides li { background: var(--surface); border: 1px solid var(--rule); border-left: 3px solid var(--accent); border-radius: 0 6px 6px 0; padding: 0.875rem 1.125rem; display: flex; flex-direction: column; gap: 0.25rem; }
+.overrides .what { font-weight: 600; }
+.overrides .why { font-size: 0.9375rem; color: var(--muted); }
+.overrides .where { font-family: var(--font-mono); font-size: 0.6875rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent); }
+.checks td:first-child { width: 30%; font-weight: 500; }
+.video { aspect-ratio: 16 / 9; max-width: 38rem; width: 100%; background: var(--surface); border: 1px dashed var(--rule); border-radius: 6px; display: grid; place-items: center; color: var(--muted); font-size: 0.9375rem; text-align: center; padding: 1rem; }
+.pending { background: var(--surface); border: 1px dashed var(--rule); border-radius: 6px; padding: 1rem 1.25rem; color: var(--muted); font-size: 0.9375rem; max-width: 38rem; }
+.pending strong { color: var(--fg); }
+</style>
+</head>
+<body>
+<main class="page">
+  <nav class="sitenav" aria-label="Case study">
+    <a class="home" href="index.html">Second Avenue</a>
+    <a href="phase-1-discovery.html">1 · Discovery</a>
+    <a href="phase-2-opportunity.html">2 · Opportunity</a>
+    <a href="phase-3-prd.html">3 · PRD</a>
+    <a href="phase-4-prototype.html">4 · Prototype</a>
+    <a href="phase-5-backlog-roadmap.html">5 · Backlog</a>
+    <a href="phase-6-package.html" aria-current="page">6 · Package</a>
+  </nav>
+
+  <header>
+    <p class="eyebrow">Phase 6 · Package &amp; deliver</p>
+    <h1>Built with AI. Decided by me.</h1>
+    <p class="note">This case study was built with Claude as a working partner, from interview synthesis to the prototype's code. This page is the honest account: what AI did, what I decided, where I overrode it, and how its work was checked.</p>
+  </header>
+
+  <aside class="tldr" aria-labelledby="tldr-h">
+    <p class="label" id="tldr-h">TL;DR</p>
+    <dl>
+      <dt>AI did</dt>
+      <dd>Drafting, synthesis, the sizing arithmetic, the prototype's SQL and Python, and the backlog's first cut.</dd>
+      <dt>I did</dt>
+      <dd>Chose the problem, set the framing and the bar for success, made every scope and sequencing call, and decided what the evidence meant.</dd>
+      <dt>Checked by</dt>
+      <dd>Tests that AI couldn't grade itself on: a backtest on contracts the flag wasn't tuned on, and a 30-question evaluation scored against SQL.</dd>
+      <dt>Reusable</dt>
+      <dd>The repeatable steps are packaged as Claude skills in the repository, so the workflow runs the same way next time.</dd>
+    </dl>
+  </aside>
+
+  <section class="section" aria-labelledby="split-h">
+    <h2 id="split-h">1. Who did what</h2>
+    <p>AI is fast at producing a first version. The product calls are where the work is, so those stayed with me in every phase.</p>
+    <div class="scroll">
+      <table class="split">
+        <thead><tr><th>Phase</th><th>What AI did</th><th>What I decided</th></tr></thead>
+        <tbody>
+          <tr><td class="ph">01 · Discovery</td><td>Drafted personas and interview transcripts from my notes on the real problem; structured jobs to be done.</td><td>The use case, the three vantage points worth interviewing, and that risk means pacing over the contract's life, not a miss at expiry.</td></tr>
+          <tr><td class="ph">02 · Opportunity</td><td>Built the sizing funnel and ran the low, base and high cases.</td><td>The assumptions behind each step, the primary metric, the guardrails, and what the pilot must prove to go live.</td></tr>
+          <tr><td class="ph">03 · PRD</td><td>Drafted the requirements and field lists in a fixed structure.</td><td>What is in and out of scope, and that the PRD says what, not how: the why stays on the opportunity page, the how and when with Engineering.</td></tr>
+          <tr><td class="ph">04 · Prototype</td><td>Wrote the data generator, the SQL views, the backtest and the question layer.</td><td>What the prototype had to answer, the go-live bar it was judged against, and what to do when the first flag failed.</td></tr>
+          <tr><td class="ph">05 · Backlog</td><td>Broke the PRD into epics and stories and synced them to GitHub Issues.</td><td>How many epics, what each one must deliver, the release sequence, and that estimates belong to Engineering.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="over-h">
+    <h2 id="over-h">2. Where I overrode it</h2>
+    <p>The moments where the first answer wasn't the right one, and what I did instead.</p>
+    <ol class="overrides">
+      <li><span class="where">Phase 01</span><span class="what">Replaced an invented use case with one I lived.</span><span class="why">The first idea was a fictional working-capital problem. I switched to Risk contracts, a problem I worked on professionally, so every assumption could be tested against real experience.</span></li>
+      <li><span class="where">Phase 02</span><span class="what">Caught numbers that didn't reconcile.</span><span class="why">An average contract of about $8K couldn't produce about $4M a year in shortfalls at the stated miss rate. I raised the average to about $50K, where a contract can hold one high-value item or a lot.</span></li>
+      <li><span class="where">Phase 04</span><span class="what">Kept Claude away from free-form SQL.</span><span class="why">The question layer can only call fixed, governed queries, or decline. A prompt asking it to use the agreed definitions isn't enough; the tools make it impossible to do otherwise.</span></li>
+      <li><span class="where">Phase 05</span><span class="what">Cut eleven epics to six.</span><span class="why">The first breakdown mirrored the requirements one to one. I regrouped it into outcomes someone can sign off on, with two or three stories each, and left the technical breakdown to refinement with the Tech Lead.</span></li>
+      <li><span class="where">Phase 05</span><span class="what">Refused to wait ten weeks for value.</span><span class="why">The first roadmap had one launch at week 10. I asked what could ship without the flag, and the contract book became a week-4 release that ends the manual report on its own.</span></li>
+    </ol>
+  </section>
+
+  <section class="section" aria-labelledby="check-h">
+    <h2 id="check-h">3. How AI's work was checked</h2>
+    <p>Polished output proves nothing. Each piece that mattered had to pass a test it couldn't talk its way through.</p>
+    <div class="scroll">
+      <table class="checks">
+        <thead><tr><th>What</th><th>The check</th><th>Result</th></tr></thead>
+        <tbody>
+          <tr><td>The risk flag</td><td>Replayed last year's contracts, with settings chosen on one set and judged on contracts the flag hadn't seen.</td><td>The first design failed with 80% false alarms. The revised flag reached 36%, inside the 40% guardrail.</td></tr>
+          <tr><td>Plain-language answers</td><td>30 questions, including six to decline and four ambiguous ones, scored against SQL on the same governed views. Three runs per model; a question passes only if it passes every run.</td><td>Sonnet 30 of 30 in every run. Haiku 29 of 30, at a twentieth of the cost.</td></tr>
+          <tr><td>The sizing</td><td>Every step of the funnel traced to a stated assumption, then the first step replaced with the prototype's measured value.</td><td>Base case revised down, from about $500K to about $320K a year.</td></tr>
+          <tr><td>The backlog</td><td>A script checks that every story traces to a requirement before anything syncs to GitHub.</td><td>Fifteen stories, each tied to a DPR.</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="takeaway">Details: <a href="phase-4-prototype.html#results">prototype results</a> and the <a href="https://github.com/caioluthi/portfolio/blob/main/prototype/questions/results/report.md">evaluation report</a>.</p>
+  </section>
+
+  <section class="section" aria-labelledby="skills-h">
+    <h2 id="skills-h">4. The skills</h2>
+    <p>When a step worked, I packaged it as a Claude skill: instructions, rules for the judgment calls, and scripts that check the output. The next project starts from a workflow, not a blank prompt.</p>
+    <div class="cards">
+      <div class="card">
+        <span class="tag">Phase 05</span>
+        <h3>prd-to-backlog</h3>
+        <p>Turns a PRD into outcome epics and functional stories, records what Engineering decides in refinement, and syncs the result to GitHub Issues.</p>
+        <p><a href="https://github.com/caioluthi/portfolio/tree/main/skills/prd-to-backlog">View the skill ↗</a></p>
+      </div>
+    </div>
+    <div class="pending"><strong>To add:</strong> interview-notes (Phase 01) and opportunity-to-prd (Phase 03), once they're in the repository.</div>
+  </section>
+
+  <section class="section" aria-labelledby="video-h">
+    <h2 id="video-h">5. Walkthrough</h2>
+    <p>The prototype answering Ops and Finance questions in plain language, and declining the ones it shouldn't answer.</p>
+    <div class="video">Walkthrough video · link to come</div>
+  </section>
+
+  <section class="section" aria-labelledby="diff-h">
+    <h2 id="diff-h">6. What I'd do differently</h2>
+    <div class="pending"><strong>Yours to write.</strong> Two or three honest lines. For example: something you'd validate with real stakeholders earlier, a phase you'd timebox harder, or where AI slowed you down instead of speeding you up.</div>
+  </section>
+
+  <nav class="pager" aria-label="Phases">
+    <a href="phase-5-backlog-roadmap.html"><span class="dir">Previous</span>Phase 5 · Backlog &amp; roadmap</a>
+  </nav>
+</main>
+</body>
+</html>
