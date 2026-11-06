@@ -14,7 +14,7 @@ only by the prompt.
 | Tool | Reads | For questions like |
 |---|---|---|
 | `morning_list` | `ops_morning_list` | Which contracts need attention and expire in the next 30 days? |
-| `contracts` | `raw_contracts`, `contract_daily`, `contract_outcome` | How are CN-00580's contracts doing? |
+| `contracts` | `contract_register`, `contract_daily`, `contract_outcome` | How are CN-00580's contracts doing? |
 | `exposure` | `finance_exposure` | How much is at risk in the Midwest? |
 | `exposure_trend` | `finance_exposure_trend` | Is exposure going up or down? |
 | `channel_performance` | `channel_performance` | Where do watches sell best? |

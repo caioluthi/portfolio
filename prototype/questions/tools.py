@@ -125,7 +125,7 @@ def contracts(contract_id: str | None = None, consignor_id: str | None = None) -
              t.projected_shortfall, t.evidence_share, t.risk_tier,
              o.realized_sales_at_close, o.closed_below_target, o.first_act_date,
              o.detection_lead_time_days, o.false_positive
-      FROM {table('raw_contracts')} c
+      FROM {table('contract_register')} c
       LEFT JOIN today_row t USING (contract_id)
       LEFT JOIN {table('contract_outcome')} o USING (contract_id)
       WHERE (@contract IS NULL OR c.contract_id = @contract)
