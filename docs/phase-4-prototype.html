@@ -63,7 +63,7 @@ table.ledger td:nth-child(3) { width: 33%; }
       <dt>Output</dt>
       <dd>A go-live verdict, chosen flag settings, the failure cases sized, and a revised PRD.</dd>
       <dt>So far</dt>
-      <dd>The simple flag failed: 80% of its flags were false alarms. Counting unsold inventory brought that to 36% on contracts it wasn't tuned on. The prototype also measured that 44% of underperformers can be caught with confidence by halfway, which resized the opportunity to about $320K a year. The morning list and Finance rollups are built, channel attribution is settled, and the Ops, Finance and Data feedback has been folded into the PRD.</dd>
+      <dd>The simple flag failed: 80% of its flags over last year were false alarms, and 66% on contracts held back from tuning. Counting unsold inventory brought that to 36% on the same held-back contracts. The prototype also measured that 44% of underperformers can be caught with confidence by halfway, which resized the opportunity to about $320K a year. The morning list and Finance rollups are built, channel attribution is settled, and the Ops, Finance and Data feedback has been folded into the PRD. Plain-language questions pass all 30 evaluation questions with Sonnet. What remains is the recorded walkthrough.</dd>
       <dt>Next</dt>
       <dd>Phase 5 plans the production build from the revised PRD, with Engineering.</dd>
     </dl>
@@ -127,7 +127,7 @@ table.ledger td:nth-child(3) { width: 33%; }
           <tr><td class="n">2</td><td>Replay the flag over last year's contracts, test every combination of settings, and report against the go-live criteria</td><td>Q1, Q2, Q3</td><td><span class="status done">Done</span></td></tr>
           <tr><td class="n">2b</td><td>A better signal and a two-tier flag, tested on contracts the settings weren't tuned on. <span class="pivot">Added after step 2 failed.</span></td><td>Q1, Q2</td><td><span class="status done">Done</span></td></tr>
           <tr><td class="n">3</td><td>Morning list, Finance rollups and channel attribution</td><td>Q4</td><td><span class="status done">Done</span></td></tr>
-          <tr><td class="n">4</td><td>Plain-language questions and the evaluation set. Deferred to the end of the roadmap, just before the walkthrough is recorded; nothing in Phase 5 depends on it.</td><td>Q5</td><td><span class="status">Deferred</span></td></tr>
+          <tr><td class="n">4</td><td>Plain-language questions and the evaluation set. Built after Phase 5, since nothing there depended on it.</td><td>Q5</td><td><span class="status done">Done</span></td></tr>
           <tr><td class="n">5</td><td>Feedback from Ops and Finance, and the PRD revision</td><td>Q6</td><td><span class="status done">Done</span></td></tr>
         </tbody>
       </table>
@@ -178,13 +178,14 @@ table.ledger td:nth-child(3) { width: 33%; }
       </table>
     </div>
     <p><strong>Counting unsold inventory fixed the false alarms</strong>, from 66% to 37%, and halved the weekly flags. The tiers added a little on top: 6 more points of recall and a watch list that rarely tops 10 contracts.</p>
+    <p>Two of C's passes are thin. Median lead time is exactly at the 30-day bar, with no margin. And 44% clears the recall target only because the target was reset afterwards, to just under what this test measured; against the original 70% it fails. The test has 174 underperformers, so every rate here can move a few points either way.</p>
 
     <h3>Q2 · What should the settings be?</h3>
     <p>Chosen by the rule fixed before the run, using contracts that closed 6 to 12 months ago: flag when the projection falls below <strong>95% of target</strong>, from <strong>day 21</strong>, with a cushion worth <strong>15% of target</strong> so that one or two cheap early sales can't swing the projection, and move to act once <strong>15% of appraised value has sold</strong>.</p>
 
     <h3>Q3 · Where does the flag get it wrong?</h3>
     <p>The suspects were contracts whose items sell late at auction, and single-item contracts. Auction-heavy contracts were the worst, with 87% of their flags false, but they are only 4% of the book, and every channel and contract size sat between 77% and 83%. No segment explained the failure, so excluding one wouldn't fix it; the flag itself had to change.</p>
-    <p>The new flag fixed the false alarms but falls short on catching underperformers by halfway. Staying under the 40% false-alarm limit, the best any setting could do was about 41% by day 45; catching 70% meant going back to about 70% false alarms. About half of the contracts that will end short still look healthy at day 45 on sales and appraisals alone. The 70% target came from a judgment in the Phase 2 sizing, so the prototype replaced it with what it measured, and the target moved with it, as recorded <a href="#changed">below</a>.</p>
+    <p>The new flag fixed the false alarms but falls short on catching underperformers by halfway. Staying under the 40% false-alarm limit, the best any setting could do on the tuning contracts was about 41% by day 45, and the chosen setting reached 44% on the held-back ones; catching 70% meant going back to about 70% false alarms. About half of the contracts that will end short still look healthy at day 45 on sales and appraisals alone. The 70% target came from a judgment in the Phase 2 sizing, so the prototype replaced it with what it measured, and the target moved with it, as recorded <a href="#changed">below</a>.</p>
     <h3 id="q4">Q4 · How should a contract count in rollups by channel?</h3>
     <p>By its items, not as a whole. Channel and asset type belong to items, and most flagged contracts mix them: 21 of the 37 contracts flagged act had no channel holding 80% of their unsold value. Assigning each contract wholly to its main channel moved 7 to 15% of exposure between channels and understated live auction by 13%. So each contract's projected shortfall is split over its unsold items by appraised value, because what is still unsold is where the remaining risk sits and what Ops can still reprice or move. Every rollup then adds up to the book total, which the build now checks on every run.</p>
 
@@ -218,6 +219,9 @@ table.ledger td:nth-child(3) { width: 33%; }
       </table>
     </div>
     <p>The Midwest holds 49% of the exposure with 28% of the active contracts. And the item-level view answers the discovery question about channels: art fetches <strong>1.18×</strong> its appraisal at live auction against 0.74× on the app, and furniture 1.09× against 0.81×, while handbags do better on the app. That is the lever Ops pulls when a contract is flagged.</p>
+
+    <h3 id="q5">Q5 · Can Ops and Finance ask in plain language? Yes, within the governed metrics.</h3>
+    <p>Claude answers only by calling fixed, governed queries over these views, or declines. On the 30-question evaluation set, scored against SQL on the same views, three runs per model, a question passes only if it passes every run. Sonnet answered all 30 in every run. Haiku passed 29 of 30 at about a twentieth of the cost; it missed one list of contracts that can still go into a live auction in two of its three runs. Full results: <a href="https://github.com/caioluthi/portfolio/blob/main/prototype/questions/results/report.md">evaluation report</a>.</p>
 
     <p class="note" style="margin-top:0">Reports, data and code: <a href="https://github.com/caioluthi/portfolio/blob/main/prototype/backtest/results/report.md">step 2 report</a>, <a href="https://github.com/caioluthi/portfolio/blob/main/prototype/experiment/DESIGN.md">step 2b design</a> and <a href="https://github.com/caioluthi/portfolio/blob/main/prototype/experiment/results/report.md">step 2b results</a>. Each selection rule was committed before its run.</p>
   </section>
@@ -313,7 +317,7 @@ table.ledger td:nth-child(3) { width: 33%; }
           <tr><td>Flags have two tiers: act, which Ops reviews, and watch, shown as context</td><td class="src">Step 2b test</td><td>+6 points caught by halfway; at most 10 on watch on 95% of days</td><td><a href="phase-3-prd.html#dpr-5">PRD, DPR-3 and DPR-5</a></td></tr>
           <tr><td>New required field: an appraised value per item</td><td class="src">Step 2b test</td><td>The projection can't price unsold items without it</td><td><a href="phase-3-prd.html#fields">PRD, required fields</a></td></tr>
           <tr><td>Pilot settings: 95% of target, from day 21, a cushion worth 15% of target, act once 15% has sold</td><td class="src">Step 2b test</td><td>Chosen by a rule fixed before the run</td><td><a href="phase-3-prd.html#fields">PRD, parameters</a></td></tr>
-          <tr><td>Target for underperformers caught by halfway: 70% → 40%</td><td class="src">Step 2b test</td><td>No setting caught more than about 41% within the false-alarm limit</td><td><a href="phase-2-opportunity.html#metrics">Opportunity, success metrics</a></td></tr>
+          <tr><td>Target for underperformers caught by halfway: 70% → 40%</td><td class="src">Step 2b test</td><td>Within the false-alarm limit, no setting caught more than about 41% on the tuning contracts; the chosen one reached 44% on held-back contracts</td><td><a href="phase-2-opportunity.html#metrics">Opportunity, success metrics</a></td></tr>
           <tr><td>Opportunity base case: ~$500K → ~$320K a year</td><td class="src">Step 2b test</td><td>The funnel's first step is measured at 44%, not judged at 70%</td><td><a href="phase-2-opportunity.html#opportunity">Opportunity, sizing</a></td></tr>
           <tr><td>Success counts from the first act flag; a limit on the size of the watch list</td><td class="src">Step 2b design</td><td>Decided before the run, as part of its design</td><td><a href="phase-2-opportunity.html#metrics">Opportunity, success metrics</a></td></tr>
           <tr><td>Next scope adds listing activity: views, watchers, bids, price drops</td><td class="src">Step 2b test</td><td>Sales and appraisals alone cap the halfway catch near 41%. Not yet tested</td><td><a href="phase-3-prd.html#scope">PRD, scope</a></td></tr>

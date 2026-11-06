@@ -91,7 +91,7 @@
     <p class="label" id="rev-h">Revision 2 · after the Phase 4 prototype</p>
     <ul>
       <li>The first funnel step is now measured, not judged: <strong>44%</strong> of underperformers can be flagged with confidence by halfway, not the 70% first assumed. The base case falls from about $500K to about <strong>$320K</strong> a year.</li>
-      <li>The recall-at-halfway target moves from 70% to <strong>40%</strong>, the level the prototype showed is reachable without breaking the false-alarm guardrail. The other targets don't move, and a guardrail on the size of the watch list is added.</li>
+      <li>The recall-at-halfway target moves from 70% to <strong>40%</strong>, under what the prototype reached without breaking the false-alarm guardrail: 44% on held-back contracts, about 41% at best on the ones used for tuning. The other targets don't move, and a guardrail on the size of the watch list is added.</li>
       <li>The pilot flag changes from linear pacing to a projection that counts unsold inventory, with <strong>watch</strong> and <strong>act</strong> tiers. Success is measured from the first act flag.</li>
     </ul>
     <p>Why, with the evidence: <a href="phase-4-prototype.html#changed">what the prototype changed</a>. The earlier version is archived as <a href="phase-2-opportunity-v1.html">revision 1</a>.</p>
@@ -105,9 +105,9 @@
       <dt>Opportunity</dt>
       <dd>Flagging contracts heading below target while they are still running could recover about $95K to $665K a year, with a base case near $320K. Ops review time costs about $4K a year.</dd>
       <dt>Success</dt>
-      <dd>Flag underperformers a median of at least 30 days before expiry, against under a week today, and at least 40% of them by halfway, with no more than 40% false alarms and 25 new flags a week.</dd>
+      <dd>Flag underperformers a median of at least 30 days before expiry and at least 40% of them by halfway, with no more than 40% false alarms and 25 new flags a week. Today the median is 0 days: two-thirds are never caught before they expire.</dd>
       <dt>Pilot</dt>
-      <dd>A daily flag that projects each contract's final value from what has sold and what is still unsold, with watch and act tiers. On the prototype's backtest it meets every go-live criterion it can be tested on.</dd>
+      <dd>A daily flag that projects each contract's final value from what has sold and what is still unsold, with watch and act tiers. On the prototype's backtest it meets every go-live criterion it can be tested on, against the revised recall target and with lead time exactly at the 30-day bar.</dd>
       <dt>Next</dt>
       <dd>The <a href="phase-3-prd.html">PRD</a> turns this into the requirements Engineering sizes.</dd>
     </dl>
@@ -129,7 +129,7 @@
       <p><span class="lead">How might we</span> give Ops and Finance a trusted, early view of which Risk contracts are pacing below target, so they can act before the contract expires?</p>
     </div>
 
-    <p class="note" style="margin-top:0">Out of scope for this framing: predicting final outcomes with historical models, planned for a later version, and automating the interventions themselves.</p>
+    <p class="note" style="margin-top:0">Out of scope for this framing: sharper projections from per-segment history or listing activity, planned for a later version, and automating the interventions themselves.</p>
   </section>
 
   <section class="section" aria-labelledby="opportunity">
@@ -214,28 +214,6 @@
       <li>The sizing counts avoided shortfall only. It leaves out upside from better channel placement and the analyst time saved, about 8 hours per report today.</li>
     </ul>
 
-    <details>
-      <summary>Sizing inputs (assumptions.yaml)</summary>
-<pre>book:
-  active_contracts: 500
-  avg_contract_value_usd: 50000
-  lifecycle_days: 90
-
-observed:
-  underperformance_rate_12m: 0.15
-  underperformance_rate_6m: 0.18
-  annual_shortfall_payouts_usd: 3600000
-
-funnel:            # low / base / high
-  flagged_by_halfway:  {low: 0.44, base: 0.44, high: 0.44}  # measured in Phase 4; was 0.50 / 0.70 / 0.90
-  action_available:    {low: 0.30, base: 0.50, high: 0.70}
-  recovery_when_acted: {low: 0.20, base: 0.40, high: 0.60}
-
-cost_side:
-  alerts_per_week: {low: 10, base: 25, high: 60}  # Phase 4 backtest: ~8.5 act flags a week
-  minutes_per_review: 10
-  loaded_hourly_cost_usd: 60</pre>
-    </details>
   </section>
 
   <section class="section" aria-labelledby="metrics">
@@ -252,11 +230,11 @@ cost_side:
       <div class="metric primary" role="listitem">
         <span class="role">Primary</span>
         <div><span class="name">Detection lead time</span><span class="def">Days from a contract's first <strong>act</strong> flag to its expiry, for contracts that closed below target. An underperformer that was never flagged act counts as 0 days, so missed contracts pull the number down instead of disappearing.</span></div>
-        <span class="target">Median ≥ 30 days<small>Today: under ~7</small></span>
+        <span class="target">Median ≥ 30 days<small>Today: 0 days</small></span>
       </div>
       <div class="metric" role="listitem">
         <span class="role">Supporting</span>
-        <div><span class="name">Recall at halfway</span><span class="def">Share of eventual underperformers flagged act by day 45. The prototype measured 44% and showed that more costs false alarms, so the target is set just under it. It also replaced the first assumption in the funnel.</span></div>
+        <div><span class="name">Recall at halfway</span><span class="def">Share of eventual underperformers flagged act by day 45. The prototype measured 44% on contracts held back from tuning; on the tuning contracts, no setting did better than about 41% within the false-alarm limit. With 174 underperformers in the test, either figure can move a few points, so the target is set at 40%, under both. It also replaced the first assumption in the funnel.</span></div>
         <span class="target">≥ 40%<small>Was 70%; revised in v2</small></span>
       </div>
       <div class="metric guard" role="listitem" id="guardrails">
@@ -280,7 +258,7 @@ cost_side:
         <span class="target">100%</span>
       </div>
     </div>
-    <p class="note" style="margin-top:0">The baseline lead time comes from the Ops interview: contracts are opened near the 90-day deadline, often with days rather than weeks left. Before launch, the backtest measures it properly by replaying today's practice, a manual review in the final week, over last year's contracts.</p>
+    <p class="note" style="margin-top:0">The baseline started with the Ops interview: contracts are opened near the 90-day deadline, with days rather than weeks left. The prototype then measured it by replaying today's practice, a manual review in the final week, over last year's contracts. That review catches only 33% of underperformers, each with under a week left, so the median across all of them is 0 days. The same replay runs on Second Avenue's own history before go-live.</p>
     <p>The primary metric and the false-positive guardrail pull against each other. A looser threshold flags contracts earlier, which raises lead time, and also flags more contracts that would have recovered on their own. The targets are set so that neither can be bought at the other's expense. How each metric is calculated is specified in the <a href="phase-3-prd.html#calculated">PRD</a>.</p>
   </section>
 
@@ -306,7 +284,7 @@ cost_side:
       <li>no more than 40 contracts are on watch at once, on 95% of days, and</li>
       <li>every active contract reconciles across the three sources.</li>
     </ul>
-    <p>The flag's settings are chosen by the backtest, not assumed. On the prototype's backtest, scored on contracts the settings weren't tuned on, the flag meets every criterion except reconciliation, which needs the real source systems and is part of the production build.</p>
+    <p>The flag's settings are chosen by the backtest, not assumed. On the prototype's backtest, scored on contracts the settings weren't tuned on, the flag meets every criterion except reconciliation, which needs the real source systems and is part of the production build. Two of those passes are thin. The recall target was reset after the test, to just under what it measured, and median lead time came in at exactly 30 days, with no margin. The backtest on real history is where both get a fresh test.</p>
 
     <h3 id="pilot-risks">Risks to the bet</h3>
     <ul>
@@ -321,7 +299,6 @@ cost_side:
     <a href="phase-1-discovery.html"><span class="dir">Previous</span>Phase 1 · Discovery</a>
     <a class="next" href="phase-3-prd.html"><span class="dir">Next</span>Phase 3 · Product requirements</a>
   </nav>
-  <p class="foot">The sizing inputs and model will be version-controlled in this repository so every figure above can be reproduced.</p>
 </main>
 
 <script>

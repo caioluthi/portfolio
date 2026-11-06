@@ -15,11 +15,11 @@ Second Avenue guarantees each consignor a target price and pays the difference w
 | # | Phase | Where | Status |
 |---|---|---|---|
 | 1 | [Discovery](docs/phase-1-discovery.html) | `docs/` | Done |
-| 2 | [Opportunity & success metrics](docs/phase-2-opportunity.html) | `docs/`, sizing model in `sizing/` (to come) | Done |
+| 2 | [Opportunity & success metrics](docs/phase-2-opportunity.html) | `docs/` | Done |
 | 3 | [Product requirements (PRD)](docs/phase-3-prd.html) | `docs/` | Done |
-| 4 | [Prototype & validation](docs/phase-4-prototype.html): test the pilot bet, then show what it changed. The plain-language question layer is deferred to the end | BigQuery sandbox, Claude API | Done |
+| 4 | [Prototype & validation](docs/phase-4-prototype.html): test the pilot bet, then show what it changed, with plain-language questions on top. Only the recorded walkthrough is left | `prototype/`, BigQuery sandbox, Claude API | In progress |
 | 5 | [Backlog and roadmap](docs/phase-5-backlog-roadmap.html): six epics and their functional stories, refinement with the Tech Lead, Now / Next / Later | `backlog/`, GitHub Issues | Done |
-| 6 | Package and deliver | Case study, AI skills, walkthrough | Planned |
+| 6 | [Package and deliver](docs/phase-6-package.html): how AI was used, the skills, the walkthrough | `docs/`, `skills/` | In progress |
 
 ### Why the prototype comes before the backlog
 
