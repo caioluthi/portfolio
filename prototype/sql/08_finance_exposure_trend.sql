@@ -9,7 +9,8 @@ WITH daily AS (
     SUM(IF(risk_tier = 'act' AND unsold_estimate <= 0, projected_shortfall, 0)) AS exposure_locked_in,
     SUM(IF(risk_tier = 'watch', projected_shortfall, 0)) AS exposure_on_watch,
     COUNTIF(risk_tier = 'act') AS contracts_act,
-    COUNTIF(risk_tier = 'watch') AS contracts_watch,
+    -- Watch list size: contracts on watch that day (Phase 2 guardrail)
+    COUNTIF(risk_tier = 'watch') AS watch_list_size,
     COUNT(*) AS contracts_active
   FROM `{dataset}.contract_daily`
   WHERE contract_id != 'CT-EXAMPLE'

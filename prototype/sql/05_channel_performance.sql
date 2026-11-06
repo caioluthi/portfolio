@@ -22,7 +22,7 @@ SELECT
   COUNT(*) AS items_listed,
   COUNTIF(sold) AS items_sold,
   COUNTIF(sold) / COUNT(*) AS sell_through,
-  SAFE_DIVIDE(SUM(IF(sold, gross_amount, 0)), SUM(IF(sold, estimate_usd, 0))) AS price_realization,
+  SAFE_DIVIDE(SUM(IF(sold, gross_amount, 0)), SUM(IF(sold, estimate_usd, 0))) AS channel_price_realization,
   SAFE_DIVIDE(SUM(IF(sold, gross_amount, 0)), SUM(estimate_usd)) AS value_realization
 FROM items
 GROUP BY 1, 2
