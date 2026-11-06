@@ -139,5 +139,7 @@ tables:
     description: Calculated fields per contract per day, before the flag (PRD section 3). One row per non-cancelled contract per day it was active, up to today. History is replayed as it was - sales and appraised value sold only count sales dated on or before as_of_date.
   contract_daily:
     description: Calculated fields per contract per day, including the projection with unsold inventory and the pilot risk flag and tier (PRD section 3, DPR-3). One row per non-cancelled contract per day it was active, up to today.
+  contract_register:
+    description: The governed contract register - one row per contract, every status, with the PRD's required contract fields. The question layer reads contracts here, never from raw_contracts.
   contract_outcome:
     description: Calculated fields at close - the inputs to the success metrics, measured from the first act flag (PRD section 3; Phase 2 success metrics). One row per closed contract.
