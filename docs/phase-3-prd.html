@@ -72,6 +72,7 @@ td.id { font-family: var(--font-mono); font-size: 0.8125rem; font-weight: 500; c
       <li>Finance gets a 4-week average beside the daily exposure figure (DPR-4).</li>
       <li>The intake appraisal is its own field that repricing can't overwrite, and its completeness is checked on every refresh (NFR-5).</li>
       <li>Exposure at risk is not an accounting reserve; that is now stated out of scope.</li>
+      <li>Every success metric is mapped to the fields it is built from, which added two: watch list size and shortfall at close. Channel price realization is named apart from a contract's price realization (NFR-2).</li>
     </ul>
     <p>Why, with the evidence: <a href="phase-4-prototype.html#changed">what the prototype changed</a>. The earlier version is archived as <a href="phase-3-prd-v1.html">revision 1</a>.</p>
   </aside>
@@ -92,7 +93,7 @@ td.id { font-family: var(--font-mono); font-size: 0.8125rem; font-weight: 500; c
 
   <section class="section" aria-labelledby="users">
     <h2 id="users">1. Goal and users</h2>
-    <p>Give Ops and Finance a trusted, early view of which Risk contracts are heading below target, so they can act before the contract expires. Success is judged by the <a href="phase-2-opportunity.html#metrics">metrics set on the opportunity page</a>: detection lead time first, with false-positive, alert-volume and reconciliation guardrails.</p>
+    <p>Give Ops and Finance a trusted, early view of which Risk contracts are heading below target, so they can act before the contract expires. Success is judged by the <a href="phase-2-opportunity.html#metrics">metrics set on the opportunity page</a>: detection lead time first, with false-positive, alert-volume, watch-list and reconciliation guardrails.</p>
     <div class="users">
       <article class="card">
         <span class="tag">Ops · Maria</span>
@@ -106,6 +107,23 @@ td.id { font-family: var(--font-mono); font-size: 0.8125rem; font-weight: 500; c
         <span class="tag">Data · Priya</span>
         <p>Builds today's one-off views by hand. Needs contracts, listings and sales joined and reconciled, so a report becomes a query.</p>
       </article>
+    </div>
+
+    <h3 id="success-metrics" style="margin-top:1.5rem">Success metrics</h3>
+    <p>Targets are set on the opportunity page. Each metric here is built only from calculated fields in section 3, so the scorecard and the backtest can compute it.</p>
+    <div class="scroll">
+      <table>
+        <thead><tr><th>Metric</th><th>Built from</th></tr></thead>
+        <tbody>
+          <tr><td>Detection lead time</td><td>Detection lead time</td></tr>
+          <tr><td>Recall at halfway</td><td>Flagged by halfway, closed below target</td></tr>
+          <tr><td>False-positive rate</td><td>False positive</td></tr>
+          <tr><td>Alert volume</td><td>New flags</td></tr>
+          <tr><td>Watch list size</td><td>Watch list size</td></tr>
+          <tr><td>Reconciliation</td><td>Reconciled</td></tr>
+          <tr><td>Shortfall payouts avoided</td><td>Shortfall at close, closed below target</td></tr>
+        </tbody>
+      </table>
     </div>
   </section>
 
@@ -226,7 +244,7 @@ td.id { font-family: var(--font-mono); font-size: 0.8125rem; font-weight: 500; c
     </div>
 
     <h3 id="calculated">Calculated fields</h3>
-    <p>DPR-3 is met when each field below is defined once, computed from the required fields, and exposed by this name. Everything downstream reads them by name, including the plain-language question layer. The last six are the inputs to the <a href="phase-2-opportunity.html#metrics">success metrics</a>, which count from the first <strong>act</strong> flag. Rows with a teal bar are new or changed in revision 2.</p>
+    <p>DPR-3 is met when each field below is defined once, computed from the required fields, and exposed by this name. Everything downstream reads them by name, including the plain-language question layer. The <a href="#success-metrics">success metrics</a> are built only from these fields, and count from the first <strong>act</strong> flag. Rows with a teal bar are new or changed in revision 2.</p>
     <div class="scroll">
       <table>
         <thead><tr><th>Field</th><th>Definition</th><th class="how">Inputs</th><th>Grain</th></tr></thead>
@@ -236,7 +254,7 @@ td.id { font-family: var(--font-mono); font-size: 0.8125rem; font-weight: 500; c
           <tr><td>Realized sales</td><td>Sum of gross sale proceeds to date for the contract's assets</td><td class="how">gross_amount, sale_date, asset_id</td><td>Contract, daily</td></tr>
           <tr class="changed"><td>Appraised value sold</td><td>Sum of <code>estimate_usd</code> for the items sold to date</td><td class="how">estimate_usd, sale_date</td><td>Contract, daily</td></tr>
           <tr class="changed"><td>Unsold appraised value</td><td>Total appraised value − appraised value sold</td><td class="how">estimate_usd, appraised value sold</td><td>Contract, daily</td></tr>
-          <tr class="changed"><td>Price realization</td><td><span class="formula">(realized + prior) ÷ (appraised sold + prior)</span>, with the prior worth 15% of target. How sold items are fetching against their appraisals, pulled toward 1 until there is enough evidence.</td><td class="how">realized sales, appraised value sold, target_price, realization_prior_share</td><td>Contract, daily</td></tr>
+          <tr class="changed"><td>Price realization</td><td><span class="formula">(realized + prior) ÷ (appraised sold + prior)</span>, with the prior worth 15% of target. How a contract's sold items are fetching against their appraisals, pulled toward 1 until there is enough evidence. Not the same as channel price realization below.</td><td class="how">realized sales, appraised value sold, target_price, realization_prior_share</td><td>Contract, daily</td></tr>
           <tr class="changed"><td>Evidence share</td><td><span class="formula">appraised sold ÷ total appraised</span>. How much of the contract has resolved.</td><td class="how">appraised value sold, estimate_usd</td><td>Contract, daily</td></tr>
           <tr class="changed"><td>Projected final value</td><td><span class="formula">realized + unsold appraised × sell-through × price realization</span>, using the sell-through for the contract's current 15-day period</td><td class="how">realized sales, unsold appraised value, sell_through, price realization</td><td>Contract, daily</td></tr>
           <tr><td>Projected shortfall</td><td><span class="formula">max(0, target − projected_final)</span></td><td class="how">target_price, projected final value</td><td>Contract, daily</td></tr>
@@ -246,11 +264,14 @@ td.id { font-family: var(--font-mono); font-size: 0.8125rem; font-weight: 500; c
           <tr class="changed"><td>Exposure at risk</td><td>Sum of projected shortfall across contracts flagged act. For channel and asset type, each contract's shortfall is first split over its unsold items in proportion to their appraised value</td><td class="how">projected shortfall, risk tier</td><td>Any rollup: region, channel, asset type, consignor</td></tr>
           <tr class="changed"><td>Exposure locked in</td><td>Exposure at risk on contracts with nothing left to sell</td><td class="how">projected shortfall, unsold appraised value</td><td>Any rollup, and daily</td></tr>
           <tr class="changed"><td>Exposure, 4-week average</td><td>Average of daily exposure at risk over the last 28 days</td><td class="how">exposure at risk, as_of_date</td><td>Book, daily</td></tr>
+          <tr class="changed"><td>Watch list size</td><td>Number of active contracts on watch that day</td><td class="how">risk tier, as_of_date</td><td>Book, daily</td></tr>
           <tr class="changed"><td>Live auction possible</td><td>At least 14 days to expiry, so unsold items can still go into an auction</td><td class="how">days to expiry, live_catalog_lead_days</td><td>Contract, daily</td></tr>
-          <tr class="changed"><td>Unsold value on a weak channel</td><td>Appraised value of unsold items listed where their type's price realization is 15 points or more below its best channel</td><td class="how">price realization by channel and asset type, unsold appraised value, weak_channel_gap</td><td>Contract, daily</td></tr>
+          <tr class="changed"><td>Unsold value on a weak channel</td><td>Appraised value of unsold items listed where their type's channel price realization is 15 points or more below its best channel</td><td class="how">channel price realization, unsold appraised value, weak_channel_gap</td><td>Contract, daily</td></tr>
+          <tr class="changed"><td>Channel price realization</td><td><span class="formula">gross sales ÷ appraised value</span> for items that sold, by asset type and channel, on contracts closed in the last 12 months. No prior; this measures channels, not one contract.</td><td class="how">gross_amount, estimate_usd, listing_channel, asset_type, status</td><td>Asset type and channel, last 12 months</td></tr>
           <tr class="changed"><td>Value realization by channel</td><td><span class="formula">gross sales ÷ appraised value of every item listed</span>, sold or not, by asset type and channel, on contracts closed in the last 12 months. Combines price and sell-through, so it answers which channel sells a type of item best.</td><td class="how">gross_amount, estimate_usd, listing_channel, asset_type, status</td><td>Asset type and channel, last 12 months</td></tr>
           <tr><td>Reconciled</td><td>True when status and sales agree across ConsignTrack, Listings and Sales</td><td class="how">status, listing_status, sales from each source</td><td>Contract, daily</td></tr>
           <tr><td>Closed below target</td><td>Realized sales at expiry below target_price</td><td class="how">realized sales, target_price, status</td><td>Contract, at close</td></tr>
+          <tr class="changed"><td>Shortfall at close</td><td><span class="formula">max(0, target − realized at expiry)</span>. What Second Avenue paid the consignor.</td><td class="how">realized sales, target_price, status</td><td>Contract, at close</td></tr>
           <tr class="changed"><td>First flag date, first act date</td><td>Earliest as_of_date on which the contract was flagged at either tier, and on which it was flagged act</td><td class="how">risk flag and tier history (DPR-6)</td><td>Contract</td></tr>
           <tr class="changed"><td>Detection lead time</td><td><span class="formula">expiry_date − first_act_date</span> for contracts closing below target; 0 if never flagged act</td><td class="how">first act date, expiry_date, closed below target</td><td>Contract, at close</td></tr>
           <tr class="changed"><td>Flagged by halfway</td><td>First act date on or before day 45</td><td class="how">first act date, start_date</td><td>Contract, at close</td></tr>

@@ -33,14 +33,14 @@ sales_by_channel AS (
   GROUP BY 1
 ),
 best_channel AS (
-  SELECT channel, asset_type, price_realization,
-    MAX(price_realization) OVER (PARTITION BY asset_type) AS best_realization
+  SELECT channel, asset_type, channel_price_realization,
+    MAX(channel_price_realization) OVER (PARTITION BY asset_type) AS best_realization
   FROM `{dataset}.channel_performance`
 ),
 unsold AS (
   SELECT
     e.contract_id, e.channel, e.basis_estimate,
-    (b.best_realization - b.price_realization >= p.weak_channel_gap) AS on_weak_channel
+    (b.best_realization - b.channel_price_realization >= p.weak_channel_gap) AS on_weak_channel
   FROM `{dataset}.exposure_allocation` e
   CROSS JOIN params p
   LEFT JOIN best_channel b USING (channel, asset_type)

@@ -57,6 +57,7 @@ columns:
   risk_tier: act when risk_flag is TRUE and evidence_share >= act_evidence_min; watch when risk_flag is TRUE with less evidence; null when not flagged. Ops reviews act flags; watch flags are context.
   realized_sales_at_close: Gross sale proceeds for sales dated before expiry_date.
   closed_below_target: TRUE when realized_sales_at_close is below target_price, so Second Avenue paid a shortfall.
+  shortfall_at_close: max(0, target_price - realized_sales_at_close). What Second Avenue paid the consignor, in USD.
   first_flag_date: Earliest as_of_date on which risk_flag was TRUE, at either tier. Null if never flagged.
   first_act_date: Earliest as_of_date on which risk_tier was act. Null if never acted on.
   detection_lead_time_days: expiry_date - first_act_date, for contracts that closed below target; 0 if never acted on; null for contracts that met target. Input to the primary success metric.
@@ -92,6 +93,7 @@ columns:
   items_listed: Items listed in this channel and asset type, on contracts that closed in the last 12 months.
   items_sold: Of those, items sold before their contract expired.
   value_realization: Gross sales / appraised value of every listed item, sold or not. Combines price and sell-through.
+  channel_price_realization: Gross sales / appraised value, for items that sold, by channel and asset type. Not the same as a contract's price_realization, which carries a prior.
 
 tables:
   raw_consignors:
@@ -123,7 +125,7 @@ tables:
       exposure_locked_in: Part of exposure_at_risk from contracts with nothing left to sell that day.
       exposure_on_watch: Sum of projected_shortfall for contracts on watch that day.
       contracts_act: Contracts flagged act that day.
-      contracts_watch: Contracts on watch that day.
+      watch_list_size: Contracts on watch that day. Phase 2 guardrail - no more than 40 on 95% of days.
       contracts_active: Active contracts that day.
   finance_exposure:
     description: Finance's exposure rollups as of today (PRD DPR-4), in long form - one row per dimension value. Every dimension adds up to the book total.
@@ -134,7 +136,6 @@ tables:
     columns:
       channel: Channel the item was listed on - app, website or live.
       sell_through: Share of listed items that sold before their contract expired.
-      price_realization: Gross sales / appraised value, for items that sold.
   contract_pacing_daily:
     description: Calculated fields per contract per day, before the flag (PRD section 3). One row per non-cancelled contract per day it was active, up to today. History is replayed as it was - sales and appraised value sold only count sales dated on or before as_of_date.
   contract_daily:

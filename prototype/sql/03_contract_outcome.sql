@@ -23,6 +23,8 @@ SELECT
   IFNULL(r.realized_sales, 0) AS realized_sales_at_close,
   -- Closed below target
   IFNULL(r.realized_sales, 0) < c.target_price AS closed_below_target,
+  -- Shortfall at close: what Second Avenue paid the consignor
+  GREATEST(0, c.target_price - IFNULL(r.realized_sales, 0)) AS shortfall_at_close,
   -- First flag date (watch or act) and first act date
   f.first_flag_date,
   f.first_act_date,

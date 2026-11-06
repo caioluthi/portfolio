@@ -176,7 +176,7 @@ def exposure_trend(from_date: str, to_date: str | None = None) -> dict:
     to_date = to_date or bounds["last"]
     sql = f"""
       SELECT as_of_date, exposure_at_risk, exposure_at_risk_4wk_avg, exposure_locked_in,
-             exposure_on_watch, contracts_act, contracts_watch, contracts_active
+             exposure_on_watch, contracts_act, watch_list_size, contracts_active
       FROM {table('finance_exposure_trend')}
       WHERE as_of_date BETWEEN @from AND @to
         AND (as_of_date = @from OR as_of_date = @to
@@ -191,7 +191,7 @@ def exposure_trend(from_date: str, to_date: str | None = None) -> dict:
 
 def channel_performance(asset_type: str | None = None, channel: str | None = None) -> dict:
     sql = f"""
-      SELECT asset_type, channel, items_listed, items_sold, sell_through, price_realization,
+      SELECT asset_type, channel, items_listed, items_sold, sell_through, channel_price_realization,
              value_realization
       FROM {table('channel_performance')}
       WHERE (@asset_type IS NULL OR LOWER(asset_type) = LOWER(@asset_type))
