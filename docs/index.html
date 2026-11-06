@@ -176,8 +176,8 @@ h1 { font-size: clamp(1.75rem, 4.6vw, 2.625rem); letter-spacing: -0.01em; max-wi
   <section class="kpis" aria-label="Headline numbers">
     <div class="kpi"><div class="v">~$3.6M</div><div class="k">a year paid out on the ~15% of contracts that miss target</div></div>
     <div class="kpi"><div class="v">~$320K</div><div class="k">a year recoverable in the base case, measured, not assumed</div></div>
-    <div class="kpi"><div class="v"><span class="was">80%</span>36%</div><div class="k">false alarms, after the prototype replaced the first flag design</div></div>
-    <div class="kpi"><div class="v">30+ days</div><div class="k">warning before expiry, the primary target, against under a week today</div></div>
+    <div class="kpi"><div class="v"><span class="was">66%</span>36%</div><div class="k">false alarms on held-back contracts, after the prototype replaced the first flag design</div></div>
+    <div class="kpi"><div class="v">30+ days</div><div class="k">warning before expiry, the primary target, against a median of 0 days today, when most misses are never caught</div></div>
   </section>
 
   <section aria-labelledby="journey-h">
@@ -267,13 +267,13 @@ const PHASES = [
   {
     n: "04", id: "prototype", name: "Prototype & validation", status: "active", paths: ["tech", "ai"],
     out: "Tested the flag before asking anyone to build it.",
-    num: "80% → 36% false alarms",
+    num: "66% → 36% false alarms",
     did: [
       "Built a throwaway prototype in BigQuery: governed metrics on a simulated contract book and a replay of last year.",
       "Backtested the flag against the go-live criteria, then built the Ops morning list and Finance rollups.",
       "Added plain-language questions on top: Claude answers only through fixed, governed queries, or declines."
     ],
-    pivot: "The simple pacing flag failed with 80% false alarms. Counting unsold inventory brought that to 36% on contracts it wasn't tuned on.",
+    pivot: "The simple pacing flag failed, with 80% false alarms over last year and 66% on contracts held back from tuning. Counting unsold inventory brought that to 36% on the same held-back contracts.",
     visual: "phase4",
     links: [
       ["Full prototype write-up", "phase-4-prototype.html", "Page"],
@@ -326,7 +326,7 @@ const DECISIONS = [
   { phase: 0, t: "Measure pacing, not misses", w: "Risk is tracked across the contract's life, so it shows up while there is still time to act." },
   { phase: 1, t: "Resize the opportunity down", w: "A measured 44% recall at halfway replaced the assumed 70%. Base case: ~$500K → ~$320K." },
   { phase: 3, t: "Prototype before the backlog", w: "Test the one bet the product rests on before Engineering plans a build around it." },
-  { phase: 3, t: "Replace the first flag design", w: "Linear pacing raised 80% false alarms. A projection with unsold inventory cut that to 36%." },
+  { phase: 3, t: "Replace the first flag design", w: "On contracts held back from tuning, linear pacing raised 66% false alarms. A projection with unsold inventory cut that to 36%." },
   { phase: 4, t: "Ship value at week 4", w: "The contract book ships first and ends the manual report, independent of the flag." }
 ];
 
@@ -351,7 +351,7 @@ const VISUALS = {
       <div class="bar"><span>Should-have</span><span class="track-b"><span class="fill" style="width:22%;display:block;opacity:.55"></span></span><span class="val">2</span></div>
     </div><p class="label" style="text-transform:none;letter-spacing:0;font-family:var(--font-body);font-size:.8125rem">Every backlog story traces back to one of them.</p></div>`,
   phase4: `<div class="mini"><h3>False alarms on unseen contracts</h3><div class="bars">
-      <div class="bar"><span>Linear pacing</span><span class="track-b"><span class="fill bad" style="width:80%;display:block"></span></span><span class="val">80%</span></div>
+      <div class="bar"><span>Linear pacing</span><span class="track-b"><span class="fill bad" style="width:66%;display:block"></span></span><span class="val">66%</span></div>
       <div class="bar"><span>Projection</span><span class="track-b"><span class="fill" style="width:36%;display:block"></span></span><span class="val">36%</span></div>
       <div class="bar"><span>Guardrail</span><span class="track-b"><span class="fill" style="width:40%;display:block;opacity:.35"></span></span><span class="val">≤40%</span></div>
     </div></div>`,
