@@ -63,7 +63,7 @@ gates:
   go_live:
     story: E3-S2
     when: week 6
-    rule: The pilot starts only if the go-live report shows every criterion met. Otherwise the settings come back to Product; if no setting meets every guardrail, the pilot doesn't start and listing-activity signals move up from next scope.
+    rule: The pilot starts only if the go-live report shows every criterion that history can test met. Reconciliation can't be tested on a replay, so Priya checks it by hand for the Midwest pilot, and the full pilot waits until it holds without her. Otherwise the settings come back to Product; if no setting meets every guardrail, the pilot doesn't start and listing-activity signals move up from next scope.
 
 # Open questions. OQ-3 (listings) and OQ-6 (channel attribution) were closed
 # by the prototype; the rest were settled in refinement except OQ-7, whose
@@ -116,7 +116,7 @@ releases:
     week: 7
     stories: [E4-S1]
     who_gets_what: Maria the act list for the Midwest as a morning email.
-    success: Maria works the list daily; first real lead-time and false-alarm figures arrive.
+    success: Maria works the list daily, and act flags stay at or below 25 a week with the watch list under 40. Real lead-time and false-alarm figures build up as flagged contracts close.
     trade_off: Runs before data contracts are signed; Priya checks Midwest reconciliation by hand.
     depends_on_gates: [appraisal_recovery, go_live]
   R3:

@@ -320,7 +320,7 @@ table.releases td:last-child { color: var(--muted); font-size: 0.875rem; }
     <details class="epic">
       <summary><span>E5 · Run it as a product</span><span class="count">2 stories</span><span class="ms next">Next</span></summary>
       <div class="inner">
-        <p class="epic-goal">What turns a pipeline into something people can rely on and judge. Both stories are needed by the first week of the pilot.</p>
+        <p class="epic-goal">What turns a pipeline into something people can rely on and judge. The scorecard is needed from the first week of the Midwest pilot. The operating commitments land with the full pilot, because the data contracts depend on three other teams; until then Priya checks reconciliation by hand.</p>
 
         <div class="story">
           <div class="head"><a class="id" href="https://github.com/caioluthi/portfolio/issues/17">E5-S1 · #17</a><h4>Operating commitments</h4><span class="who">Priya · NFR-1 to NFR-5</span></div>
@@ -496,7 +496,7 @@ table.releases td:last-child { color: var(--muted); font-size: 0.875rem; }
         <span class="when">◆ 2 · Week 6</span>
         <h4>Does the flag hold on real history?</h4>
         <dl>
-          <dt>Pass</dt><dd>The go-live report shows every <a href="phase-2-opportunity.html#go-live">criterion</a> met. The Midwest pilot starts in week 7.</dd>
+          <dt>Pass</dt><dd>The go-live report shows every <a href="phase-2-opportunity.html#go-live">criterion</a> that history can test met. The Midwest pilot starts in week 7. Reconciliation can't be tested on a replay, so Priya checks it by hand for the Midwest, and the full pilot waits until it holds without her.</dd>
           <dt>Fail</dt><dd>The settings come back to Product. If another setting meets every guardrail, I decide whether to switch. If none does, no pilot starts, listing-activity signals move up from Next scope, and the contract book carries on.</dd>
           <dt>Why here</dt><dd>No prediction reaches Ops until the flag is proven. The contract book, which predicts nothing, ships before it.</dd>
         </dl>
@@ -510,7 +510,7 @@ table.releases td:last-child { color: var(--muted); font-size: 0.875rem; }
         <thead><tr><th>Release</th><th>When</th><th>Who gets what</th><th>Success looks like</th></tr></thead>
         <tbody>
           <tr><td><strong>R1 · Contract book</strong></td><td class="when">Week 4</td><td>Priya gets the daily, reconciled view of every contract. David sees the exposure already locked in. Maria can sort contracts by days left and sales so far. No prediction yet.</td><td>The monthly report is built from the book instead of by hand, and David reports locked-in exposure from it</td></tr>
-          <tr><td><strong>R2 · Midwest pilot</strong></td><td class="when">Week 7</td><td>Maria gets the act list for the Midwest as a morning email, right after the flag passes on real history. The Midwest holds about half the exposure and a quarter of the contracts.</td><td>Maria works the list daily, and the first real lead-time and false-alarm figures come in, three weeks earlier than a single release</td></tr>
+          <tr><td><strong>R2 · Midwest pilot</strong></td><td class="when">Week 7</td><td>Maria gets the act list for the Midwest as a morning email, right after the flag passes on real history. The Midwest holds about half the exposure and a quarter of the contracts.</td><td>Maria works the list daily, and act flags stay at or below 25 a week with the watch list under 40. Real lead-time and false-alarm figures build up as flagged contracts close, starting three weeks earlier than a single release would</td></tr>
           <tr><td><strong>R3 · Full pilot</strong></td><td class="when">Week 10</td><td>Every region, on a dashboard. David's exposure view and the weekly scorecard. Data contracts signed and the product run to its commitments.</td><td>The scorecard stays inside its guardrails, and Priya stops checking reconciliation by hand</td></tr>
           <tr><td><strong>Later · Questions</strong></td><td class="when">After readout</td><td>Plain-language questions for Ops and Finance. The PRD's Next scope is weighed at the same readout.</td><td>The question layer passes its test set before Ops gets access</td></tr>
         </tbody>
