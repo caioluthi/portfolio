@@ -66,7 +66,8 @@ gates:
     rule: The pilot starts only if the go-live report shows every criterion met. Otherwise the settings come back to Product; if no setting meets every guardrail, the pilot doesn't start and listing-activity signals move up from next scope.
 
 # Open questions. OQ-3 (listings) and OQ-6 (channel attribution) were closed
-# by the prototype; the rest were settled in refinement except OQ-7.
+# by the prototype; the rest were settled in refinement except OQ-7, whose
+# accuracy testing the prototype settled (30-question evaluation set).
 open_questions:
   OQ-1:
     question: Extraction. Full daily snapshots or change capture, and how the three sources are frozen to one point in time.
@@ -86,7 +87,7 @@ open_questions:
     by: engineering
   OQ-7:
     question: Question layer. Hosting, cost envelope and how accuracy is tested before Ops sees it.
-    decision: Open. Refined when E6 comes up.
+    decision: Partly resolved. Accuracy is tested on a versioned 30-question set that must fully pass before Ops gets access (prototype). Hosting and cost stay open, refined when E6 comes up.
     by: [engineering, product]
   OQ-8:
     question: Lots. Split a lot's appraisal across its items, or treat the lot as one item.
