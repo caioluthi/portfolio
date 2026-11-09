@@ -30,7 +30,6 @@ The riskiest assumption is that a simple pacing flag catches underperforming con
 ```
 docs/      Case study pages (GitHub Pages site)
 backlog/   Backlog: epics and functional stories traced to the PRD
+prototype/ Phase 4 prototype: data generator, BigQuery views, backtest and the question layer
 skills/    Claude skills used to build the case study, with their scripts
 ```
-
-More folders are added as the build phases land.

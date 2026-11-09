@@ -31,7 +31,7 @@ Finance manager: Probably a lot of them. But that's a guess, not something backe
 
 Interviewer: Has anyone tried to close that gap?
 
-Finance manager: Last quarter I asked Tom on the Ops side whether he could flag at-risk contracts early, and he told me he'd have to open each one by hand.
+Finance manager: Last quarter I asked Marcus on the Ops side whether he could flag at-risk contracts early, and he told me he'd have to open each one by hand.
 
 Interviewer: What would an ideal solution look like for you?
 

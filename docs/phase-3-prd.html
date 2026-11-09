@@ -48,6 +48,7 @@ td.id { font-family: var(--font-mono); font-size: 0.8125rem; font-weight: 500; c
     <a href="phase-3-prd.html" aria-current="page">3 · PRD</a>
     <a href="phase-4-prototype.html">4 · Prototype</a>
     <a href="phase-5-backlog-roadmap.html">5 · Backlog</a>
+    <a href="phase-6-package.html">6 · Package</a>
   </nav>
 
   <header>
@@ -245,7 +246,7 @@ td.id { font-family: var(--font-mono); font-size: 0.8125rem; font-weight: 500; c
     </div>
 
     <h3 id="calculated">Calculated fields</h3>
-    <p>DPR-3 is met when each field below is defined once, computed from the required fields, and exposed by this name. Everything downstream reads them by name, including the plain-language question layer. The <a href="#success-metrics">success metrics</a> are built only from these fields, and count from the first <strong>act</strong> flag. Rows with a teal bar are new or changed in revision 2.</p>
+    <p>DPR-3 is met when each field below is defined once, computed from the required fields, and exposed by this name. Cancelled contracts are left out of every field and metric: they have no sales period, so they can't miss a target. Everything downstream reads them by name, including the plain-language question layer. The <a href="#success-metrics">success metrics</a> are built only from these fields, and count from the first <strong>act</strong> flag. Rows with a teal bar are new or changed in revision 2.</p>
     <div class="scroll">
       <table>
         <thead><tr><th>Field</th><th>Definition</th><th class="how">Inputs</th><th>Grain</th></tr></thead>

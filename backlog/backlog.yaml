@@ -107,7 +107,7 @@ releases:
   R1:
     name: Contract book
     week: 4
-    stories: [E1-S1, E1-S3, E2-S2, E4-S3]
+    stories: [E1-S1, E1-S3, E4-S3]
     who_gets_what: Priya the daily reconciled view of every contract; David exposure already locked in; Maria contracts sortable by days left and sales so far. No prediction.
     success: The monthly report is built from the book instead of by hand, and David reports locked-in exposure from it.
     depends_on_gates: []
@@ -214,6 +214,7 @@ epics:
 
       - key: E2-S2
         issue: 7
+        release: R2   # exposure at risk needs the flag from E2-S1
         title: Exposure and the facts Ops acts on
         as: [david, maria]
         so_that: both views read the same numbers
@@ -316,7 +317,7 @@ epics:
         acceptance:
           - Every contract appears with its sales to date, days to expiry and pacing, shown as information, not as a flag, and refreshed daily.
           - Exposure already locked in, on contracts below target with nothing left to sell, is shown by region and in total.
-          - The reconciliation rate and appraisal coverage for the day are shown on the book.
+          - The reconciliation rate for the day is shown on the book; appraisal coverage joins it with the Midwest pilot, once E1-S2 lands.
         added_in_refinement: First release, in week 4, independent of the flag.
         tasks: []
 
@@ -348,7 +349,7 @@ epics:
         traces: [DPR-8]
         acceptance:
           - Each success metric is aggregated from the evaluation fields and shown against its target, by channel and contract size.
-          - A metric outside its guardrail is visibly marked, from the first week of the pilot.
+          - A metric outside its guardrail is visibly marked, from the first week of the full pilot.
         tasks: []
 
   - key: E6

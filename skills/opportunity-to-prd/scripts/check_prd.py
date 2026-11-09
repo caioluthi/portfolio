@@ -87,6 +87,8 @@ def check_sequence(kind: str, nums: list[int], first_draft: bool) -> None:
 
 
 def main() -> None:
+    if len(sys.argv) != 2 or sys.argv[1] in ("-h", "--help"):
+        sys.exit(__doc__)
     path = Path(sys.argv[1])
     text = path.read_text(encoding="utf-8")
     lines = text.splitlines()

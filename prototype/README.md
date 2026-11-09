@@ -18,7 +18,7 @@ example. Sandbox tables expire after 60 days, so this command is the prototype.
 
 | Path | What it is |
 |---|---|
-| `generator/config.yaml` | Every assumption behind the simulated book, fixed before the backtest ran |
+| `generator/config.yaml` | Every assumption behind the simulated book, fixed before each backtest ran |
 | `generator/generate.py` | Writes the source tables: consignors, contracts, assets, listings, sales |
 | `sql/` | The PRD's calculated fields as BigQuery views, under the PRD's names |
 | `metadata.yaml` | A description for every table, view and column, applied on every build; the build fails if a column is undocumented |
@@ -34,5 +34,10 @@ in `config.yaml` is a stated assumption, including the two cases linear pacing
 is expected to get wrong: live-auction items that sell late in the window, and
 single-asset contracts.
 
-The generator was committed before the backtest ran, so the flag's results
-can't have been tuned into the data.
+The generator was committed before the first backtest ran, so its results
+can't have been tuned into the data. When that flag failed, appraisals were
+added to the generator so a flag could price unsold items. That change was
+committed before the second backtest ran, but it was made knowing the first
+had failed, and the sale prices and the appraisals come from the same
+underlying value, with about 30% appraisal error. The real-history backtest
+in Phase 5 is the test that settles it.
