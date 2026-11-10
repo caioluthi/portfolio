@@ -32,6 +32,9 @@ DIMENSIONS = ["book", "region", "channel", "asset_type", "consignor"]
 TIERS = ["act", "watch", "all"]
 MAX_ROWS = 50
 
+# SQL each tool call ran, for the demo page's "How this was answered" panel.
+QUERY_LOG: list[str] = []
+
 
 @lru_cache(maxsize=1)
 def client() -> bigquery.Client:
@@ -43,6 +46,9 @@ def table(name: str) -> str:
 
 
 def run(sql: str, params: list | None = None) -> list[dict]:
+    if "flag_parameters" not in sql:  # the as-of date lookup isn't part of the answer
+        QUERY_LOG.append("\n".join(line[6:] if line.startswith("      ") else line.strip()
+                                   for line in sql.strip("\n").splitlines()))
     job = client().query(sql, job_config=bigquery.QueryJobConfig(query_parameters=params or []))
     return [clean(dict(row)) for row in job.result()]
 

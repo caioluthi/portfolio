@@ -81,9 +81,11 @@ def ask(question: str, model: str = DEFAULT_MODEL, client: anthropic.Anthropic |
                 continue
             if block.name == "answer":
                 return {**normalize(block.input), "tools_used": trace, "usage": usage, "model": model}
+            tools.QUERY_LOG.clear()
             output = tools.call(block.name, block.input)
             trace.append({"tool": block.name, "input": block.input,
-                          "rows": json.loads(output).get("row_count")})
+                          "rows": json.loads(output).get("row_count"),
+                          "sql": list(tools.QUERY_LOG)})
             results.append({"type": "tool_result", "tool_use_id": block.id, "content": output})
         if not results:  # replied in plain text: ask for the structured answer
             results = [{"type": "text", "text": "Give your reply by calling the answer tool."}]

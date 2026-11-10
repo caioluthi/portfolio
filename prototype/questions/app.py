@@ -57,5 +57,10 @@ for asked, result in st.session_state.history:
             for call in result["tools_used"]:
                 filters = ", ".join(f"{k}={v}" for k, v in call["input"].items()) or "no filters"
                 st.markdown(f"- `{call['tool']}` ({filters}) → {call['rows']} rows")
+                for sql in call.get("sql", []):
+                    st.code(sql, language="sql")
+            if result["tools_used"]:
+                st.caption("Fixed, reviewed queries over the governed views. Claude picks the query "
+                           "and its filters; @-values are passed as parameters, never written into the SQL.")
             st.caption(f"{result['model']} · {result['usage']['input_tokens']:,} tokens in, "
                        f"{result['usage']['output_tokens']:,} out")
