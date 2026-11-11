@@ -18,7 +18,8 @@ table.split td:nth-child(2), table.split td:nth-child(3) { width: 42%; }
 .overrides .why { font-size: 0.9375rem; color: var(--muted); }
 .overrides .where { font-family: var(--font-mono); font-size: 0.6875rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent); }
 .checks td:first-child { width: 30%; font-weight: 500; }
-.video { aspect-ratio: 16 / 9; max-width: 38rem; width: 100%; background: var(--surface); border: 1px dashed var(--rule); border-radius: 6px; display: grid; place-items: center; color: var(--muted); font-size: 0.9375rem; text-align: center; padding: 1rem; }
+.video { aspect-ratio: 16 / 9; max-width: 44rem; width: 100%; background: var(--surface); border: 1px solid var(--rule); border-radius: 6px; overflow: hidden; }
+.video iframe { width: 100%; height: 100%; border: 0; display: block; }
 .pending { background: var(--surface); border: 1px dashed var(--rule); border-radius: 6px; padding: 1rem 1.25rem; color: var(--muted); font-size: 0.9375rem; max-width: 38rem; }
 .pending strong { color: var(--fg); }
 </style>
@@ -129,7 +130,8 @@ table.split td:nth-child(2), table.split td:nth-child(3) { width: 42%; }
   <section class="section" aria-labelledby="video-h">
     <h2 id="video-h">5. Walkthrough</h2>
     <p>The prototype answering Ops and Finance questions in plain language, and declining the ones it shouldn't answer.</p>
-    <div class="video">Walkthrough video · link to come</div>
+    <div class="video"><iframe src="https://www.youtube-nocookie.com/embed/5c_hqZ8J5YQ" title="Second Avenue prototype walkthrough" loading="lazy" allow="accelerometer; encrypted-media; gyroscope; picture-in-picture; fullscreen" allowfullscreen></iframe></div>
+    <p class="foot"><a href="https://youtu.be/5c_hqZ8J5YQ">Watch on YouTube</a> · about 9 minutes</p>
   </section>
 
   <section class="section" aria-labelledby="diff-h">
